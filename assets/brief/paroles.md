@@ -234,7 +234,7 @@ Paie nous en temps et en heures,
 En train d’écrire notre récit,
 L’temps presse pas, j’serai bien quelque part dans quelque pages,
 Les rêves s’réalisent pas mais au moins on a moins les poches vides,
-Le futur est pas passé, raison d’plus pour qu’on profite
+Le plus dur est pas passé, raison d’plus pour qu’on profite
 Bro paie nous en temps et en heures,
 Essaie pas d’nous apprendre tu sais pas vraiment faire,
 J’me demande a combien ils vont brader l’enfer wow,
