@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<link rel="icon" href="data:,">
+<title>capture — pochette</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&display=swap">
+<style>
+body{margin:0;background:#07060C}
+#stage{position:relative;width:1000px;height:1000px;overflow:hidden;background:#07060C}
+</style>
+<script src="js/cover-live.js"></script>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+// Outil hors site, port de Capture.dc.html : une pochette de single rendue en direct sur une scène
+// de 1000 × 1000, le titre choisi par ?track=01…10 (05 par défaut).
+// Ouvrir http://localhost:8000/tools/capture.html?track=03 puis appuyer sur S pour enregistrer le PNG
+// (nommé comme dans assets/singles/, prêt à y être copié).
+const FILES = { "01": "01-intro", "02": "02-vieux-messages", "03": "03-sidehustle", "04": "04-buisness-model", "05": "05-lappelduvide",
+  "06": "06-impermeable", "07": "07-long-fleuve", "08": "08-sesame-interlude", "09": "09-dequoituparles", "10": "10-persephone" };
+const raw = new URLSearchParams(location.search).get('track') || '05';
+const track = String(parseInt(raw, 10) || 5).padStart(2, '0');
+document.title = `capture — ${track}`;
+
+const el = document.createElement('cover-live'); el.setAttribute('track', track);
+document.getElementById('stage').appendChild(el);
+
+// S : enregistre l’image courante du canvas WebGL (cover-live garde son tampon, preserveDrawingBuffer) en PNG 1000 × 1000.
+addEventListener('keydown', e => {
+  if (e.key !== 's' && e.key !== 'S') return;
+  const src = el.querySelector('canvas'); if (!src) return;
+  const out = document.createElement('canvas'); out.width = out.height = 1000;
+  out.getContext('2d').drawImage(src, 0, 0, 1000, 1000);
+  const a = document.createElement('a'); a.download = `${FILES[track] || track}.png`; a.href = out.toDataURL('image/png'); a.click();
+});
+</script>
+</body>
+</html>

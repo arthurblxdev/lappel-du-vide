@@ -1,0 +1,42 @@
+:root {
+  /* base — nuit → or, l’axe de l’album */
+  --nuit: #07060C;
+  --nuit-2: #0C0A14;
+  --nuit-3: #15111F;
+  --violet-nuit: #1B1436;
+  --violet: #5E3FB3;
+  --violet-fume: #3A2452;
+  --bleu-profond: #0F1F44;
+  --brun-brule: #7A3E22;
+  --ambre: #B8652E;
+  --or: #E0A33A;
+  --or-pale: #F2D9A0;
+  --blanc-chaud: #F3EBDD;
+  --blanc-creme: #F6EEDF;
+  /* neutres chauds */
+  --gris-chaud: #B7AE9B;
+  --gris-sourd: #A89E8C;
+  --gris-violet: #8F86B0;
+  --trait: #2A2338;
+  /* accents par titre (singles) */
+  --sidehustle-rose: #F06292;
+  --sidehustle-jaune: #F8F06A;
+  --vieux-messages-brule: #C8622A;
+  --vieux-messages-rose: #B84A6E;
+  --appelduvide-ciel: #A9C8EA;
+  --long-fleuve-vert: #2E8B8B;
+  --dequoituparles-rouge: #8A1F26;
+  --persephone-rose: #F0B8C8;
+  --persephone-lavande: #B8A0D0;
+  /* sémantique */
+  --surface: var(--nuit);
+  --surface-card: var(--nuit-3);
+  --border: var(--trait);
+  --text-body: var(--blanc-chaud);
+  --text-muted: var(--gris-sourd);
+  --text-meta: var(--gris-violet);
+  --accent: var(--or);
+  --accent-soft: var(--or-pale);
+  --link: var(--or);
+  --link-hover: var(--or-pale);
+}

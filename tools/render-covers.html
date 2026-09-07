@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<link rel="icon" href="data:,">
+<title>rendu des pochettes de secours</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&display=swap">
+<style>body{margin:0;background:#07060C}#stage{position:relative;width:1000px;height:1000px}</style>
+<!-- outil hors site : rend chaque pochette via <cover-live> et l’exporte en PNG.
+     cover-live.js garde son tampon (preserveDrawingBuffer), le canvas WebGL est relisible après le rendu. -->
+<script src="js/cover-live.js"></script>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+window.renderCover = async (n, size, wait) => {
+  await document.fonts.load("italic 300 22px 'Cormorant Garamond'").catch(() => {});
+  const stage = document.getElementById('stage'); stage.style.width = stage.style.height = size + 'px'; stage.innerHTML = '';
+  const el = document.createElement('cover-live'); el.setAttribute('track', n); stage.appendChild(el);
+  await new Promise(r => setTimeout(r, wait));
+  const src = el.querySelector('canvas'); const out = document.createElement('canvas'); out.width = out.height = size;
+  out.getContext('2d').drawImage(src, 0, 0, size, size);
+  const url = out.toDataURL('image/png'); el.remove();
+  return url.slice(url.indexOf(',') + 1);
+};
+</script>
+</body>
+</html>

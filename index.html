@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>l’appel du vide — Lev × Simard</title>
+<meta name="description" content="l’appel du vide, l’album de Lev × Simard : dix titres, 22:33. La pochette en dix pièces, les singles, les paroles.">
+<meta name="theme-color" content="#07060C">
+<meta property="og:type" content="music.album">
+<meta property="og:title" content="l’appel du vide — Lev × Simard">
+<meta property="og:description" content="Dix titres, 22:33. Rap français mélancolique et solaire : un bord, une hauteur, un vide regardé avec espoir.">
+<meta property="og:url" content="https://arthurblxdev.github.io/lappel-du-vide/">
+<meta property="og:image" content="https://arthurblxdev.github.io/lappel-du-vide/assets/pochette-titre.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+
+<!-- rivière de paroles en fond : texture peinte une fois par js/site.js, mise en rotation lente -->
+<div class="river" aria-hidden="true">
+  <div class="river-tex" id="river-tex"></div>
+  <div class="river-scrim"></div>
+</div>
+
+<div class="page">
+
+  <header class="brand">LEV × SIMARD</header>
+
+  <section class="hero" id="accueil">
+    <h1 class="titre">l’appel du vide</h1>
+    <p class="hero-quote">t'as le monde dans les mains, j'ai des rêves dans les yeux, j'aimerais pouvoir aider en exauçant les voeux</p>
+  </section>
+
+  <section class="pochette" id="pochette" aria-label="La pochette en dix pièces">
+    <div class="puzzle" id="puzzle"></div>
+    <div class="puzzle-tools">
+      <button type="button" class="lien" id="flip-all">TOUT RETOURNER</button>
+    </div>
+  </section>
+
+  <section class="titres" id="titres" aria-label="Les titres">
+    <a class="titres-cover" id="titres-cover" href="#pochette" aria-label="Écouter intro"></a>
+    <div class="tracklist" id="tracklist"></div>
+  </section>
+
+  <section class="livret" id="livret" aria-label="Le livret">
+    <div class="livret-grid" id="livret-grid"></div>
+  </section>
+
+  <footer class="pied">LEV × SIMARD · 10 TITRES · 22:33</footer>
+
+</div>
+
+<!-- lecteur plein écran : la pochette du single s’envole depuis sa vignette, s’anime en WebGL pendant la lecture -->
+<div class="player" id="player" role="dialog" aria-modal="true" aria-label="Lecteur" hidden>
+  <div class="player-glow" id="p-glow" aria-hidden="true"></div>
+  <div class="player-bar">
+    <span class="player-index" id="p-index"></span>
+    <button type="button" class="lien" id="p-close">fermer</button>
+  </div>
+  <div class="player-img" id="p-img" role="button" tabindex="0" aria-label="Lecture / pause">
+    <div class="player-img-static" id="p-static-prev"></div>
+    <div class="player-img-static" id="p-static"></div>
+    <div class="player-live" id="p-live"></div>
+    <div class="player-img-play" aria-hidden="true">
+      <svg class="glyph-play" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30"/><path d="M26.5 20.5 L45.5 32 L26.5 43.5 Z"/></svg>
+      <svg class="glyph-pause" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30"/><path d="M26 22 V42 M38 22 V42"/></svg>
+    </div>
+  </div>
+  <div class="player-text" id="p-text">
+    <div class="player-head">
+      <span class="player-title" id="p-title"></span>
+      <span class="player-meta" id="p-meta"></span>
+    </div>
+    <div class="player-lyrics" id="p-lyrics"></div>
+    <div class="player-controls">
+      <div class="seek" id="p-seek" aria-label="Position dans le titre">
+        <div class="seek-rail"></div>
+        <div class="seek-fill" id="p-fill"></div>
+        <div class="seek-knob" id="p-knob"></div>
+      </div>
+      <div class="transport">
+        <button type="button" class="nav" id="p-prev">← précédent</button>
+        <button type="button" class="play" id="p-play">LECTURE</button>
+        <button type="button" class="nav" id="p-next">suivant →</button>
+      </div>
+      <div class="times"><span id="p-elapsed">0:00</span><span id="p-dur"></span></div>
+    </div>
+  </div>
+</div>
+
+<noscript>
+  <ol class="noscript">
+    <li>intro · 2:08</li><li>vieux messages · 1:43</li><li>sidehustle · 2:54</li><li>buisness model · 2:37</li><li>l’appelduvide · 1:36</li>
+    <li>imperméable · 2:46</li><li>long fleuve · 2:14</li><li>sésame interlude · 1:50</li><li>dequoituparles! · 1:30</li><li>persephone · 3:15</li>
+  </ol>
+</noscript>
+
+<script src="js/cover-live.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>

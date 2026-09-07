@@ -1,0 +1,208 @@
+/* l’appel du vide — site vitrine
+   Porté depuis la maquette Site.dc.html (Claude Design). Tokens du design system dans ../tokens/. */
+@import "../tokens/colors.css";
+@import "../tokens/texture.css";
+
+:root {
+  --font-titre: 'Cormorant Garamond', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --titre-tilt: -1.5deg;
+  --texte-doux: #CFC4AE;
+  --largeur: 1100px;
+  --marge: 32px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--nuit); }
+body {
+  margin: 0; background: var(--nuit); color: var(--blanc-chaud);
+  font-family: var(--font-titre); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+body.no-scroll { overflow: hidden; }
+a { color: var(--or); text-decoration: none; }
+a:hover { color: var(--or-pale); }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; border-radius: 0; }
+.noscript { font-style: italic; font-size: 24px; line-height: 1.5; padding: 0 var(--marge) 40px; }
+
+/* ---------- rivière de paroles ---------- */
+.river { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.river-tex {
+  position: absolute; left: 50%; top: 50%; width: 175vmax; height: 175vmax; margin: -87.5vmax 0 0 -87.5vmax;
+  background-size: 100% 100%; animation: riverSpin 320s linear infinite; will-change: transform;
+}
+.river-scrim { position: absolute; inset: 0; background: radial-gradient(ellipse 55% 50% at 50% 45%, rgba(7,6,12,.8), rgba(7,6,12,0) 100%); }
+@keyframes riverSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .river-tex { animation: none; } }
+
+/* ---------- page ---------- */
+.page { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+.page > * { width: 100%; max-width: var(--largeur); padding-left: var(--marge); padding-right: var(--marge); }
+
+.brand { padding-top: 28px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--or); }
+
+.hero { padding-top: 10vh; padding-bottom: 8vh; display: flex; flex-direction: column; gap: 18px; }
+.titre {
+  margin: 0; font-style: italic; font-weight: 300; font-size: clamp(56px, 11vw, 150px); line-height: .92; letter-spacing: -.01em;
+  color: var(--blanc-creme); transform: rotate(var(--titre-tilt)); transform-origin: left bottom; text-wrap: balance;
+}
+.hero-quote { margin: 12px 0 0; max-width: 52ch; font-style: italic; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45; color: var(--texte-doux); text-wrap: pretty; }
+
+/* ---------- pochette en dix pièces ---------- */
+.pochette { padding-bottom: 10vh; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.puzzle {
+  /* la pochette tient entière dans la hauteur de l’écran (96px de marge pour le lien dessous) */
+  position: relative; width: min(100%, calc(100vh - 96px)); width: min(100%, calc(100svh - 96px)); aspect-ratio: 1; display: grid;
+  grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2px; background: var(--trait); padding: 2px;
+}
+.tile { position: relative; perspective: 1600px; cursor: pointer; min-width: 0; min-height: 0; container-type: inline-size; }
+.tile:focus-visible { outline: 1px solid var(--or); outline-offset: 2px; }
+.tile-in { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .7s ease; transform: rotateY(0deg); }
+.tile.is-flipped .tile-in { transform: rotateY(180deg); }
+.tile-front, .tile-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; }
+.tile-front { background: var(--nuit) url(../assets/pochette.webp) no-repeat; }
+.tile-n { position: absolute; left: 12px; top: 10px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; color: var(--or-pale); opacity: .75; }
+.tile-title {
+  position: absolute; left: 12px; right: 12px; bottom: 10px; font-style: italic; font-weight: 300; font-size: clamp(14px, 1.8vw, 22px); line-height: 1;
+  color: var(--blanc-creme); opacity: .9; text-shadow: 0 0 12px rgba(7,6,12,.6);
+}
+.tile-back { transform: rotateY(180deg); background: var(--nuit-2); display: grid; grid-template-rows: 1fr auto; }
+.tile-back-img { position: relative; overflow: hidden; min-height: 0; background: var(--nuit) center / cover no-repeat; }
+.tile-hint { position: absolute; right: 10px; top: 8px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; color: var(--or-pale); }
+.tile-back-txt { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; border-top: 1px solid #1A1626; }
+.tile-meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 9px; letter-spacing: .18em; color: var(--gris-violet); }
+.tile-quote { font-style: italic; font-weight: 300; font-size: clamp(13px, 1.5vw, 19px); line-height: 1.12; color: var(--blanc-creme); text-wrap: balance; }
+/* petites pièces : le single occupe tout le dos, la phrase se pose dessus en bas sur un voile ;
+   taille en cqw pour suivre la taille de la pièce (le puzzle est borné par la hauteur d’écran) */
+.tile:not(.tile-big) .tile-back { display: block; }
+.tile:not(.tile-big) .tile-back-img { position: absolute; inset: 0; }
+.tile:not(.tile-big) .tile-back-txt {
+  position: absolute; left: 0; right: 0; bottom: 0; border-top: 0; padding-top: 28px; gap: 5px;
+  background: linear-gradient(to bottom, rgba(12,10,20,0), rgba(12,10,20,.86) 30%, rgba(12,10,20,.94));
+}
+.tile:not(.tile-big) .tile-quote { font-size: clamp(12px, 7cqw, 16px); line-height: 1.15; text-shadow: 0 1px 8px rgba(7,6,12,.6); }
+.puzzle-tools { display: flex; gap: 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; color: var(--gris-violet); }
+.lien { border-bottom: 1px solid var(--trait); padding-bottom: 2px; color: inherit; }
+.lien:hover { color: var(--or-pale); }
+
+/* ---------- titres ---------- */
+.titres { padding-bottom: 12vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 32px 48px; align-items: stretch; }
+.titres-cover { display: block; min-height: 100%; background: var(--nuit) center / cover no-repeat; }
+.tracklist { display: flex; flex-direction: column; }
+.track {
+  display: grid; grid-template-columns: 2.5em minmax(0, 1fr) auto; gap: 16px; align-items: baseline;
+  padding: 14px 0; border-top: 1px solid var(--trait); color: var(--blanc-chaud);
+}
+.track-n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; color: var(--gris-violet); }
+.track-title { font-style: italic; font-weight: 300; font-size: clamp(26px, 3vw, 40px); line-height: 1.05; color: var(--blanc-creme); transition: color .3s ease; }
+.track:hover .track-title { color: var(--or-pale); }
+.track-dur { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--gris-violet); }
+.track-end { border-top: 1px solid var(--trait); }
+
+/* ---------- livret ---------- */
+.livret { padding-bottom: 14vh; }
+.livret-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px; background: var(--trait); padding: 6px; }
+.thumb { position: relative; aspect-ratio: 1; overflow: hidden; display: block; background: var(--nuit) center / cover no-repeat; }
+.thumb-n { position: absolute; left: 10px; top: 8px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; color: var(--or-pale); opacity: .8; }
+.thumb-title {
+  position: absolute; left: 10px; right: 10px; bottom: 8px; font-style: italic; font-weight: 300; font-size: 20px; line-height: 1;
+  color: var(--blanc-creme); text-shadow: var(--text-halo);
+}
+
+.pied { padding-top: 12px; padding-bottom: 40px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gris-violet); }
+
+/* ---------- lecteur ---------- */
+/* --accent : la couleur du titre en cours ; enregistrée pour pouvoir glisser d’une couleur à l’autre au changement de morceau */
+@property --accent { syntax: '<color>'; inherits: true; initial-value: #E0A33A; }
+.player { position: fixed; inset: 0; z-index: 10; background: var(--nuit); opacity: 0; --accent: #E0A33A; transition: opacity .5s ease, --accent 1.2s ease; }
+/* la lueur : un halo de la couleur du titre ; pendant la lecture js/site.js la fait respirer avec les basses (transform + opacité) */
+.player-glow {
+  --glow-base: .24; --glow-pulse: .14; /* opacité au repos, et amplitude ajoutée sur les coups (lues par js/site.js) */
+  position: absolute; inset: 0; pointer-events: none; opacity: var(--glow-base); transform-origin: 28% 50%; will-change: transform, opacity;
+  background: radial-gradient(ellipse 70% 90% at 28% 50%, var(--accent), rgba(7,6,12,0) 75%);
+}
+.player.is-open { opacity: 1; }
+.player-bar {
+  position: absolute; left: 0; right: 0; top: 0; padding: 24px 32px; display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gris-violet);
+}
+.player-index { color: var(--or); }
+.player-img {
+  position: fixed; background: var(--nuit); overflow: hidden; cursor: pointer;
+  transition: left .7s cubic-bezier(.2,.7,.2,1), top .7s cubic-bezier(.2,.7,.2,1), width .7s cubic-bezier(.2,.7,.2,1), height .7s cubic-bezier(.2,.7,.2,1);
+}
+.player-img:focus-visible { outline: 1px solid var(--or); outline-offset: 2px; }
+.player-img-static { position: absolute; inset: 0; background: var(--nuit) center / cover no-repeat; transition: opacity .8s ease; }
+.player-live { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s ease; }
+.player-live.is-on { opacity: 1; }
+/* symbole play / pause au centre de la pochette : il apparaît à l’ouverture, à chaque clic et quand la souris bouge dessus,
+   puis s’efface au bout de 2 s (classe glyph-on posée par js/site.js) */
+.player-img-play { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; color: var(--blanc-creme); opacity: 0; transition: opacity .4s ease; }
+.player-img-play svg {
+  width: clamp(56px, 14%, 96px); height: auto; fill: none; stroke: currentColor; stroke-width: 1.1; stroke-linejoin: round; stroke-linecap: round;
+  filter: drop-shadow(0 0 14px rgba(7,6,12,.85)); transition: transform .4s ease;
+}
+.player-img-play .glyph-pause { display: none; }
+.player-img.glyph-on .player-img-play { opacity: .9; }
+.player:not(.is-playing) .player-img-play { animation: playBreath 3.2s ease-in-out infinite; }
+.player.is-playing .glyph-play { display: none; }
+.player.is-playing .glyph-pause { display: block; }
+.player-img:hover .player-img-play svg { transform: scale(1.06); }
+@keyframes playBreath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+@media (prefers-reduced-motion: reduce) { .player:not(.is-playing) .player-img-play { animation: none; } }
+.player-text {
+  position: absolute; top: 50%; transform: translateY(-50%); padding: 0 32px; display: flex; flex-direction: column; gap: 22px;
+  opacity: 0; transition: opacity .5s ease .35s;
+}
+.player.is-open .player-text { opacity: 1; }
+.player-head, .player-lyrics { transition: opacity .35s ease, transform .35s ease; }
+.player-text.is-switching .player-head, .player-text.is-switching .player-lyrics { opacity: 0; transform: translateY(10px); }
+.player-head { display: flex; flex-direction: column; gap: 8px; }
+.player-title {
+  font-style: italic; font-weight: 300; font-size: clamp(40px, 5vw, 84px); line-height: .95; color: var(--blanc-creme);
+  transform: rotate(var(--titre-tilt)); transform-origin: left bottom;
+}
+.player-meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; transition: color .8s ease; }
+.player-lyrics { max-height: 38vh; overflow: auto; padding-right: 12px; mask-image: linear-gradient(#000 85%, #0000); -webkit-mask-image: linear-gradient(#000 85%, #0000); }
+.player-lyrics span { display: block; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: var(--texte-doux); font-style: italic; text-wrap: pretty; }
+.player-controls { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.seek { position: relative; height: 18px; cursor: pointer; display: flex; align-items: center; }
+.seek-rail { position: absolute; left: 0; right: 0; height: 1px; background: var(--trait); }
+.seek-fill { position: absolute; left: 0; height: 1px; width: 0; background: var(--or); transition: background-color .8s ease; }
+.seek-knob { position: absolute; top: 5px; width: 8px; height: 8px; margin-left: -4px; left: 0; background: var(--or); transition: background-color .8s ease; }
+.transport {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--gris-violet);
+}
+.nav:hover { color: var(--or-pale); }
+.play { color: var(--blanc-chaud); border: 1px solid var(--trait); padding: 10px 22px; }
+.play:hover { border-color: var(--gris-violet); }
+.times { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; letter-spacing: .18em; color: var(--gris-violet); }
+
+/* ---------- écrans étroits ---------- */
+@media (max-width: 820px) {
+  :root { --marge: 20px; }
+  .titres { grid-template-columns: 1fr; gap: 24px; }
+  .titres-cover { aspect-ratio: 1; }
+  .livret-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+  .thumb-title { font-size: 18px; }
+  .tile-n, .tile-hint { font-size: 8px; left: 8px; top: 6px; }
+  .tile-hint { left: auto; right: 8px; }
+  .tile-title { left: 8px; right: 8px; bottom: 7px; font-size: 12px; }
+  /* au dos des pièces : plus de texte, seulement le bouton écouter, centré */
+  .tile-back-txt { display: none; }
+  .tile-back { display: block; }
+  .tile-back-img { position: absolute; inset: 0; }
+  .tile-hint {
+    left: 50%; top: 50%; right: auto; transform: translate(-50%, -50%); font-size: 9px; letter-spacing: .14em; padding: 6px 8px; white-space: nowrap;
+    border: 1px solid rgba(242,217,160,.55); background: rgba(7,6,12,.45); color: var(--or-pale);
+  }
+  .player-bar { padding: 20px 24px; }
+  /* téléphone : le halo se recentre derrière la pochette et s’assagit, pour que les paroles restent lisibles */
+  .player-glow {
+    --glow-base: .15; --glow-pulse: .08; transform-origin: 50% 30%;
+    background: radial-gradient(ellipse 85% 48% at 50% 30%, var(--accent), rgba(7,6,12,0) 70%);
+  }
+  .player-text { transform: none; padding: 0 24px; gap: 14px; }
+  .player-title { font-size: clamp(34px, 9vw, 60px); }
+  .player-lyrics { max-height: 22vh; }
+}

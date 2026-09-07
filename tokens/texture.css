@@ -1,0 +1,16 @@
+:root {
+  /* matières : la DA est photographique/générative — pas de radius, pas d’ombre portée */
+  --radius: 0;
+  --radius-badge: 3px;
+  --shadow: none;
+  --grain-opacity: .6;             /* fractalNoise soft-light sur toute image */
+  --blur-doux: 4px;                /* flou de tirage sur les images génératives */
+  --halo: 0 0 40px 14px rgba(242, 217, 160, .35);
+  --text-halo: 0 0 16px rgba(7, 6, 12, .7);
+  --gradient-nuit-or: linear-gradient(180deg, #07060C 0%, #1B1436 42%, #3A2452 62%, #7A3E22 78%, #E0A33A 96%);
+  --gradient-solar: linear-gradient(90deg, #1B1436 0%, #5E3FB3 30%, #F3EBDD 50%, #B8652E 72%, #07060C 100%);
+  --posterize-5: linear-gradient(90deg, #07060C 0 20%, #0F1F44 20% 40%, #7A3E22 40% 60%, #E0A33A 60% 80%, #F2D9A0 80%);
+  --space-1: 6px; --space-2: 12px; --space-3: 20px; --space-4: 28px; --space-5: 40px; --space-6: 64px;
+  --cover-size: 3000px;            /* pochette carrée livrable */
+  --single-size: 1000px;
+}
