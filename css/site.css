@@ -3,6 +3,21 @@
 @import "../tokens/colors.css";
 @import "../tokens/texture.css";
 
+/* ---------- la lumière : jour ou nuit (Site.dc.html / Heure.dc.html) ----------
+   js/site.js pose data-heure sur <html> — jour entre 10 h et 18 h chez le visiteur, nuit le reste
+   du temps, et le switch de l’en-tête tranche. De jour le site est inversé, encre nuit sur or. */
+:root, :root[data-heure="nuit"] {
+  --h-fond: #07060C;
+  --h-env: radial-gradient(ellipse 90% 45% at 50% 108%, rgba(94,63,179,.45), rgba(7,6,12,0) 70%), #07060C;
+  --h-ink: #F6EEDF; --h-quote: #CFC4AE; --h-meta: #8F86B0; --h-accent: #E0A33A; --h-trait: #2A2338;
+}
+:root[data-heure="jour"] {
+  /* midi : le site est inversé, encre nuit sur or ; le voile sombre du centre creuse le vide */
+  --h-fond: #F2D9A0;
+  --h-env: radial-gradient(circle at 50% 62%, #F6EEDF 0, #F2D9A0 22%, #E0A33A 60%, #B8652E 100%), #F2D9A0;
+  --h-ink: #07060C; --h-quote: #07060C; --h-meta: #07060C; --h-accent: #07060C; --h-trait: rgba(7,6,12,.35);
+}
+
 :root {
   --font-titre: 'Cormorant Garamond', Georgia, serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
@@ -13,16 +28,31 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { background: var(--nuit); }
+html { background: var(--h-fond); transition: background-color 1.6s ease; }
 body {
-  margin: 0; background: var(--nuit); color: var(--blanc-chaud);
+  margin: 0; background: transparent; color: var(--blanc-chaud);
   font-family: var(--font-titre); -webkit-font-smoothing: antialiased; overflow-x: hidden;
 }
 body.no-scroll { overflow: hidden; }
 a { color: var(--or); text-decoration: none; }
 a:hover { color: var(--or-pale); }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; border-radius: 0; }
-.noscript { font-style: italic; font-size: 24px; line-height: 1.5; padding: 0 var(--marge) 40px; }
+.noscript { font-style: italic; font-size: 24px; line-height: 1.5; padding: 0 var(--marge) 40px; color: var(--h-ink); }
+
+/* midi : là où l’ombre du soleil passe derrière elle, la liste des titres se retourne en blanc.
+   Le dégradé reprend l’ellipse du voile, il est posé sur la liste entière et découpé dans le texte ;
+   js/site.js recale son centre à chaque défilement, le voile étant fixe à l’écran. */
+:root[data-heure="jour"] .tracklist {
+  background-image: radial-gradient(ellipse 55vw 50vh at var(--ombre-x, 50%) var(--ombre-y, 45vh), #F6EEDF 0 42%, #07060C 48%);
+  -webkit-background-clip: text; background-clip: text;
+}
+:root[data-heure="jour"] .track-n,
+:root[data-heure="jour"] .track-title,
+:root[data-heure="jour"] .track-dur,
+:root[data-heure="jour"] .track:hover .track-title { color: transparent; }
+
+/* le ciel : la lumière de l’heure, posée en fond fixe sous la rivière */
+.ciel { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--h-env); transition: background 1.6s ease; }
 
 /* ---------- rivière de paroles ---------- */
 .river { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -38,21 +68,38 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .page { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
 .page > * { width: 100%; max-width: var(--largeur); padding-left: var(--marge); padding-right: var(--marge); }
 
-.brand { padding-top: 28px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--or); }
+.brand {
+  padding-top: 28px; display: flex; justify-content: space-between; align-items: baseline; gap: 24px; flex-wrap: wrap;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+}
+.brand-nom { color: var(--h-accent); transition: color 1.6s ease; }
+.heures { display: flex; gap: 18px; flex-wrap: wrap; }
+.heure {
+  padding-bottom: 3px; color: var(--h-meta); border-bottom: 1px solid transparent;
+  font: inherit; letter-spacing: inherit; text-transform: none; cursor: pointer;
+  transition: color .6s ease, border-color .6s ease;
+}
+.heure:hover { color: var(--h-ink); }
+.heure.is-on { color: var(--h-ink); border-bottom-color: var(--h-accent); }
 
 .hero { padding-top: 10vh; padding-bottom: 8vh; display: flex; flex-direction: column; gap: 18px; }
 .titre {
   margin: 0; font-style: italic; font-weight: 300; font-size: clamp(56px, 11vw, 150px); line-height: .92; letter-spacing: -.01em;
-  color: var(--blanc-creme); transform: rotate(var(--titre-tilt)); transform-origin: left bottom; text-wrap: balance;
+  color: var(--h-ink); transform: rotate(var(--titre-tilt)); transform-origin: left bottom; text-wrap: balance;
+  transition: color 1.6s ease;
 }
-.hero-quote { margin: 12px 0 0; max-width: 52ch; font-style: italic; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45; color: var(--texte-doux); text-wrap: pretty; }
+.hero-quote {
+  margin: 12px 0 0; max-width: 52ch; font-style: italic; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45;
+  color: var(--h-quote); text-wrap: pretty; transition: color 1.6s ease;
+}
 
 /* ---------- pochette en dix pièces ---------- */
 .pochette { padding-bottom: 10vh; display: flex; flex-direction: column; align-items: center; gap: 32px; }
 .puzzle {
   /* la pochette tient entière dans la hauteur de l’écran (96px de marge pour le lien dessous) */
   position: relative; width: min(100%, calc(100vh - 96px)); width: min(100%, calc(100svh - 96px)); aspect-ratio: 1; display: grid;
-  grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2px; background: var(--trait); padding: 2px;
+  grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2px; background: var(--h-trait); padding: 2px;
+  transition: background-color 1.6s ease;
 }
 .tile { position: relative; perspective: 1600px; cursor: pointer; min-width: 0; min-height: 0; container-type: inline-size; }
 .tile:focus-visible { outline: 1px solid var(--or); outline-offset: 2px; }
@@ -60,7 +107,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .tile.is-flipped .tile-in { transform: rotateY(180deg); }
 .tile-front, .tile-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; }
 .tile-front { background: var(--nuit) url(../assets/pochette.webp) no-repeat; }
-.tile-n { position: absolute; left: 12px; top: 10px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; color: var(--or-pale); opacity: .75; }
 .tile-title {
   position: absolute; left: 12px; right: 12px; bottom: 10px; font-style: italic; font-weight: 300; font-size: clamp(14px, 1.8vw, 22px); line-height: 1;
   color: var(--blanc-creme); opacity: .9; text-shadow: 0 0 12px rgba(7,6,12,.6);
@@ -69,7 +115,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .tile-back-img { position: relative; overflow: hidden; min-height: 0; background: var(--nuit) center / cover no-repeat; }
 .tile-hint { position: absolute; right: 10px; top: 8px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; color: var(--or-pale); }
 .tile-back-txt { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; border-top: 1px solid #1A1626; }
-.tile-meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 9px; letter-spacing: .18em; color: var(--gris-violet); }
 .tile-quote { font-style: italic; font-weight: 300; font-size: clamp(13px, 1.5vw, 19px); line-height: 1.12; color: var(--blanc-creme); text-wrap: balance; }
 /* petites pièces : le single occupe tout le dos, la phrase se pose dessus en bas sur un voile ;
    taille en cqw pour suivre la taille de la pièce (le puzzle est borné par la hauteur d’écran) */
@@ -80,35 +125,117 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   background: linear-gradient(to bottom, rgba(12,10,20,0), rgba(12,10,20,.86) 30%, rgba(12,10,20,.94));
 }
 .tile:not(.tile-big) .tile-quote { font-size: clamp(12px, 7cqw, 16px); line-height: 1.15; text-shadow: 0 1px 8px rgba(7,6,12,.6); }
-.puzzle-tools { display: flex; gap: 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; color: var(--gris-violet); }
+.puzzle-tools { display: flex; gap: 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; color: var(--h-meta); transition: color 1.6s ease; }
+.puzzle-tools .lien { border-color: var(--h-trait); }
+.puzzle-tools .lien:hover { color: var(--h-ink); }
 .lien { border-bottom: 1px solid var(--trait); padding-bottom: 2px; color: inherit; }
 .lien:hover { color: var(--or-pale); }
 
 /* ---------- titres ---------- */
-.titres { padding-bottom: 12vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 32px 48px; align-items: stretch; }
-.titres-cover { display: block; min-height: 100%; background: var(--nuit) center / cover no-repeat; }
+.titres { padding-bottom: 12vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 32px 48px; align-items: start; }
 .tracklist { display: flex; flex-direction: column; }
 .track {
   display: grid; grid-template-columns: 2.5em minmax(0, 1fr) auto; gap: 16px; align-items: baseline;
-  padding: 14px 0; border-top: 1px solid var(--trait); color: var(--blanc-chaud);
+  padding: 14px 0; border-top: 1px solid var(--h-trait); color: var(--blanc-chaud); transition: border-color 1.6s ease;
 }
-.track-n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; color: var(--gris-violet); }
-.track-title { font-style: italic; font-weight: 300; font-size: clamp(26px, 3vw, 40px); line-height: 1.05; color: var(--blanc-creme); transition: color .3s ease; }
-.track:hover .track-title { color: var(--or-pale); }
-.track-dur { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--gris-violet); }
-.track-end { border-top: 1px solid var(--trait); }
+.track-n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; color: var(--h-meta); transition: color 1.6s ease; }
+.track-title { font-style: italic; font-weight: 300; font-size: clamp(26px, 3vw, 40px); line-height: 1.05; color: var(--h-ink); transition: color .3s ease; }
+.track:hover .track-title { color: var(--h-accent); }
+.track-dur { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--h-meta); transition: color 1.6s ease; }
+.track-end { border-top: 1px solid var(--h-trait); transition: border-color 1.6s ease; }
 
-/* ---------- livret ---------- */
-.livret { padding-bottom: 14vh; }
-.livret-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px; background: var(--trait); padding: 6px; }
-.thumb { position: relative; aspect-ratio: 1; overflow: hidden; display: block; background: var(--nuit) center / cover no-repeat; }
-.thumb-n { position: absolute; left: 10px; top: 8px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; color: var(--or-pale); opacity: .8; }
-.thumb-title {
-  position: absolute; left: 10px; right: 10px; bottom: 8px; font-style: italic; font-weight: 300; font-size: 20px; line-height: 1;
-  color: var(--blanc-creme); text-shadow: var(--text-halo);
+/* ---------- livret : dix cartes à foil holographique ----------
+   Porté de Site.dc.html. À gauche des titres, les cartes sont empilées en éventail : chacune ne laisse
+   voir que son bord haut. Elles se distribuent quand la pile entre à l’écran, sortent de la pile au
+   survol, et s’ouvrent en grand au clic (voir plus bas). */
+.cartes { display: flex; flex-direction: column; align-items: flex-start; }
+.carte {
+  position: relative; flex: 0 0 auto; width: 72%; aspect-ratio: 180 / 250; cursor: pointer; overflow: hidden;
+  background: var(--nuit) center / cover no-repeat; outline: 1px solid rgba(243,235,221,.14); outline-offset: -1px;
+  transform: translateY(40px); opacity: 0;
+  transition: transform .7s cubic-bezier(.2,.7,.2,1), opacity .4s ease;
+}
+/* la marge en % suit la largeur de la pile : à 72 % de large, une carte fait pile 100 % de haut,
+   il ne reste donc que le bord de 42 px qui dépasse */
+.carte + .carte { margin-top: calc(-100% + 42px); }
+.carte:focus-visible { outline: 1px solid var(--or); }
+.carte.is-dealt { transform: none; opacity: 1; }
+.carte.is-dealt:hover { transform: translateX(9%); z-index: 5; }
+.carte.is-open { opacity: 0; transition: opacity .4s ease; }
+.carte-holo {
+  position: absolute; inset: 0; pointer-events: none; opacity: .14; mix-blend-mode: color-dodge;
+  background: conic-gradient(from 210deg at 60% 40%, #F0B8C8, #A9C8EA, #F2D9A0, #B8A0D0, #F0B8C8);
+}
+.carte-sheen {
+  position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+  background: linear-gradient(105deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.1) 46%, rgba(242,217,160,.08) 50%, rgba(255,255,255,0) 66%);
 }
 
-.pied { padding-top: 12px; padding-bottom: 40px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gris-violet); }
+/* ---------- une carte ouverte en grand : le foil suit la souris ---------- */
+.carte-vue { position: fixed; inset: 0; z-index: 12; background: rgba(7,6,12,0); transition: background .6s ease; perspective: 1400px; cursor: pointer; }
+.carte-vue.is-open { background: rgba(7,6,12,.86); }
+.carte-bar {
+  position: absolute; left: 0; right: 0; top: 0; padding: 24px 32px; display: flex; justify-content: flex-end;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gris-violet);
+  opacity: 0; transition: opacity .5s ease .3s;
+}
+.carte-vue.is-open .carte-bar { opacity: 1; }
+.carte-scene {
+  position: fixed; cursor: pointer; transform-style: preserve-3d;
+  transition: left .7s cubic-bezier(.2,.7,.2,1), top .7s cubic-bezier(.2,.7,.2,1), width .7s cubic-bezier(.2,.7,.2,1), height .7s cubic-bezier(.2,.7,.2,1), transform .5s ease, opacity .5s ease;
+}
+.carte-scene.is-tilting { transition: transform .12s ease-out; }
+.carte-scene.is-sliding { transition: transform .26s ease, opacity .26s ease; }
+.carte-scene.is-instant { transition: none; }
+/* le flip : recto imprimé (foil) et verso mat (les paroles) */
+.carte-flip { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.carte-flip.is-back { transform: rotateY(180deg); }
+.carte-face {
+  position: absolute; inset: 0; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  outline: 1px solid rgba(243,235,221,.18); outline-offset: -1px;
+}
+.carte-recto { background: var(--nuit) center / cover no-repeat; }
+.carte-verso {
+  transform: rotateY(180deg); background: var(--nuit-2);
+  display: flex; flex-direction: column; justify-content: center; padding: 9% 7% 22%;
+}
+.verso-vers { font-style: italic; font-weight: 300; font-size: clamp(17px, 2.4vmin, 24px); line-height: 1.5; color: var(--texte-doux); white-space: pre-line; text-wrap: pretty; }
+.verso-play {
+  position: absolute; left: 7%; bottom: 8%; font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--blanc-chaud); border: 1px solid var(--trait); padding: 10px 18px;
+}
+.verso-play:hover { border-color: var(--gris-violet); color: var(--or-pale); }
+.carte-tourner {
+  position: absolute; left: 6%; top: 4%; font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--or-pale); opacity: .85; text-shadow: 0 0 10px rgba(7,6,12,.9);
+}
+.carte-scene:hover .carte-tourner { opacity: 1; }
+/* feuilleter : les chevrons, et le glissé au doigt (voir js/site.js) */
+.carte-nav {
+  position: absolute; top: 50%; transform: translateY(-50%); padding: 18px 22px;
+  font-family: var(--font-titre); font-size: 44px; line-height: 1; color: var(--gris-violet);
+  opacity: 0; transition: opacity .5s ease .3s, color .3s ease;
+}
+.carte-vue.is-open .carte-nav { opacity: 1; }
+.carte-nav:hover { color: var(--or-pale); }
+.carte-prev { left: 1.5%; }
+.carte-next { right: 1.5%; }
+.grande-holo, .grande-sheen, .grande-stripes { position: absolute; inset: 0; pointer-events: none; }
+.grande-holo { mix-blend-mode: color-dodge; }
+.grande-sheen { mix-blend-mode: screen; }
+.grande-stripes { mix-blend-mode: overlay; opacity: .35; }
+.carte-txt {
+  position: absolute; left: 6%; right: 6%; bottom: 5%; display: flex; flex-direction: column; gap: 10px;
+  opacity: 0; transition: opacity .5s ease .3s;
+}
+.carte-vue.is-open .carte-txt { opacity: 1; }
+.carte-titre {
+  font-style: italic; font-weight: 300; font-size: clamp(28px, 5vmin, 52px); line-height: 1; color: var(--blanc-creme);
+  transform: rotate(var(--titre-tilt)); transform-origin: left bottom; text-shadow: 0 0 14px rgba(7,6,12,.7);
+}
+.carte-quote { font-style: italic; font-size: clamp(14px, 1.9vmin, 18px); line-height: 1.35; color: var(--texte-doux); text-wrap: pretty; }
+
+.pied { padding-top: 12px; padding-bottom: 40px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--h-meta); transition: color 1.6s ease; }
 
 /* ---------- lecteur ---------- */
 /* --accent : la couleur du titre en cours ; enregistrée pour pouvoir glisser d’une couleur à l’autre au changement de morceau */
@@ -182,11 +309,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @media (max-width: 820px) {
   :root { --marge: 20px; }
   .titres { grid-template-columns: 1fr; gap: 24px; }
-  .titres-cover { aspect-ratio: 1; }
-  .livret-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-  .thumb-title { font-size: 18px; }
-  .tile-n, .tile-hint { font-size: 8px; left: 8px; top: 6px; }
-  .tile-hint { left: auto; right: 8px; }
+  /* sur mobile la pile redevient une rangée qui se fait défiler à l’horizontale */
+  .cartes { flex-direction: row; overflow-x: auto; overflow-y: hidden; gap: 8px; padding: 0 0 12px; -webkit-overflow-scrolling: touch; }
+  .carte { flex: 0 0 112px; width: auto; }
+  .carte + .carte { margin-top: 0; }
+  .carte.is-dealt:hover { transform: none; }
+  .tile-hint { font-size: 8px; right: 8px; top: 6px; }
   .tile-title { left: 8px; right: 8px; bottom: 7px; font-size: 12px; }
   /* au dos des pièces : plus de texte, seulement le bouton écouter, centré */
   .tile-back-txt { display: none; }
@@ -205,4 +333,91 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .player-text { transform: none; padding: 0 24px; gap: 14px; }
   .player-title { font-size: clamp(34px, 9vw, 60px); }
   .player-lyrics { max-height: 22vh; }
+  /* la carte ouverte prend la largeur du cadre : les chevrons passent sous elle */
+  .carte-nav { top: auto; bottom: 3%; transform: none; font-size: 34px; padding: 12px 20px; }
+  .carte-prev { left: 28%; }
+  .carte-next { right: 28%; }
+  .carte-bar { padding: 20px 24px; }
+}
+
+/* ---------- paroles vivantes (Prolongements 1c) ----------
+   À la première lecture, js/site.js pose is-live : le vers en cours s’allume et grandit, les vers passés
+   s’effacent, les vers à venir s’étirent vers le bas (le vertige de la chute). La liste se recentre seule
+   sur le vers en cours ; un clic sur un vers déplace la lecture. */
+.player-lyrics.is-live {
+  mask-image: linear-gradient(#0000, #000 20%, #000 80%, #0000);
+  -webkit-mask-image: linear-gradient(#0000, #000 20%, #000 80%, #0000);
+  padding-block: 15vh; /* le premier et le dernier vers doivent pouvoir se centrer */
+}
+/* la souris posée sur les paroles les rallume : on peut lire le texte entier sans arrêter la lecture */
+.player-lyrics.is-live:hover span { opacity: .5; filter: none; transform: none; }
+.player-lyrics.is-live:hover span.is-now { opacity: 1; }
+.player-lyrics span { transition: opacity .55s ease, filter .55s ease, transform .55s ease, color .55s ease, font-size .4s ease; }
+/* les vers déjà passés s’étirent vers le haut en s’effaçant, ceux qui viennent restent en attente */
+.player-lyrics.is-live span { cursor: pointer; opacity: .08; filter: blur(1px); transform-origin: bottom; }
+.player-lyrics.is-live span.is-n2 { opacity: .12; filter: blur(.7px); }
+.player-lyrics.is-live span.is-n1 { opacity: .2; filter: blur(.3px); }
+.player-lyrics.is-live span.is-now {
+  opacity: 1; filter: none; transform: none; color: var(--blanc-creme);
+  font-size: clamp(19px, 1.6vw, 24px); line-height: 1.35;
+}
+.player-lyrics.is-live span.is-p1 { opacity: .42; filter: blur(.3px); transform: scaleY(1.08); }
+.player-lyrics.is-live span.is-p2 { opacity: .26; filter: blur(.7px); transform: scaleY(1.2); }
+.player-lyrics.is-live span.is-past { opacity: .1; filter: blur(1.2px); transform: scaleY(1.34); }
+
+/* ---------- l’objet : le vinyle (Prolongements 1f) ---------- */
+.objet { padding-bottom: 12vh; }
+
+/* le vinyle 12 pouces, deux pressages : le disque sort de la pochette et tourne au survol */
+.pressages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
+.pressage { display: flex; flex-direction: column; gap: 18px; }
+.pressage-vue { position: relative; aspect-ratio: 8 / 5; }
+.pressage-pochette { position: absolute; left: 0; top: 0; width: 62.5%; aspect-ratio: 1; object-fit: cover; background: var(--nuit); z-index: 2; }
+.disque {
+  position: absolute; left: 23.44%; top: 5%; width: 56.25%; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  transition: transform .7s cubic-bezier(.2,.7,.2,1);
+}
+.disque-plateau { position: absolute; inset: 0; border-radius: 50%; }
+.disque-sillons { position: absolute; inset: 0; border-radius: 50%; }
+.disque-reflet { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; }
+.disque-label {
+  position: absolute; left: 33.3%; top: 33.3%; width: 33.4%; height: 33.4%; border-radius: 50%; overflow: hidden;
+  background: var(--nuit); container-type: inline-size;
+}
+.disque-label img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.disque-face { position: absolute; left: 0; right: 0; top: 17%; text-align: center; font-family: var(--font-mono); font-size: 7cqw; letter-spacing: .14em; color: var(--or-pale); text-shadow: 0 0 6px rgba(7,6,12,.9); }
+.disque-titre { position: absolute; left: 0; right: 0; top: 50%; text-align: center; font-style: italic; font-weight: 300; font-size: 14cqw; color: var(--blanc-creme); text-shadow: 0 0 6px rgba(7,6,12,.9); }
+.disque-trou { position: absolute; left: 50%; top: 50%; width: 7%; aspect-ratio: 1; margin: -3.5% 0 0 -3.5%; border-radius: 50%; background: var(--nuit); box-shadow: 0 0 0 1px var(--trait); }
+.pressage-noir .disque-sillons {
+  background: radial-gradient(circle, #0C0A14 0 17%, rgba(7,6,12,0) 18%),
+              repeating-radial-gradient(circle, #07060C 0 1.4px, #221B30 2px, #07060C 3.4px);
+}
+.pressage-noir .disque-reflet {
+  background: conic-gradient(from 200deg, rgba(243,235,221,0) 0, rgba(243,235,221,.12) 6%, rgba(243,235,221,0) 14%, rgba(243,235,221,0) 50%, rgba(243,235,221,.1) 56%, rgba(243,235,221,0) 64%);
+}
+.pressage-ambre .disque-sillons {
+  background: repeating-radial-gradient(circle, rgba(7,6,12,.55) 0 1.4px, rgba(7,6,12,0) 2px, rgba(7,6,12,.55) 3.4px),
+              radial-gradient(circle, #07060C 0 17%, #3A1A0C 17.5%, #7A3E22 18%, #B8652E 40%, #E0A33A 70%, #F2D9A0 100%);
+}
+.pressage-ambre .disque-reflet {
+  background: radial-gradient(circle, rgba(0,0,0,0) 17%, rgba(7,6,12,.4) 18%, rgba(7,6,12,0) 30%, rgba(7,6,12,0) 80%, rgba(7,6,12,.5) 100%),
+              conic-gradient(from 200deg, rgba(255,255,255,0) 0, rgba(255,255,255,.28) 6%, rgba(255,255,255,0) 14%, rgba(255,255,255,0) 50%, rgba(255,255,255,.2) 56%, rgba(255,255,255,0) 64%);
+}
+.pressage:hover .disque, .pressage:focus-within .disque { transform: translateX(35.5%); }
+.pressage:hover .disque-plateau, .pressage:focus-within .disque-plateau { animation: spin 7s linear infinite; }
+@keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+.pressage-ligne {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+  border-top: 1px solid var(--h-trait); padding-top: 12px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .18em; line-height: 1.6; color: var(--h-meta);
+  transition: color 1.6s ease, border-color 1.6s ease;
+}
+.prix { font-size: 11px; color: var(--h-ink); white-space: nowrap; transition: color 1.6s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .pressage:hover .disque-plateau, .pressage:focus-within .disque-plateau { animation: none; }
+  .carte, .carte.is-dealt:hover { transition: opacity .4s ease; transform: none; }
+}
+@media (max-width: 820px) {
+  .pressages { grid-template-columns: 1fr; gap: 32px; }
+  .objet { gap: 44px; }
 }

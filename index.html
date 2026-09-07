@@ -17,8 +17,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@400&display=swap">
 <link rel="stylesheet" href="css/site.css">
+<!-- la lumière est posée avant le premier rendu pour éviter un passage par la nuit -->
+<script>document.documentElement.dataset.heure=(h=>h>=10&&h<18?'jour':'nuit')(new Date().getHours())</script>
 </head>
 <body>
+
+<!-- la lumière du site : jour ou nuit, selon l’heure locale du visiteur ou le switch de l’en-tête -->
+<div class="ciel" aria-hidden="true"></div>
 
 <!-- rivière de paroles en fond : texture peinte une fois par js/site.js, mise en rotation lente -->
 <div class="river" aria-hidden="true">
@@ -28,7 +33,10 @@
 
 <div class="page">
 
-  <header class="brand">LEV × SIMARD</header>
+  <header class="brand">
+    <span class="brand-nom">LEV × SIMARD</span>
+    <nav class="heures" id="heures" aria-label="Lumière du site"></nav>
+  </header>
 
   <section class="hero" id="accueil">
     <h1 class="titre">l’appel du vide</h1>
@@ -42,17 +50,44 @@
     </div>
   </section>
 
+  <!-- les titres, et à gauche le livret : dix cartes à foil empilées en éventail -->
   <section class="titres" id="titres" aria-label="Les titres">
-    <a class="titres-cover" id="titres-cover" href="#pochette" aria-label="Écouter intro"></a>
+    <div class="cartes" id="cartes" aria-label="Le livret"></div>
     <div class="tracklist" id="tracklist"></div>
   </section>
 
-  <section class="livret" id="livret" aria-label="Le livret">
-    <div class="livret-grid" id="livret-grid"></div>
+  <!-- l’objet : le vinyle en deux pressages (Prolongements 1f) -->
+  <section class="objet" id="objet" aria-label="Le vinyle">
+    <div class="pressages" id="pressages"></div>
   </section>
 
   <footer class="pied">LEV × SIMARD · 10 TITRES · 22:33</footer>
 
+</div>
+
+<!-- une carte du livret ouverte en grand : elle s’envole depuis sa place, le foil suit la souris -->
+<div class="carte-vue" id="carte-vue" role="dialog" aria-modal="true" aria-label="Carte du livret" hidden>
+  <div class="carte-bar"><button type="button" class="lien" id="carte-close">fermer</button></div>
+  <button type="button" class="carte-nav carte-prev" id="carte-prev" aria-label="Carte précédente">‹</button>
+  <button type="button" class="carte-nav carte-next" id="carte-next" aria-label="Carte suivante">›</button>
+  <div class="carte-scene" id="carte-scene">
+    <div class="carte-flip" id="carte-flip">
+      <div class="carte-face carte-recto">
+        <div class="grande-holo" id="grande-holo" aria-hidden="true"></div>
+        <div class="grande-sheen" id="grande-sheen" aria-hidden="true"></div>
+        <div class="grande-stripes" id="grande-stripes" aria-hidden="true"></div>
+        <span class="carte-tourner" aria-hidden="true">retourner ↻</span>
+        <div class="carte-txt">
+          <span class="carte-titre" id="carte-titre"></span>
+          <span class="carte-quote" id="carte-quote"></span>
+        </div>
+      </div>
+      <div class="carte-face carte-verso">
+        <span class="verso-vers" id="verso-vers"></span>
+        <button type="button" class="verso-play" id="verso-play">écouter →</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- lecteur plein écran : la pochette du single s’envole depuis sa vignette, s’anime en WebGL pendant la lecture -->
@@ -95,8 +130,8 @@
 
 <noscript>
   <ol class="noscript">
-    <li>intro · 2:08</li><li>vieux messages · 1:43</li><li>sidehustle · 2:54</li><li>buisness model · 2:37</li><li>l’appelduvide · 1:36</li>
-    <li>imperméable · 2:46</li><li>long fleuve · 2:14</li><li>sésame interlude · 1:50</li><li>dequoituparles! · 1:30</li><li>persephone · 3:15</li>
+    <li>intro</li><li>vieux messages</li><li>sidehustle</li><li>buisness model</li><li>l’appelduvide</li>
+    <li>imperméable</li><li>long fleuve</li><li>sésame interlude</li><li>dequoituparles!</li><li>persephone</li>
   </ol>
 </noscript>
 
