@@ -39,6 +39,7 @@ assets/pochette-titre.jpg la pochette titrée, 1200 × 1200, pour og:image
 assets/singles/*.webp     les 10 pochettes de singles, 1000 × 1000
 audio/*.mp3               les 10 titres, masters v3.2, mêmes noms que les singles
 tokens/               tokens du design system
+functions/audio/[[file]].js  fonction Cloudflare Pages : sert les MP3 avec les requêtes Range (Pages les ignore sinon, le seek repart à zéro)
 tools/serve.py            serveur de développement (requêtes Range, indispensables au seek audio)
 tools/capture.html        port de Capture.dc.html : une pochette en direct, 1000 × 1000, ?track=01…10, S enregistre le PNG (hors site)
 tools/render-covers.html  outil de rendu des pochettes de secours en série (hors site)
