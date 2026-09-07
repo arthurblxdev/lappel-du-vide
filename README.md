@@ -41,10 +41,11 @@ Prolongements en place :
   écouter qui ouvre le lecteur depuis la carte), **les chevrons, les flèches ← → et le glissé
   feuillettent** le livret sans le refermer. Clic à côté ou Échap pour refermer. Sur mobile la pile
   redevient une rangée qui se fait défiler à l’horizontale.
-- **1c · paroles vivantes** (`Prolongements.dc.html`) — dans le lecteur, le vers en cours s’allume
-  et grandit, les vers déjà passés s’étirent vers le haut en s’effaçant, ceux qui viennent restent
-  en attente ; la liste se recentre seule, un clic sur un vers y déplace la lecture, la souris posée
-  sur les paroles les rallume pour lire le texte entier. `paroles.md` n’ayant pas d’horodatage,
+- **1c · paroles vivantes** (`Prolongements.dc.html`) — dans le lecteur, le vers en cours s’allume,
+  ses voisins s’effacent, le lointain passé s’étire en se dissolvant. Le vers en cours ne change ni
+  de taille ni de netteté : la liste ne se réajuste jamais, l’œil ne perd pas la ligne quand les vers
+  s’enchaînent vite. Elle se recentre seule, un clic sur un vers y déplace la lecture, la souris
+  posée sur les paroles les rallume pour lire le texte entier. `paroles.md` n’ayant pas d’horodatage,
   les 545 vers de l’album ont été horodatés à la main avec `tools/horodatage.html` (ci-dessous) →
   `assets/brief/horodatage.json`, que le lecteur utilise comme ancres. Si un vers n’a pas de temps
   (paroles modifiées, titre pas encore fait), il se répartit entre les ancres voisines à la longueur,

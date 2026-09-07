@@ -399,7 +399,7 @@ function centerVerse(el) {
   cancelAnimationFrame(P.centerRaf);
   if (!el || !P.live || Date.now() - P.manual < 6000) return;
   const doux = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fin = performance.now() + 900;
+  const fin = performance.now() + 600;   // la cible ne bouge plus (le vers ne grandit pas), c’est vite fini
   const suivre = () => {
     if (!P.live || !el.isConnected || Date.now() - P.manual < 6000) return;
     const cible = el.offsetTop - box.offsetTop - box.clientHeight / 2 + el.offsetHeight / 2;
