@@ -370,7 +370,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* le vinyle 12 pouces, deux pressages : le disque sort de la pochette et tourne au survol */
 .pressages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
-.pressage { display: flex; flex-direction: column; gap: 18px; }
+.pressage { display: flex; flex-direction: column; }
 .pressage-vue { position: relative; aspect-ratio: 8 / 5; }
 .pressage-pochette { position: absolute; left: 0; top: 0; width: 62.5%; aspect-ratio: 1; object-fit: cover; background: var(--nuit); z-index: 2; }
 .disque {
@@ -406,13 +406,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .pressage:hover .disque, .pressage:focus-within .disque { transform: translateX(35.5%); }
 .pressage:hover .disque-plateau, .pressage:focus-within .disque-plateau { animation: spin 7s linear infinite; }
 @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
-.pressage-ligne {
-  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-  border-top: 1px solid var(--h-trait); padding-top: 12px;
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: .18em; line-height: 1.6; color: var(--h-meta);
-  transition: color 1.6s ease, border-color 1.6s ease;
-}
-.prix { font-size: 11px; color: var(--h-ink); white-space: nowrap; transition: color 1.6s ease; }
 @media (prefers-reduced-motion: reduce) {
   .pressage:hover .disque-plateau, .pressage:focus-within .disque-plateau { animation: none; }
   .carte, .carte.is-dealt:hover { transition: opacity .4s ease; transform: none; }

@@ -244,7 +244,7 @@ function ecouterCarte() {
    Porté de Prolongements.dc.html (1f vinyle 12 pouces, deux pressages). */
 const PRESSAGES = [
   { key: 'noir', cover: 'assets/covers/vertige.webp', coverAlt: 'pochette vertige',
-    label: 'VINYLE NOIR · 180 G · POCHETTE MATE + LIVRET 12×12', prix: '28 €', labelImg: 'assets/singles/05-lappelduvide.webp' }, // prix gardés mais pas affichés : pas de boutique
+    label: 'VINYLE NOIR · 180 G · POCHETTE MATE + LIVRET 12×12', prix: '28 €', labelImg: 'assets/singles/05-lappelduvide.webp' }, // label et prix gardés, pas affichés : pas de boutique
   { key: 'ambre', cover: 'assets/covers/horizon-solarise.webp', coverAlt: 'pochette horizon solarisé',
     label: 'VINYLE AMBRE TRANSLUCIDE · 300 EX NUMÉROTÉS · FOIL OR', prix: '38 €', labelTitre: 'l’appel du vide' },
 ];
@@ -266,7 +266,6 @@ function renderObjet() {
         </div>
         <img class="pressage-pochette" src="${p.cover}" alt="${esc(p.coverAlt)}" loading="lazy" decoding="async">
       </div>
-      <div class="pressage-ligne"><span>${esc(p.label)}</span></div>
     </article>`).join('');
 }
 

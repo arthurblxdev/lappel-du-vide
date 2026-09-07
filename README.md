@@ -49,9 +49,10 @@ Prolongements en place :
   `assets/brief/horodatage.json`, que le lecteur utilise comme ancres. Si un vers n’a pas de temps
   (paroles modifiées, titre pas encore fait), il se répartit entre les ancres voisines à la longueur,
   et sans fichier du tout le calage entier retombe sur cette estimation.
-- **1f · le vinyle 12 pouces** (`Prolongements.dc.html`) — deux pressages (noir 180 g, ambre
-  translucide 300 ex). Au survol, le disque sort de la pochette et se met à tourner, étiquette
-  visible. Le livret 12 × 12 en trois finitions (1e) a été remplacé par les cartes à foil.
+- **1f · le vinyle 12 pouces** (`Prolongements.dc.html`) — deux pressages, noir et ambre
+  translucide. Au survol, le disque sort de la pochette et se met à tourner, étiquette visible.
+  Les descriptions et les prix des pressages sont dans `js/site.js` mais pas affichés, faute de
+  boutique. Le livret 12 × 12 en trois finitions (1e) a été remplacé par les cartes à foil.
 
 ## Lancer
 
