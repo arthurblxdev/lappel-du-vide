@@ -1,3 +1,4 @@
 .DS_Store
 tools/.shot-*.jpeg
 __pycache__/
+.wrangler/

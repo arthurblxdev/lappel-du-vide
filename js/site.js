@@ -26,7 +26,7 @@ const TRACKS = [
     tile: [3, 1, 1, 1] },
   { n: "05", title: "l’appelduvide", file: "05-lappelduvide", dur: "1:36", accent: "#A9C8EA", meta: "1:36 · 120 BPM", tileMeta: "1:36 · 120 BPM",
     quote: "dérush un peu ma belle, le plus important c’est d’contempler",
-    excerpt: "l’avenir est chatoyant, les couleurs du décor sont bien ternes, l’asile c’est dehors, ça fait bientôt 26 ans qu’on m’y interne",
+    excerpt: "l’avenir est chatoyant, les couleurs du décor sont bien ternes, l’asile c’est dehors, ça fait bientôt 26 piges qu’on m’y interne",
     tile: [1, 1, 2, 2] },
   { n: "06", title: "imperméable", file: "06-impermeable", dur: "2:46", accent: "#B8652E", meta: "2:46 · 75 BPM", tileMeta: "2:46 · 75 BPM",
     quote: "p’t’être que des sumériennes écrivaient déjà tes lèvres sur les miennes",
@@ -186,7 +186,8 @@ function renderLyrics() {
   const t = TRACKS[P.open];
   const txt = (P.lines && P.lines[t.i]) || t.excerpt;
   const box = $('p-lyrics'); box.innerHTML = ''; box.scrollTop = 0;
-  txt.split(/(?<=[,.!?…])\s+/).map(s => s.trim()).filter(Boolean).forEach(l => { const s = document.createElement('span'); s.textContent = l; box.appendChild(s); });
+  // un vers par ligne, tels qu’écrits dans paroles.md (pas de découpe sur la ponctuation)
+  txt.split('\n').map(s => s.trim()).filter(Boolean).forEach(l => { const s = document.createElement('span'); s.textContent = l; box.appendChild(s); });
 }
 function renderProgress() {
   const t = TRACKS[P.open]; const p = (100 * Math.min(1, P.elapsed / t.seconds)) + '%';
@@ -330,15 +331,17 @@ function pulseFrame() {
 /* ---------- paroles ---------- */
 function loadLyrics() {
   fetch('assets/brief/paroles.md').then(r => r.ok ? r.text() : Promise.reject(r.status)).then(md => {
-    const lines = [];
+    const lines = [], flat = [];
     for (const s of md.split(/\n## /).slice(1)) {
       const m = s.match(/^(\d\d)\.[^\n]*\n\n\*[^\n]*\*\n\n([\s\S]*)/);
-      if (m) lines.push(m[2].replace(/\s+/g, ' ').trim());
+      if (!m) continue;
+      lines.push(m[2].trim());                          // un vers par ligne, pour le lecteur
+      flat.push(m[2].replace(/\s+/g, ' ').trim());      // en un seul fil, pour la rivière
     }
     if (!lines.length) return;
     P.lines = lines;
     if (P.phase !== 'closed') renderLyrics();
-    river.repaint(lines);
+    river.repaint(flat);
   }).catch(() => {});
 }
 
