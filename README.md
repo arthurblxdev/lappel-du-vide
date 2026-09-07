@@ -69,7 +69,15 @@ enchaînement).
 
 ## Mise en ligne
 
-Le site est publié par GitHub Pages depuis la branche `main` du dépôt
-<https://github.com/arthurblxdev/lappel-du-vide> : <https://arthurblxdev.github.io/lappel-du-vide/>.
-Chaque `git push` sur `main` redéploie en une minute environ. `og:url` et `og:image` dans
-`index.html` pointent sur cette adresse ; les changer si le site passe sur un domaine propre.
+Le site est servi par Cloudflare Pages : <https://lappelduvide.pages.dev/> (projet `lappelduvide`,
+compte Cloudflare arthur.blxdev@gmail.com, connexion par `npx wrangler login`). Pour redéployer,
+depuis le dossier du site :
+
+```
+git commit -am "…"                       # les fichiers versionnés sont ceux publiés
+npx -y wrangler pages deploy . --project-name lappelduvide --branch main --commit-dirty=true
+```
+
+Le dépôt <https://github.com/arthurblxdev/lappel-du-vide> garde l’historique ; GitHub Pages y sert
+encore une copie sur <https://arthurblxdev.github.io/lappel-du-vide/>. `og:url` et `og:image` dans
+`index.html` pointent sur pages.dev ; les changer si le site passe sur un domaine propre.
