@@ -2,3 +2,4 @@
 tools/.shot-*.jpeg
 __pycache__/
 .wrangler/
+tools/insta/node_modules/

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<base href="../../">
+<link rel="icon" href="data:,">
+<title>post — l’appel du vide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Gabarits des posts 1080 × 1350 — outil hors site.
+   ?type=single|carte|citation|album|tracklist|vinyle  &n=01…10  &heure=nuit|jour  &pressage=noir|ambre
+   La lumière (nuit / jour) et les styles reprennent css/site.css ; render.mjs attend window.post.ready. */
+:root {
+  --nuit: #07060C; --blanc-chaud: #F3EBDD; --blanc-creme: #F6EEDF; --texte-doux: #CFC4AE; --gris-violet: #8F86B0;
+  --or: #E0A33A; --or-pale: #F2D9A0; --trait: #2A2338; --accent: #E0A33A;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace; --font-titre: 'Cormorant Garamond', Georgia, serif;
+}
+:root, :root[data-heure="nuit"] {
+  --h-fond: #07060C; --h-env: radial-gradient(ellipse 90% 45% at 50% 108%, rgba(94,63,179,.45), rgba(7,6,12,0) 70%), #07060C;
+  --h-ink: #F6EEDF; --h-quote: #CFC4AE; --h-meta: #8F86B0; --h-accent: #E0A33A; --h-trait: #2A2338;
+}
+:root[data-heure="jour"] {
+  --h-fond: #F2D9A0; --h-env: radial-gradient(circle at 50% 62%, #F6EEDF 0, #F2D9A0 22%, #E0A33A 60%, #B8652E 100%), #F2D9A0;
+  --h-ink: #07060C; --h-quote: #07060C; --h-meta: #07060C; --h-accent: #07060C; --h-trait: rgba(7,6,12,.35);
+}
+html, body { margin: 0; }
+body { position: relative; width: 1080px; height: 1350px; overflow: hidden; background: var(--h-env); font-family: var(--font-titre); color: var(--h-ink); -webkit-font-smoothing: antialiased; }
+.glow { position: absolute; inset: 0; opacity: .26; background: radial-gradient(ellipse 60% 45% at 50% 40%, var(--accent), rgba(7,6,12,0) 75%); }
+:root[data-heure="jour"] .glow { display: none; }
+.mono { font-family: var(--mono); font-size: 18px; letter-spacing: .2em; text-transform: uppercase; color: var(--h-meta); }
+.brand { position: absolute; left: 80px; right: 80px; top: 80px; display: flex; justify-content: space-between; }
+.brand .acc { color: var(--h-accent); }
+.foot { position: absolute; left: 80px; right: 80px; bottom: 78px; display: flex; justify-content: space-between; }
+
+/* single : la pochette entière, puis numéro · titre · durée, la phrase-clé, et la métadonnée du lecteur */
+.cover { position: absolute; left: 100px; top: 80px; width: 880px; height: 880px; object-fit: cover; background: var(--nuit); outline: 1px solid rgba(243,235,221,.08); outline-offset: -1px; }
+.row { position: absolute; left: 100px; right: 100px; top: 1004px; display: grid; grid-template-columns: 2.5em minmax(0, 1fr) auto; gap: 18px; align-items: baseline; }
+.row .n { font-family: var(--mono); font-size: 18px; letter-spacing: .2em; color: var(--h-meta); }
+.row .t { font-style: italic; font-weight: 300; font-size: 68px; line-height: 1; color: var(--h-ink); white-space: nowrap; }
+.row .d { font-family: var(--mono); font-size: 18px; letter-spacing: .14em; color: var(--h-meta); }
+.quote { position: absolute; left: 100px; width: 880px; top: 1100px; font-style: italic; font-weight: 300; font-size: 31px; line-height: 1.32; color: var(--h-quote); text-wrap: pretty; }
+
+/* carte : la carte du livret, pochette plein cadre, foil, titre et phrase-clé en bas */
+.plein { position: absolute; inset: 0; background: var(--nuit) center / cover no-repeat; }
+.holo { position: absolute; inset: 0; opacity: .14; mix-blend-mode: color-dodge; background: conic-gradient(from 210deg at 60% 40%, #F0B8C8, #A9C8EA, #F2D9A0, #B8A0D0, #F0B8C8); }
+.sheen { position: absolute; inset: 0; mix-blend-mode: screen; background: linear-gradient(105deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.1) 46%, rgba(242,217,160,.08) 50%, rgba(255,255,255,0) 66%); }
+.scrim { position: absolute; inset: 0; background: linear-gradient(rgba(7,6,12,0) 42%, rgba(7,6,12,.8) 100%); }
+.carte-txt { position: absolute; left: 66px; right: 66px; bottom: 66px; display: flex; flex-direction: column; gap: 18px; }
+.carte-titre { font-style: italic; font-weight: 300; font-size: 92px; line-height: 1; color: var(--blanc-creme); transform: rotate(-1.5deg); transform-origin: left bottom; text-shadow: 0 0 14px rgba(7,6,12,.7); }
+.carte-quote { font-style: italic; font-size: 30px; line-height: 1.35; color: var(--texte-doux); text-wrap: pretty; max-width: 860px; }
+.sur-image .mono { color: var(--or-pale); text-shadow: 0 0 10px rgba(7,6,12,.9); }
+
+/* citation : la phrase-clé seule, en grand */
+.cit { position: absolute; left: 100px; right: 100px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; gap: 36px; }
+.cit .txt { font-style: italic; font-weight: 300; line-height: 1.12; letter-spacing: -.01em; color: var(--h-ink); text-wrap: balance; }
+.cit .src { font-family: var(--mono); font-size: 20px; letter-spacing: .2em; text-transform: uppercase; color: var(--h-accent); }
+
+/* album, tracklist */
+.h1 { position: absolute; left: 80px; width: 920px; font-style: italic; font-weight: 300; line-height: .92; letter-spacing: -.01em; color: var(--h-ink); transform: rotate(-1.5deg); transform-origin: left bottom; text-wrap: balance; }
+.list { position: absolute; left: 80px; right: 80px; top: 332px; display: flex; flex-direction: column; }
+.track { display: grid; grid-template-columns: 2.5em minmax(0, 1fr) auto; gap: 18px; align-items: baseline; padding: 15px 0; border-top: 1px solid var(--h-trait); }
+.track .n, .track .d { font-family: var(--mono); font-size: 17px; letter-spacing: .2em; color: var(--h-meta); }
+.track .d { letter-spacing: .14em; }
+.track .t { font-style: italic; font-weight: 300; font-size: 42px; line-height: 1.05; color: var(--h-ink); }
+.track-end { border-top: 1px solid var(--h-trait); }
+
+/* vinyle — repris de css/site.css (.pressage), dans l’état survolé : le disque sort de la pochette */
+.pressage-vue { position: absolute; left: 80px; top: 318px; width: 920px; aspect-ratio: 8 / 5; }
+.pressage-pochette { position: absolute; left: 0; top: 0; width: 62.5%; aspect-ratio: 1; object-fit: cover; background: var(--nuit); z-index: 2; }
+.disque { position: absolute; left: 23.44%; top: 5%; width: 56.25%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; transform: translateX(35.5%); }
+.disque-plateau { position: absolute; inset: 0; border-radius: 50%; transform: rotate(-24deg); }
+.disque-sillons, .disque-reflet { position: absolute; inset: 0; border-radius: 50%; }
+.disque-label { position: absolute; left: 33.3%; top: 33.3%; width: 33.4%; height: 33.4%; border-radius: 50%; overflow: hidden; background: var(--nuit); container-type: inline-size; }
+.disque-label img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.disque-face { position: absolute; left: 0; right: 0; top: 17%; text-align: center; font-family: var(--mono); font-size: 7cqw; letter-spacing: .14em; color: var(--or-pale); text-shadow: 0 0 6px rgba(7,6,12,.9); }
+.disque-titre { position: absolute; left: 0; right: 0; top: 50%; text-align: center; font-style: italic; font-weight: 300; font-size: 14cqw; color: var(--blanc-creme); text-shadow: 0 0 6px rgba(7,6,12,.9); }
+.disque-trou { position: absolute; left: 50%; top: 50%; width: 7%; aspect-ratio: 1; margin: -3.5% 0 0 -3.5%; border-radius: 50%; background: var(--nuit); box-shadow: 0 0 0 1px var(--trait); }
+.pressage-noir .disque-sillons { background: radial-gradient(circle, #0C0A14 0 17%, rgba(7,6,12,0) 18%), repeating-radial-gradient(circle, #07060C 0 1.4px, #221B30 2px, #07060C 3.4px); }
+.pressage-noir .disque-reflet { background: conic-gradient(from 200deg, rgba(243,235,221,0) 0, rgba(243,235,221,.12) 6%, rgba(243,235,221,0) 14%, rgba(243,235,221,0) 50%, rgba(243,235,221,.1) 56%, rgba(243,235,221,0) 64%); }
+.pressage-ambre .disque-sillons { background: repeating-radial-gradient(circle, rgba(7,6,12,.55) 0 1.4px, rgba(7,6,12,0) 2px, rgba(7,6,12,.55) 3.4px), radial-gradient(circle, #07060C 0 17%, #3A1A0C 17.5%, #7A3E22 18%, #B8652E 40%, #E0A33A 70%, #F2D9A0 100%); }
+.pressage-ambre .disque-reflet { background: radial-gradient(circle, rgba(0,0,0,0) 17%, rgba(7,6,12,.4) 18%, rgba(7,6,12,0) 30%, rgba(7,6,12,0) 80%, rgba(7,6,12,.5) 100%), conic-gradient(from 200deg, rgba(255,255,255,0) 0, rgba(255,255,255,.28) 6%, rgba(255,255,255,0) 14%, rgba(255,255,255,0) 50%, rgba(255,255,255,.2) 56%, rgba(255,255,255,0) 64%); }
+.vinyle-txt { position: absolute; left: 80px; right: 80px; top: 960px; display: flex; flex-direction: column; gap: 22px; }
+.vinyle-txt .t { font-style: italic; font-weight: 300; font-size: 84px; line-height: .95; color: var(--h-ink); transform: rotate(-1.5deg); transform-origin: left bottom; }
+</style>
+</head>
+<body>
+<script>
+(() => {
+const q = new URLSearchParams(location.search);
+const type = q.get('type') || 'single', n = String(parseInt(q.get('n') || '5', 10)).padStart(2, '0');
+document.documentElement.dataset.heure = q.get('heure') === 'jour' ? 'jour' : 'nuit';
+const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const HERO = "t'as le monde dans les mains, j'ai des rêves dans les yeux, j'aimerais pouvoir aider en exauçant les voeux";
+const brand = (g = 'LEV × SIMARD', d = 'l’appel du vide') => `<div class="brand"><span class="mono acc">${g}</span><span class="mono">${d}</span></div>`;
+const foot = (g, d) => `<div class="foot"><span class="mono">${g}</span><span class="mono">${d}</span></div>`;
+const sansDur = meta => meta.split(' · ').slice(1).join(' · ');   // "1:36 · 120 BPM · FA♯ MIN" → "120 BPM · FA♯ MIN"
+const taille = s => s.length <= 40 ? 100 : s.length <= 60 ? 86 : s.length <= 90 ? 72 : s.length <= 120 ? 62 : 54;
+
+const GABARITS = {
+  single: (t) => `
+    ${document.documentElement.dataset.heure === 'nuit' ? '<div class="glow"></div>' : ''}
+    <img class="cover" src="assets/singles/${t.file}.webp" alt="">
+    <div class="row"><span class="n">${t.n}</span><span class="t">${esc(t.title)}</span><span class="d">${t.dur}</span></div>
+    <div class="quote">${esc(t.quote)}</div>
+    ${foot('LEV × SIMARD · l’appel du vide', sansDur(t.meta))}`,
+  carte: (t) => `
+    <div class="plein" style="background-image:url(assets/singles/${t.file}.webp)"></div>
+    <div class="holo"></div><div class="sheen"></div><div class="scrim"></div>
+    <div class="sur-image">${brand()}</div>
+    <div class="carte-txt"><span class="carte-titre">${esc(t.title)}</span><span class="carte-quote">${esc(t.quote)}</span></div>`,
+  citation: (t) => `
+    <div class="glow"></div>
+    ${brand()}
+    <div class="cit"><div class="txt" style="font-size:${taille(t.quote)}px">${esc(t.quote)}</div><div class="src">${t.n} · ${esc(t.title)}</div></div>
+    ${foot('LEV × SIMARD', '10 titres · 22:33')}`,
+  album: () => document.documentElement.dataset.heure === 'jour' ? `
+    <img class="cover" src="assets/covers/horizon-solarise.webp" alt="">
+    <div class="h1" style="top:1010px;left:100px;font-size:92px">l’appel du vide</div>
+    ${foot('LEV × SIMARD', '10 titres · 22:33')}` : `
+    <div class="glow"></div>
+    <img class="cover" src="assets/pochette-titre.jpg" alt="">
+    <div class="quote" style="top:1010px;font-size:34px">${esc(HERO)}</div>
+    ${foot('LEV × SIMARD', '10 titres · 22:33')}`,
+  tracklist: (_, all) => `
+    ${brand()}
+    <div class="h1" style="top:150px;font-size:96px">l’appel du vide</div>
+    <div class="list">${all.map(t => `<div class="track"><span class="n">${t.n}</span><span class="t">${esc(t.title)}</span><span class="d">${t.dur}</span></div>`).join('')}<div class="track-end"></div></div>
+    ${foot('LEV × SIMARD', '10 titres · 22:33')}`,
+  vinyle: () => {
+    const ambre = q.get('pressage') === 'ambre';
+    return `
+    ${brand()}
+    <div class="pressage-vue pressage-${ambre ? 'ambre' : 'noir'}">
+      <div class="disque"><div class="disque-plateau"><div class="disque-sillons"></div>
+        <div class="disque-label">${ambre ? '' : '<img src="assets/singles/05-lappelduvide.webp" alt="">'}<span class="disque-face">LEV × SIMARD · FACE A</span>${ambre ? '<span class="disque-titre">l’appel du vide</span>' : ''}<span class="disque-trou"></span></div>
+      </div><div class="disque-reflet"></div></div>
+      <img class="pressage-pochette" src="assets/covers/${ambre ? 'horizon-solarise' : 'vertige'}.webp" alt="">
+    </div>
+    <div class="vinyle-txt"><span class="t">l’appel du vide</span><span class="mono">vinyle 12″ · pressage ${ambre ? 'ambre translucide' : 'noir'}</span></div>
+    ${foot('LEV × SIMARD', '10 titres · 22:33')}`;
+  },
+};
+
+window.post = { ready: (async () => {
+  const plan = await (await fetch('tools/insta/plan.json')).json();
+  const t = plan.titres.find(x => x.n === n) || plan.titres[4];
+  document.documentElement.style.setProperty('--accent', t.accent);
+  document.body.innerHTML = (GABARITS[type] || GABARITS.single)(t, plan.titres);
+  await document.fonts.ready;
+  await Promise.all([...document.images].map(i => i.decode().catch(() => {})));
+  await new Promise(r => setTimeout(r, 150));
+  return true;
+})() };
+})();
+</script>
+</body>
+</html>

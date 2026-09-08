@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<base href="../../">
+<link rel="icon" href="data:,">
+<title>reel — l’appel du vide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Scène d’un reel 1080 × 1920 — outil hors site.
+   Rien n’y bouge tout seul : render.mjs appelle window.reel.frame(t) pour chaque image, la scène se
+   met dans l’état du temps t (pochette WebGL, lueur, vers en cours) et se laisse photographier.
+   Couleurs et proportions reprennent le lecteur de css/site.css, mises à l’échelle du téléphone. */
+:root {
+  --nuit: #07060C; --blanc-chaud: #F3EBDD; --blanc-creme: #F6EEDF; --texte-doux: #CFC4AE; --gris-violet: #8F86B0;
+  --or: #E0A33A; --or-pale: #F2D9A0; --trait: #2A2338; --accent: #E0A33A;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+html, body { margin: 0; background: var(--nuit); }
+body { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: 'Cormorant Garamond', Georgia, serif; color: var(--blanc-chaud); -webkit-font-smoothing: antialiased; }
+.ciel { position: absolute; inset: 0; background: radial-gradient(ellipse 90% 45% at 50% 108%, rgba(94,63,179,.45), rgba(7,6,12,0) 70%); }
+/* la lueur du lecteur : au repos .24, elle respire avec les basses (enveloppe calculée par plan.py) */
+.glow { position: absolute; inset: 0; opacity: .24; transform-origin: 50% 60%; background: radial-gradient(ellipse 72% 34% at 50% 60%, var(--accent), rgba(7,6,12,0) 75%); }
+.brand { position: absolute; left: 100px; right: 100px; top: 190px; display: flex; justify-content: space-between; font-family: var(--mono); font-size: 22px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+.cover { position: absolute; left: 100px; top: 262px; width: 880px; height: 880px; background: var(--nuit); outline: 1px solid rgba(243,235,221,.08); outline-offset: -1px; }
+.titre { position: absolute; left: 100px; top: 1184px; width: 900px; font-style: italic; font-weight: 300; font-size: 84px; line-height: 1; letter-spacing: -.01em; color: var(--blanc-creme); transform: rotate(-1.5deg); transform-origin: left bottom; white-space: nowrap; }
+.meta { position: absolute; left: 100px; top: 1290px; font-family: var(--mono); font-size: 22px; letter-spacing: .2em; color: var(--gris-violet); }
+/* paroles vivantes : le vers en cours est plein, ses voisins s’effacent (mêmes opacités que le lecteur) */
+.lyrics { position: absolute; left: 100px; top: 1352px; width: 830px; height: 400px; overflow: hidden; -webkit-mask-image: linear-gradient(#0000, #000 10%, #000 80%, #0000); mask-image: linear-gradient(#0000, #000 10%, #000 80%, #0000); }
+.col { position: absolute; left: 0; top: 0; width: 100%; }
+.col span { display: block; padding: 7px 0; font-style: italic; font-weight: 300; font-size: 44px; line-height: 1.24; color: var(--blanc-chaud); text-wrap: pretty; opacity: .1; }
+.quote { position: absolute; left: 100px; top: 1352px; width: 830px; font-style: italic; font-weight: 300; font-size: 44px; line-height: 1.28; color: var(--blanc-chaud); text-wrap: pretty; opacity: 0; }
+.pied { position: absolute; left: 100px; right: 100px; top: 1790px; display: flex; justify-content: flex-end; font-family: var(--mono); font-size: 18px; letter-spacing: .2em; text-transform: uppercase; color: var(--gris-violet); }
+.voile { position: absolute; inset: 0; background: var(--nuit); opacity: 0; }
+</style>
+<script src="js/cover-live.js"></script>
+</head>
+<body>
+<div class="ciel"></div>
+<div class="glow" id="glow"></div>
+<div class="brand"><span>LEV × SIMARD · L’APPEL DU VIDE</span></div>
+<div class="cover" id="cover"></div>
+<div class="titre" id="titre"></div>
+<div class="meta" id="meta"></div>
+<div class="lyrics" id="lyrics"><div class="col" id="col"></div></div>
+<div class="quote" id="quote"></div>
+<div class="pied" id="pied" hidden><span id="pied-droit"></span></div>
+<div class="voile" id="voile"></div>
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const SPEED = { '09': .55 };                       // même ralenti que dans js/cover-live.js
+const R = 1320;                                    // résolution de rendu de la pochette : 880 px affichés × 1,5
+const SEG = 3;                                     // teaser album : secondes par pochette
+const OP = d => d === 0 ? 1 : d === -1 ? .42 : d === -2 ? .26 : d < 0 ? .1 : d === 1 ? .3 : d === 2 ? .18 : .1;
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const ease = p => p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+const lerp = (a, b, p) => a + (b - a) * p;
+const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+// deux images pour que le canvas soit composé avant la capture ; avec un délai de secours, un onglet en arrière-plan ne recevant pas ses requestAnimationFrame
+const deuxImages = () => Promise.race([new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))), sleep(80)]);
+let plan, T, el, spans = [], mode = 'titre', teaser = null, segK = -1, dur = 0;
+
+// la pochette en direct, sans sa boucle : c’est frame() qui la dessine, au temps qu’on lui donne
+async function mount(n) {
+  if (el) el.remove();
+  el = document.createElement('cover-live'); el.setAttribute('track', n); $('cover').appendChild(el);
+  el.running = false; if (el.raf) cancelAnimationFrame(el.raf);
+  await sleep(400);                                // la texture des paroles est envoyée après un fetch (en cache)
+}
+function draw(time) {
+  const gl = el && el.gl; if (!gl) return;
+  if (el.cv.width !== R) { el.cv.width = el.cv.height = R; gl.viewport(0, 0, R, R); }
+  gl.uniform1f(el.u.time, time); gl.uniform2f(el.u.res, R, R); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); gl.finish();
+}
+function setTitre(t) {
+  document.documentElement.style.setProperty('--accent', t.accent);
+  $('titre').textContent = t.title; $('meta').textContent = t.meta;
+}
+function glowAt(env, t) {
+  const out = env[clamp(Math.floor(t * plan.fps), 0, env.length - 1)] || 0;
+  $('glow').style.opacity = (.24 + out * .14).toFixed(3); $('glow').style.transform = `scale(${(1 + out * .1).toFixed(4)})`;
+}
+// fondu d’ouverture (.8 s) et de fermeture (1 s)
+const bords = t => t < .8 ? 1 - ease(t / .8) : t > dur - 1 ? ease((t - (dur - 1)) / 1) : 0;
+
+async function load(n) {
+  plan = await (await fetch('tools/insta/plan.json')).json();
+  const q = new URLSearchParams(location.search); if (q.get('pied')) { $('pied-droit').textContent = q.get('pied'); $('pied').hidden = false; }
+  await document.fonts.load("italic 300 22px 'Cormorant Garamond'"); await document.fonts.load("22px 'IBM Plex Mono'"); await document.fonts.ready;
+  await (await fetch('assets/brief/paroles.md')).text();   // en cache : cover-live aura ses paroles tout de suite
+  if (n === 'album') {
+    mode = 'album'; teaser = plan.teaser; dur = teaser.fin - teaser.debut; $('lyrics').hidden = true;
+    await mount(teaser.segments[0]);
+  } else {
+    T = plan.titres.find(x => x.n === n); dur = T.fin - T.debut; setTitre(T);
+    $('col').innerHTML = T.vers.map(v => `<span>${esc(v.texte)}</span>`).join(''); spans = [...$('col').children];
+    await mount(n);
+  }
+  return { frames: Math.round(dur * plan.fps), dur };
+}
+
+async function frame(t) {
+  if (mode === 'album') { await frameAlbum(t); await deuxImages(); return; }
+  const abs = T.debut + t;
+  draw(abs * (SPEED[T.n] || 1));
+  glowAt(T.basses, t);
+  // le vers en cours : le dernier commencé ; la transition depuis le précédent dure .45 s
+  let cur = -1; for (let j = 0; j < T.vers.length; j++) if (T.vers[j].t <= abs) cur = j;
+  const p = cur < 0 ? 1 : ease(clamp((abs - T.vers[cur].t) / .45, 0, 1));
+  spans.forEach((s, j) => { s.style.opacity = lerp(OP(j - (cur - 1)), OP(j - cur), p).toFixed(3); });
+  const centre = j => { const s = spans[clamp(j, 0, spans.length - 1)]; return s.offsetTop + s.offsetHeight / 2 - (j < 0 ? s.offsetHeight : 0); };
+  $('col').style.transform = `translateY(${(150 - lerp(centre(cur - 1), centre(cur), p)).toFixed(1)}px)`;
+  $('voile').style.opacity = bords(t).toFixed(3);
+  await deuxImages();
+}
+// teaser : les dix pochettes à la suite sur le titre éponyme, chacune avec sa phrase-clé
+async function frameAlbum(t) {
+  const k = clamp(Math.floor(t / SEG), 0, teaser.segments.length - 1), n = teaser.segments[k];
+  if (k !== segK) {
+    segK = k; const tt = plan.titres.find(x => x.n === n); setTitre(tt); $('quote').textContent = tt.quote;
+    el.setAttribute('track', n); await sleep(350);
+  }
+  const local = t - k * SEG;
+  draw((teaser.debut + t) * (SPEED[n] || 1) + k * 37);
+  glowAt(teaser.basses, t);
+  const coupe = local < .3 ? ease(local / .3) : local > SEG - .3 ? 1 - ease((local - (SEG - .3)) / .3) : 1;
+  for (const id of ['cover', 'titre', 'meta', 'quote']) $(id).style.opacity = coupe.toFixed(3);
+  $('voile').style.opacity = bords(t).toFixed(3);
+}
+window.reel = { load, frame };
+})();
+</script>
+</body>
+</html>

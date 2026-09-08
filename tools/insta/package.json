@@ -1,0 +1,7 @@
+{
+  "name": "lappelduvide-insta",
+  "private": true,
+  "type": "module",
+  "description": "Rendu des posts et des reels Instagram de l’appel du vide (outil hors site)",
+  "dependencies": { "puppeteer-core": "^24.0.0" }
+}
