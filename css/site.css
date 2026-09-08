@@ -73,6 +73,49 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
 }
 .brand-nom { color: var(--h-accent); transition: color 1.6s ease; }
+
+/* ---------- « ça m’intéresse » ----------
+   Le compteur d’intérêt pour l’album (js/site.js, functions/api/stats.js), à côté de la marque. Un bouton
+   dans la manière des cartes du livret : bordure or, foil holographique, reflet qui balaie, halo qui
+   respire ; une fois cliqué, il se remplit d’or. Il n’apparaît que si l’API des compteurs répond. */
+.brand-gauche { display: flex; align-items: baseline; gap: 22px; flex-wrap: wrap; }
+.interet-bloc { display: none; align-items: baseline; gap: 14px; }
+body.avec-stats .interet-bloc { display: flex; }
+.interet {
+  position: relative; isolation: isolate; overflow: hidden;
+  padding: 11px 20px; border: 1px solid var(--h-accent); color: var(--h-ink);
+  font: inherit; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; white-space: nowrap;
+  background: linear-gradient(120deg, rgba(224,163,58,.12), rgba(94,63,179,.16));
+  transition: color .4s ease, border-color .6s ease, background .6s ease, transform .3s ease;
+  animation: interetHalo 4.5s ease-in-out infinite;
+}
+.interet::before {  /* le foil des cartes */
+  content: ''; position: absolute; inset: 0; z-index: -1; opacity: .2; mix-blend-mode: color-dodge;
+  background: conic-gradient(from 210deg at 60% 40%, #F0B8C8, #A9C8EA, #F2D9A0, #B8A0D0, #F0B8C8);
+  transition: opacity .5s ease;
+}
+.interet::after {  /* le reflet qui balaie */
+  content: ''; position: absolute; inset: -40% -70%; z-index: -1; mix-blend-mode: screen;
+  background: linear-gradient(105deg, rgba(255,255,255,0) 42%, rgba(255,255,255,.14) 48%, rgba(242,217,160,.22) 50%, rgba(255,255,255,0) 58%);
+  animation: interetSheen 5.5s ease-in-out infinite;
+}
+.interet:hover { color: var(--h-accent); transform: translateY(-1px); }
+.interet:hover::before { opacity: .4; }
+.interet.is-on {
+  color: var(--nuit); border-color: var(--or-pale); animation: none;
+  background: linear-gradient(120deg, #F2D9A0, #E0A33A 55%, #B8652E);
+  box-shadow: 0 0 34px 10px rgba(224,163,58,.32);
+}
+.interet.is-on:hover { color: var(--nuit); }
+.interet.is-on::before { opacity: .3; }
+.interet.is-pop { animation: interetPop .6s cubic-bezier(.2,.7,.2,1); }
+.interet-n { color: var(--h-meta); transition: color 1.6s ease; }
+:root[data-heure="jour"] .interet { background: linear-gradient(120deg, rgba(7,6,12,.05), rgba(94,63,179,.14)); animation-name: interetHaloJour; }
+@keyframes interetHalo { 0%, 100% { box-shadow: 0 0 20px 3px rgba(242,217,160,.14); } 50% { box-shadow: 0 0 36px 10px rgba(242,217,160,.34); } }
+@keyframes interetHaloJour { 0%, 100% { box-shadow: 0 0 20px 3px rgba(7,6,12,.10); } 50% { box-shadow: 0 0 34px 10px rgba(7,6,12,.22); } }
+@keyframes interetSheen { 0%, 50% { transform: translateX(-60%); } 80%, 100% { transform: translateX(60%); } }
+@keyframes interetPop { 0% { transform: scale(1); } 35% { transform: scale(1.06); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .interet, .interet::after { animation: none; } }
 .heures { display: flex; gap: 18px; flex-wrap: wrap; }
 .heure {
   padding-bottom: 3px; color: var(--h-meta); border-bottom: 1px solid transparent;
@@ -403,15 +446,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .pressage:hover .disque, .pressage:focus-within .disque { transform: translateX(35.5%); }
 .pressage:hover .disque-plateau, .pressage:focus-within .disque-plateau { animation: spin 7s linear infinite; }
-/* sous chaque pressage : « ça m’intéresse » et le nombre d’intéressés (compteurs, voir js/site.js) ;
-   la rangée n’apparaît que si l’API des compteurs répond (body.avec-stats) */
-.pressage-tools {
-  display: none; align-items: baseline; gap: 18px; padding-top: 14px;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--h-meta); transition: color 1.6s ease;
-}
-body.avec-stats .pressage-tools { display: flex; }
-.pressage-tools .lien:hover { color: var(--h-ink); }
-.interet.is-on { color: var(--h-accent); border-bottom-color: var(--h-accent); }
 @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
   .pressage:hover .disque-plateau, .pressage:focus-within .disque-plateau { animation: none; }

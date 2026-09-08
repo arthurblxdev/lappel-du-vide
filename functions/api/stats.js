@@ -1,9 +1,9 @@
 // Fonction Cloudflare Pages : les compteurs du site, dans la base D1 du projet (binding DB, wrangler.toml).
-//   GET  /api/stats                        → { ecoutes: { "01": n, …, total }, interet: { noir: n, ambre: n } }
+//   GET  /api/stats                        → { ecoutes: { "01": n, …, total }, interet: { album: n } }
 //   POST /api/stats { type, cle, delta }   → même réponse après l’incrément (type « ecoute » + numéro de titre,
-//                                            ou « interet » + pressage ; delta 1 par défaut, -1 pour retirer)
+//                                            ou « interet » + « album » ; delta 1 par défaut, -1 pour retirer)
 // La table est créée au premier appel s’il le faut ; le site (js/site.js) appelle l’API en même origine.
-const CLES = { ecoute: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'], interet: ['noir', 'ambre'] };
+const CLES = { ecoute: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'], interet: ['album'] };
 let prete = false;
 
 async function preparer(db) {
@@ -13,10 +13,11 @@ async function preparer(db) {
 }
 async function lire(db) {
   const { results } = await db.prepare('SELECT type, cle, n FROM compteurs').all();
-  const out = { ecoutes: { total: 0 }, interet: { noir: 0, ambre: 0 } };
+  const out = { ecoutes: { total: 0 }, interet: { album: 0 } };
   for (const r of results) {
+    if (!CLES[r.type] || !CLES[r.type].includes(r.cle)) continue;   // une ancienne clé reste en base, pas dans la réponse
     if (r.type === 'ecoute') { out.ecoutes[r.cle] = r.n; out.ecoutes.total += r.n; }
-    else if (r.type === 'interet') out.interet[r.cle] = r.n;
+    else out.interet[r.cle] = r.n;
   }
   return out;
 }

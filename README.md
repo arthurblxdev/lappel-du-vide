@@ -84,7 +84,7 @@ assets/covers/*.webp      les pochettes du vinyle sans titre (vertige, horizon s
 audio/*.mp3               les 10 titres, masters v3.2, mêmes noms que les singles
 tokens/               tokens du design system
 functions/audio/[[file]].js  fonction Cloudflare Pages : sert les MP3 avec les requêtes Range (Pages les ignore sinon, le seek repart à zéro)
-functions/api/stats.js    fonction Cloudflare Pages : les compteurs (écoutes par titre, intérêt vinyle) dans la base D1 du projet
+functions/api/stats.js    fonction Cloudflare Pages : les compteurs (écoutes par titre, intérêt pour l’album) dans la base D1 du projet
 wrangler.toml             configuration Pages : nom du projet, dossier publié, binding D1 `DB` (appliqué à chaque deploy)
 tools/serve.py            serveur de développement (requêtes Range, indispensables au seek audio)
 tools/capture.html        port de Capture.dc.html : une pochette en direct, 1000 × 1000, ?track=01…10, S enregistre le PNG (hors site)
@@ -174,14 +174,16 @@ Deux compteurs partagés entre tous les visiteurs, gardés dans une base **D1** 
   titre et par page, jamais en lecture simulée). Le total s’affiche dans le pied de page
   (`… · 22:33 · 1 204 ÉCOUTES`) et le détail du titre dans la métadonnée du lecteur
   (`1:36 · 120 BPM · FA♯ MIN · 38 ÉCOUTES`) ;
-- **l’intérêt pour le vinyle** : sous chaque pressage, un bouton `ÇA M’INTÉRESSE` (un aller-retour par
-  navigateur, gardé dans `localStorage` ; un second clic retire l’intérêt) et le nombre d’intéressés.
+- **l’intérêt pour l’album** : dans l’en-tête, à côté de la marque, le bouton `ÇA M’INTÉRESSE` — bordure or,
+  foil holographique des cartes, reflet qui balaie, halo qui respire ; cliqué, il se remplit d’or et dit
+  `MERCI · INTÉRESSÉ`, le nombre d’intéressés à côté. Un aller-retour par navigateur (`localStorage`), un
+  second clic retire l’intérêt.
 
 Le site n’affiche rien tant que `GET /api/stats` n’a pas répondu (`body.avec-stats`) : sur
 `tools/serve.py` ou la copie GitHub Pages, ni bouton ni chiffres. Pour développer avec les compteurs,
 lancer plutôt `npx -y wrangler pages dev` (port 8788 : fichiers statiques, fonctions et une D1 locale
-dans `.wrangler/state`). L’API : `GET /api/stats` → `{ ecoutes: { "01": n, …, total }, interet: { noir, ambre } }` ;
-`POST /api/stats` avec `{ type: "ecoute", cle: "05" }` ou `{ type: "interet", cle: "ambre", delta: -1 }`.
+dans `.wrangler/state`). L’API : `GET /api/stats` → `{ ecoutes: { "01": n, …, total }, interet: { album } }` ;
+`POST /api/stats` avec `{ type: "ecoute", cle: "05" }` ou `{ type: "interet", cle: "album", delta: -1 }`.
 La table `compteurs (type, cle, n)` est créée au premier appel. Lire les chiffres en ligne :
 
 ```

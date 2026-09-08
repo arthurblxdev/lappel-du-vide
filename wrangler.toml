@@ -4,7 +4,7 @@ name = "lappelduvide"
 pages_build_output_dir = "."
 compatibility_date = "2026-08-01"
 
-# les compteurs (écoutes par titre, intérêt pour le vinyle) : functions/api/stats.js
+# les compteurs (écoutes par titre, intérêt pour l’album) : functions/api/stats.js
 [[d1_databases]]
 binding = "DB"
 database_name = "lappelduvide"

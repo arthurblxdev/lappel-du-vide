@@ -34,7 +34,14 @@
 <div class="page">
 
   <header class="brand">
-    <span class="brand-nom">LEV × SIMARD</span>
+    <div class="brand-gauche">
+      <span class="brand-nom">LEV × SIMARD</span>
+      <!-- « ça m’intéresse » : le compteur d’intérêt pour l’album (functions/api/stats.js), visible quand l’API répond -->
+      <span class="interet-bloc">
+        <button type="button" class="interet" id="interet" aria-pressed="false"><span id="interet-txt">ça m’intéresse</span></button>
+        <span class="interet-n" id="interet-n"></span>
+      </span>
+    </div>
     <nav class="heures" id="heures" aria-label="Lumière du site"></nav>
   </header>
 

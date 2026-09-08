@@ -266,12 +266,7 @@ function renderObjet() {
         </div>
         <img class="pressage-pochette" src="${p.cover}" alt="${esc(p.coverAlt)}" loading="lazy" decoding="async">
       </div>
-      <div class="pressage-tools">
-        <button type="button" class="lien interet" data-key="${p.key}">ÇA M’INTÉRESSE</button>
-        <span class="interet-n" data-key="${p.key}"></span>
-      </div>
     </article>`).join('');
-  $('pressages').addEventListener('click', e => { const b = e.target.closest('.interet'); if (b) toggleInteret(b.dataset.key); });
 }
 
 /* ---------- lecteur ---------- */
@@ -492,26 +487,24 @@ function onTick() {
 }
 
 /* ---------- compteurs ----------
-   Les écoutes par titre et l’intérêt pour chaque pressage du vinyle vivent dans la base D1 du projet,
-   derrière functions/api/stats.js (Cloudflare Pages). Une écoute est comptée après 30 s de lecture
-   effective d’un titre (une fois par titre et par page) ; l’intérêt est un aller-retour par navigateur
-   (gardé dans localStorage). Sans l’API — serveur de dev python, copie GitHub Pages — rien ne s’affiche. */
+   Les écoutes par titre et l’intérêt pour l’album (le bouton de l’en-tête) vivent dans la base D1 du
+   projet, derrière functions/api/stats.js (Cloudflare Pages). Une écoute est comptée après 30 s de
+   lecture effective d’un titre (une fois par titre et par page) ; l’intérêt est un aller-retour par
+   navigateur (gardé dans localStorage). Sans l’API — serveur de dev python, copie GitHub Pages — rien
+   ne s’affiche. */
 const stats = { ecoutes: {}, interet: {}, joue: {}, comptees: new Set() };
 const fmtN = n => Number(n).toLocaleString('fr-FR');
 const pluriel = (n, mot) => `${fmtN(n)} ${mot}${n > 1 ? 'S' : ''}`;
 const metaDe = t => { const n = stats.ecoutes[t.n] | 0; return t.meta + (n ? ` · ${pluriel(n, 'ÉCOUTE')}` : ''); };
-const interesse = key => { try { return localStorage.getItem('interet:' + key) === '1'; } catch { return false; } };
+const interesse = () => { try { return localStorage.getItem('interet:album') === '1'; } catch { return false; } };
 function renderStats() {
   const total = stats.ecoutes.total | 0;
   $('pied-ecoutes').textContent = total ? ` · ${pluriel(total, 'ÉCOUTE')}` : '';
   if (P.phase !== 'closed') $('p-meta').textContent = metaDe(TRACKS[P.open]);
-  PRESSAGES.forEach(p => {
-    const btn = document.querySelector(`.interet[data-key="${p.key}"]`), num = document.querySelector(`.interet-n[data-key="${p.key}"]`);
-    if (!btn || !num) return;
-    const moi = interesse(p.key), n = stats.interet[p.key] | 0;
-    btn.classList.toggle('is-on', moi); btn.textContent = moi ? 'ÇA VOUS INTÉRESSE · MERCI' : 'ÇA M’INTÉRESSE';
-    num.textContent = n ? pluriel(n, 'INTÉRESSÉ') : '';
-  });
+  const moi = interesse(), n = stats.interet.album | 0, btn = $('interet');
+  btn.classList.toggle('is-on', moi); btn.setAttribute('aria-pressed', String(moi));
+  $('interet-txt').textContent = moi ? 'merci · intéressé' : 'ça m’intéresse';
+  $('interet-n').textContent = n ? pluriel(n, 'INTÉRESSÉ') : '';
 }
 async function statsApi(corps) {
   try {
@@ -528,12 +521,14 @@ function compterEcoute(t) {
   if (stats.joue[t.n] < 30) return;
   stats.comptees.add(t.n); statsApi({ type: 'ecoute', cle: t.n });
 }
-function toggleInteret(key) {
-  const on = !interesse(key);
-  try { on ? localStorage.setItem('interet:' + key, '1') : localStorage.removeItem('interet:' + key); } catch (e) { /* stockage refusé : le clic compte quand même */ }
-  stats.interet[key] = Math.max(0, (stats.interet[key] | 0) + (on ? 1 : -1)); renderStats();   // tout de suite ; l’API confirme ensuite
-  statsApi({ type: 'interet', cle: key, delta: on ? 1 : -1 });
+function toggleInteret() {
+  const on = !interesse();
+  try { on ? localStorage.setItem('interet:album', '1') : localStorage.removeItem('interet:album'); } catch (e) { /* stockage refusé : le clic compte quand même */ }
+  stats.interet.album = Math.max(0, (stats.interet.album | 0) + (on ? 1 : -1)); renderStats();   // tout de suite ; l’API confirme ensuite
+  const btn = $('interet'); btn.classList.remove('is-pop'); void btn.offsetWidth; btn.classList.add('is-pop');
+  statsApi({ type: 'interet', cle: 'album', delta: on ? 1 : -1 });
 }
+$('interet').addEventListener('click', toggleInteret);
 
 /* ---------- audio, optionnel ----------
    Si audio/<fichier>.mp3 existe pour le titre, il est joué et pilote la barre ; sinon la lecture est simulée
