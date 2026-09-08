@@ -14,7 +14,7 @@ morceau (analyseur Web Audio sur les MP3), et le passage d’un titre à l’aut
 
 **Pas de label de section.** Les sections n’ont ni titre ni légende : la page ne montre que les
 images, les titres des morceaux et la liste (numéro · titre · durée). Le reste des métadonnées —
-tonalité, BPM, numéro sur les visuels — ne vit que dans le lecteur (`3:15 · 110 BPM · LA♭ MIN`) : sur les pièces du puzzle et les cartes du livret, il ne reste que le
+le BPM, le numéro sur les visuels — ne vit que dans le lecteur (`3:15 · 110 BPM`) : sur les pièces du puzzle et les cartes du livret, il ne reste que le
 titre et la phrase-clé.
 
 **La lumière suit l’heure locale du visiteur** (`Site.dc.html`, `Heure.dc.html`) : jour entre 10 h
@@ -142,7 +142,7 @@ un reel dépasse la limite de 25 Mo par fichier de Cloudflare Pages).
   du lecteur) ; plus le teaser de l’album (les dix pochettes, 3 s chacune, sur le titre éponyme).
 - `post.html` : gabarits 1080 × 1350 — `album` (nuit : pochette titrée + phrase d’accueil ; jour : horizon
   solarisé + titre), `tracklist`, `vinyle` (les deux pressages, disque sorti), et par titre `single`
-  (pochette entière, numéro · titre · durée, phrase-clé, BPM · tonalité), `carte` (la carte du livret,
+  (pochette entière, numéro · titre · durée, phrase-clé, BPM), `carte` (la carte du livret,
   plein cadre, foil) et `citation` (la phrase-clé seule, nuit et jour).
 - `reel.html` : scène 1080 × 1920 où rien ne bouge seul — `render.mjs` appelle `reel.frame(t)` pour
   chaque image : la pochette `<cover-live>` est dessinée au temps `t` (sa boucle est arrêtée), la lueur
@@ -173,7 +173,7 @@ Deux compteurs partagés entre tous les visiteurs, gardés dans une base **D1** 
 - **les écoutes** : une écoute est comptée après 30 s de lecture effective d’un titre (une fois par
   titre et par page, jamais en lecture simulée). Le total s’affiche dans le pied de page
   (`… · 22:33 · 1 204 ÉCOUTES`) et le détail du titre dans la métadonnée du lecteur
-  (`1:36 · 120 BPM · FA♯ MIN · 38 ÉCOUTES`) ;
+  (`1:36 · 120 BPM · 38 ÉCOUTES`) ;
 - **l’intérêt pour l’album** : dans l’en-tête, à côté de la marque, le bouton `ÇA M’INTÉRESSE` — bordure or,
   foil holographique des cartes, reflet qui balaie, halo qui respire ; cliqué, il se remplit d’or et dit
   `MERCI · INTÉRESSÉ`, le nombre d’intéressés à côté. Un aller-retour par navigateur (`localStorage`), un
