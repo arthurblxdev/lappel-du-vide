@@ -14,8 +14,7 @@ morceau (analyseur Web Audio sur les MP3), et le passage d’un titre à l’aut
 
 **Pas de label de section.** Les sections n’ont ni titre ni légende : la page ne montre que les
 images, les titres des morceaux et la liste (numéro · titre · durée). Le reste des métadonnées —
-tonalité, BPM, numéro sur les visuels — ne vit que dans le lecteur (`10 / 10`,
-`3:15 · 110 BPM · LA♭ MIN`) : sur les pièces du puzzle et les cartes du livret, il ne reste que le
+tonalité, BPM, numéro sur les visuels — ne vit que dans le lecteur (`3:15 · 110 BPM · LA♭ MIN`) : sur les pièces du puzzle et les cartes du livret, il ne reste que le
 titre et la phrase-clé.
 
 **La lumière suit l’heure locale du visiteur** (`Site.dc.html`, `Heure.dc.html`) : jour entre 10 h
@@ -85,11 +84,14 @@ assets/covers/*.webp      les pochettes du vinyle sans titre (vertige, horizon s
 audio/*.mp3               les 10 titres, masters v3.2, mêmes noms que les singles
 tokens/               tokens du design system
 functions/audio/[[file]].js  fonction Cloudflare Pages : sert les MP3 avec les requêtes Range (Pages les ignore sinon, le seek repart à zéro)
+functions/api/stats.js    fonction Cloudflare Pages : les compteurs (écoutes par titre, intérêt vinyle) dans la base D1 du projet
+wrangler.toml             configuration Pages : nom du projet, dossier publié, binding D1 `DB` (appliqué à chaque deploy)
 tools/serve.py            serveur de développement (requêtes Range, indispensables au seek audio)
 tools/capture.html        port de Capture.dc.html : une pochette en direct, 1000 × 1000, ?track=01…10, S enregistre le PNG (hors site)
 tools/horodatage.html     horodater les paroles en tapant sur ⏎ pendant la lecture, export JSON (hors site)
 assets/brief/horodatage.json  temps de chaque vers des 10 titres (passe complète du 7 septembre 2026)
 tools/render-covers.html  outil de rendu des pochettes de secours en série (hors site)
+tools/insta/              posts et reels Instagram : plan.py → plan.json, post.html, reel.html, render.mjs, legendes.md (hors site)
 ```
 
 ## Images
@@ -127,6 +129,65 @@ renommés comme les singles. Le lecteur les joue et la barre suit le son ; si un
 la lecture de ce titre est simulée comme dans la maquette (progression au temps, pochette animée,
 enchaînement).
 
+## Instagram
+
+`tools/insta/` fabrique les posts et les reels à partir du site — outil hors site, rien n’est publié,
+les rendus vont dans `../l'appel du vide — insta/` (à côté du dossier du site, jamais dans le dépôt :
+un reel dépasse la limite de 25 Mo par fichier de Cloudflare Pages).
+
+- `plan.py` lit `js/site.js` (titres, phrases-clés, accents, métadonnées), `paroles.md` et
+  `horodatage.json`, et écrit `plan.json` : pour chaque titre, la fenêtre de l’extrait du reel (elle
+  s’ouvre un vers avant la phrase-clé du dos de la pièce, se referme sur une fin de vers ~22 s plus loin),
+  les vers horodatés de la fenêtre et l’enveloppe des basses (ffmpeg + numpy, même lissage que la lueur
+  du lecteur) ; plus le teaser de l’album (les dix pochettes, 3 s chacune, sur le titre éponyme).
+- `post.html` : gabarits 1080 × 1350 — `album` (nuit : pochette titrée + phrase d’accueil ; jour : horizon
+  solarisé + titre), `tracklist`, `vinyle` (les deux pressages, disque sorti), et par titre `single`
+  (pochette entière, numéro · titre · durée, phrase-clé, BPM · tonalité), `carte` (la carte du livret,
+  plein cadre, foil) et `citation` (la phrase-clé seule, nuit et jour).
+- `reel.html` : scène 1080 × 1920 où rien ne bouge seul — `render.mjs` appelle `reel.frame(t)` pour
+  chaque image : la pochette `<cover-live>` est dessinée au temps `t` (sa boucle est arrêtée), la lueur
+  respire avec l’enveloppe des basses, le vers en cours s’allume et la liste glisse comme dans le lecteur.
+- `render.mjs` pilote le Google Chrome installé (`puppeteer-core`, pas de Chromium à télécharger) sur
+  `tools/serve.py`, capture les posts en PNG, les reels image par image en JPEG puis les monte avec
+  ffmpeg (H.264 1080 × 1920 30 i/s, AAC, extrait coupé à l’échantillon près, fondus).
+- `legendes.md` : légendes et hashtags proposés, ordre de publication.
+
+```
+cd tools/insta && npm install && cd ../..      # une fois : puppeteer-core
+python3 tools/insta/plan.py                    # après un changement de paroles, d’horodatage ou de phrase-clé
+node tools/insta/render.mjs                    # tout : posts/ et reels/ dans ../l'appel du vide — insta/
+node tools/insta/render.mjs --reels --only 05,album    # quelques reels ; --posts --only citation, album… pour les posts
+node tools/insta/render.mjs --apercu           # une image témoin par reel, sans vidéo (apercus/)
+```
+
+Autres options : `--secondes 3` (reels raccourcis pour tester), `--out DIR`, `--parallele 3`, `--garder`
+(garde les images), `--visible` (Chrome à l’écran), `--pied "texte"` (mention en bas à droite du reel).
+Pour déplacer un extrait : dans `plan.json`, changer `debut` / `fin` du titre et mettre `"fenetre": "manuelle"`,
+puis relancer `plan.py` (il garde la fenêtre et recalcule vers et basses) et `render.mjs --reels --only NN`.
+
+## Compteurs
+
+Deux compteurs partagés entre tous les visiteurs, gardés dans une base **D1** (SQLite Cloudflare,
+`lappelduvide`, binding `DB` dans `wrangler.toml`) derrière `functions/api/stats.js` :
+
+- **les écoutes** : une écoute est comptée après 30 s de lecture effective d’un titre (une fois par
+  titre et par page, jamais en lecture simulée). Le total s’affiche dans le pied de page
+  (`… · 22:33 · 1 204 ÉCOUTES`) et le détail du titre dans la métadonnée du lecteur
+  (`1:36 · 120 BPM · FA♯ MIN · 38 ÉCOUTES`) ;
+- **l’intérêt pour le vinyle** : sous chaque pressage, un bouton `ÇA M’INTÉRESSE` (un aller-retour par
+  navigateur, gardé dans `localStorage` ; un second clic retire l’intérêt) et le nombre d’intéressés.
+
+Le site n’affiche rien tant que `GET /api/stats` n’a pas répondu (`body.avec-stats`) : sur
+`tools/serve.py` ou la copie GitHub Pages, ni bouton ni chiffres. Pour développer avec les compteurs,
+lancer plutôt `npx -y wrangler pages dev` (port 8788 : fichiers statiques, fonctions et une D1 locale
+dans `.wrangler/state`). L’API : `GET /api/stats` → `{ ecoutes: { "01": n, …, total }, interet: { noir, ambre } }` ;
+`POST /api/stats` avec `{ type: "ecoute", cle: "05" }` ou `{ type: "interet", cle: "ambre", delta: -1 }`.
+La table `compteurs (type, cle, n)` est créée au premier appel. Lire les chiffres en ligne :
+
+```
+npx -y wrangler d1 execute lappelduvide --remote --command "select * from compteurs order by type, cle"
+```
+
 ## Mise en ligne
 
 Le site est servi par Cloudflare Pages : <https://lappelduvide.pages.dev/> (projet `lappelduvide`,
@@ -135,8 +196,11 @@ depuis le dossier du site :
 
 ```
 git commit -am "…"                       # les fichiers versionnés sont ceux publiés
-npx -y wrangler pages deploy . --project-name lappelduvide --branch main --commit-dirty=true
+npx -y wrangler pages deploy --branch main --commit-dirty=true
 ```
+
+`wrangler.toml` porte le nom du projet, le dossier publié (`.`) et le binding D1 des compteurs : il est
+appliqué à chaque deploy (sans lui, le binding disparaît et `/api/stats` répond 503).
 
 Le dépôt <https://github.com/arthurblxdev/lappel-du-vide> garde l’historique ; GitHub Pages y sert
 encore une copie sur <https://arthurblxdev.github.io/lappel-du-vide/>. `og:url` et `og:image` dans

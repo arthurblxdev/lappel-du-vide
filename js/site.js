@@ -266,7 +266,12 @@ function renderObjet() {
         </div>
         <img class="pressage-pochette" src="${p.cover}" alt="${esc(p.coverAlt)}" loading="lazy" decoding="async">
       </div>
+      <div class="pressage-tools">
+        <button type="button" class="lien interet" data-key="${p.key}">ÇA M’INTÉRESSE</button>
+        <span class="interet-n" data-key="${p.key}"></span>
+      </div>
     </article>`).join('');
+  $('pressages').addEventListener('click', e => { const b = e.target.closest('.interet'); if (b) toggleInteret(b.dataset.key); });
 }
 
 /* ---------- lecteur ---------- */
@@ -294,7 +299,6 @@ function placeText() {
 // la couleur d’accent et la lueur glissent (transition CSS sur --accent)
 function applyTrack(smooth) {
   const t = TRACKS[P.open];
-  $('p-index').textContent = `${t.n} / 10`;
   const st = $('p-static'), prev = $('p-static-prev');
   if (smooth && st.dataset.img && st.dataset.img !== t.img) {
     prev.style.backgroundImage = st.style.backgroundImage;                 // l’ancienne image reste dessous
@@ -307,7 +311,7 @@ function applyTrack(smooth) {
   player.style.setProperty('--accent', t.accent);
   switchLive(t.n, smooth);
   const setText = () => {
-    $('p-title').textContent = t.title; meta.textContent = t.meta; $('p-dur').textContent = t.dur;
+    $('p-title').textContent = t.title; meta.textContent = metaDe(t); $('p-dur').textContent = t.dur;
     renderLyrics(); renderProgress(); if (P.playing) liveLyrics(true);
   };
   clearTimeout(P.switchT);
@@ -482,9 +486,53 @@ function unmountLive() { if (coverLive && coverLive.isConnected) coverLive.remov
 function onTick() {
   if (!P.playing || P.phase !== 'open') return;
   const t = TRACKS[P.open];
-  if (audio.state === 'ok') P.elapsed = audio.el.currentTime;
+  if (audio.state === 'ok') { P.elapsed = audio.el.currentTime; compterEcoute(t); }
   else if (audio.state !== 'loading') { P.elapsed += .25; if (P.elapsed >= t.seconds) { setTrack(P.open + 1); return; } }
   renderProgress(); if (P.live) focusVerse();
+}
+
+/* ---------- compteurs ----------
+   Les écoutes par titre et l’intérêt pour chaque pressage du vinyle vivent dans la base D1 du projet,
+   derrière functions/api/stats.js (Cloudflare Pages). Une écoute est comptée après 30 s de lecture
+   effective d’un titre (une fois par titre et par page) ; l’intérêt est un aller-retour par navigateur
+   (gardé dans localStorage). Sans l’API — serveur de dev python, copie GitHub Pages — rien ne s’affiche. */
+const stats = { ecoutes: {}, interet: {}, joue: {}, comptees: new Set() };
+const fmtN = n => Number(n).toLocaleString('fr-FR');
+const pluriel = (n, mot) => `${fmtN(n)} ${mot}${n > 1 ? 'S' : ''}`;
+const metaDe = t => { const n = stats.ecoutes[t.n] | 0; return t.meta + (n ? ` · ${pluriel(n, 'ÉCOUTE')}` : ''); };
+const interesse = key => { try { return localStorage.getItem('interet:' + key) === '1'; } catch { return false; } };
+function renderStats() {
+  const total = stats.ecoutes.total | 0;
+  $('pied-ecoutes').textContent = total ? ` · ${pluriel(total, 'ÉCOUTE')}` : '';
+  if (P.phase !== 'closed') $('p-meta').textContent = metaDe(TRACKS[P.open]);
+  PRESSAGES.forEach(p => {
+    const btn = document.querySelector(`.interet[data-key="${p.key}"]`), num = document.querySelector(`.interet-n[data-key="${p.key}"]`);
+    if (!btn || !num) return;
+    const moi = interesse(p.key), n = stats.interet[p.key] | 0;
+    btn.classList.toggle('is-on', moi); btn.textContent = moi ? 'ÇA VOUS INTÉRESSE · MERCI' : 'ÇA M’INTÉRESSE';
+    num.textContent = n ? pluriel(n, 'INTÉRESSÉ') : '';
+  });
+}
+async function statsApi(corps) {
+  try {
+    const r = await fetch('api/stats', corps ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corps) } : undefined);
+    if (!r.ok) return;
+    const j = await r.json(); stats.ecoutes = j.ecoutes || {}; stats.interet = j.interet || {};
+    document.body.classList.add('avec-stats'); renderStats();
+  } catch (e) { /* pas d’API ici : les compteurs restent invisibles */ }
+}
+// une écoute : 30 s de lecture effective du titre, une fois par titre et par page
+function compterEcoute(t) {
+  if (!P.playing || stats.comptees.has(t.n)) return;
+  stats.joue[t.n] = (stats.joue[t.n] || 0) + .25;
+  if (stats.joue[t.n] < 30) return;
+  stats.comptees.add(t.n); statsApi({ type: 'ecoute', cle: t.n });
+}
+function toggleInteret(key) {
+  const on = !interesse(key);
+  try { on ? localStorage.setItem('interet:' + key, '1') : localStorage.removeItem('interet:' + key); } catch (e) { /* stockage refusé : le clic compte quand même */ }
+  stats.interet[key] = Math.max(0, (stats.interet[key] | 0) + (on ? 1 : -1)); renderStats();   // tout de suite ; l’API confirme ensuite
+  statsApi({ type: 'interet', cle: key, delta: on ? 1 : -1 });
 }
 
 /* ---------- audio, optionnel ----------
@@ -749,6 +797,6 @@ window.addEventListener('resize', () => {
   planOmbre();
 });
 window.addEventListener('scroll', planOmbre, { passive: true });
-loadLyrics(); loadStamps();
+loadLyrics(); loadStamps(); statsApi();
 if ('requestIdleCallback' in window) requestIdleCallback(() => river.start(), { timeout: 1500 }); else setTimeout(() => river.start(), 200);
 })();

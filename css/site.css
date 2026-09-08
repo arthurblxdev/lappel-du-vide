@@ -249,10 +249,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .player.is-open { opacity: 1; }
 .player-bar {
-  position: absolute; left: 0; right: 0; top: 0; padding: 24px 32px; display: flex; justify-content: space-between;
+  position: absolute; left: 0; right: 0; top: 0; padding: 24px 32px; display: flex; justify-content: flex-end;
   font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gris-violet);
 }
-.player-index { color: var(--or); }
 .player-img {
   position: fixed; background: var(--nuit); overflow: hidden; cursor: pointer;
   transition: left .7s cubic-bezier(.2,.7,.2,1), top .7s cubic-bezier(.2,.7,.2,1), width .7s cubic-bezier(.2,.7,.2,1), height .7s cubic-bezier(.2,.7,.2,1);
@@ -404,6 +403,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .pressage:hover .disque, .pressage:focus-within .disque { transform: translateX(35.5%); }
 .pressage:hover .disque-plateau, .pressage:focus-within .disque-plateau { animation: spin 7s linear infinite; }
+/* sous chaque pressage : « ça m’intéresse » et le nombre d’intéressés (compteurs, voir js/site.js) ;
+   la rangée n’apparaît que si l’API des compteurs répond (body.avec-stats) */
+.pressage-tools {
+  display: none; align-items: baseline; gap: 18px; padding-top: 14px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--h-meta); transition: color 1.6s ease;
+}
+body.avec-stats .pressage-tools { display: flex; }
+.pressage-tools .lien:hover { color: var(--h-ink); }
+.interet.is-on { color: var(--h-accent); border-bottom-color: var(--h-accent); }
 @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
   .pressage:hover .disque-plateau, .pressage:focus-within .disque-plateau { animation: none; }

@@ -1,0 +1,11 @@
+# Configuration Cloudflare Pages du site (projet lappelduvide). Les bindings déclarés ici sont posés sur
+# le projet à chaque `wrangler pages deploy` ; `wrangler pages dev` les émule en local (.wrangler/state).
+name = "lappelduvide"
+pages_build_output_dir = "."
+compatibility_date = "2026-08-01"
+
+# les compteurs (écoutes par titre, intérêt pour le vinyle) : functions/api/stats.js
+[[d1_databases]]
+binding = "DB"
+database_name = "lappelduvide"
+database_id = "5cccc7a3-de7a-45b8-a9a0-652cb934fb37"
