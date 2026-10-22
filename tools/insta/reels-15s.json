@@ -1,0 +1,2335 @@
+{
+ "album": "l’appel du vide",
+ "artiste": "Lev × Simard",
+ "note": "extraits de 15 s ; debut/fin en secondes dans le morceau, rel_debut/rel_fin dans l’extrait. Les débuts de vers sont horodatés à la main ; les fragments à l’intérieur d’un vers sont répartis au prorata des syllabes (estimation, à retoucher à l’oreille au besoin). temps_mesure : les temps de la mesure dans l’extrait, pour caler les coupes.",
+ "titres": [
+  {
+   "n": "01",
+   "titre": "intro",
+   "bpm": 120,
+   "audio": "01-intro.wav",
+   "sous_titres": "01-intro.srt",
+   "source": "audio/01-intro.mp3",
+   "debut": 55.9,
+   "fin": 70.9,
+   "duree": 15.0,
+   "phrase_cle": "j’sais comment donner naissance et ôter la vie",
+   "secondes_par_syllabe": 0.167,
+   "temps_mesure": [
+    0.176,
+    0.687,
+    1.175,
+    1.685,
+    2.173,
+    2.661,
+    3.172,
+    3.636,
+    4.1,
+    4.658,
+    5.145,
+    5.679,
+    6.19,
+    6.701,
+    7.189,
+    7.699,
+    8.187,
+    8.675,
+    9.186,
+    9.696,
+    10.184,
+    10.672,
+    11.182,
+    11.693,
+    12.181,
+    12.692,
+    13.179,
+    13.69,
+    14.178,
+    14.689
+   ],
+   "fragments": [
+    {
+     "vers": 18,
+     "texte": "T’arriveras",
+     "debut": 55.93,
+     "fin": 56.534,
+     "rel_debut": 0.03,
+     "rel_fin": 0.634
+    },
+    {
+     "vers": 18,
+     "texte": "pas à me",
+     "debut": 56.534,
+     "fin": 56.835,
+     "rel_debut": 0.634,
+     "rel_fin": 0.935
+    },
+    {
+     "vers": 18,
+     "texte": "faire gober",
+     "debut": 56.835,
+     "fin": 57.288,
+     "rel_debut": 0.935,
+     "rel_fin": 1.388
+    },
+    {
+     "vers": 18,
+     "texte": "la pill",
+     "debut": 57.288,
+     "fin": 57.59,
+     "rel_debut": 1.388,
+     "rel_fin": 1.69
+    },
+    {
+     "vers": 19,
+     "texte": "J’suis pas vraiment",
+     "debut": 57.63,
+     "fin": 58.367,
+     "rel_debut": 1.73,
+     "rel_fin": 2.467
+    },
+    {
+     "vers": 19,
+     "texte": "l’genre à être",
+     "debut": 58.367,
+     "fin": 58.736,
+     "rel_debut": 2.467,
+     "rel_fin": 2.836
+    },
+    {
+     "vers": 19,
+     "texte": "coopératif",
+     "debut": 58.736,
+     "fin": 59.473,
+     "rel_debut": 2.836,
+     "rel_fin": 3.573
+    },
+    {
+     "vers": 20,
+     "texte": "L’niveau que",
+     "debut": 59.6,
+     "fin": 60.052,
+     "rel_debut": 3.7,
+     "rel_fin": 4.152
+    },
+    {
+     "vers": 20,
+     "texte": "j’atteins commence",
+     "debut": 60.052,
+     "fin": 60.655,
+     "rel_debut": 4.152,
+     "rel_fin": 4.755
+    },
+    {
+     "vers": 20,
+     "texte": "à être",
+     "debut": 60.655,
+     "fin": 60.806,
+     "rel_debut": 4.755,
+     "rel_fin": 4.906
+    },
+    {
+     "vers": 20,
+     "texte": "problématique",
+     "debut": 60.806,
+     "fin": 61.56,
+     "rel_debut": 4.906,
+     "rel_fin": 5.66
+    },
+    {
+     "vers": 21,
+     "texte": "J’sais comment",
+     "debut": 61.6,
+     "fin": 62.057,
+     "rel_debut": 5.7,
+     "rel_fin": 6.157
+    },
+    {
+     "vers": 21,
+     "texte": "donner naissance",
+     "debut": 62.057,
+     "fin": 62.667,
+     "rel_debut": 6.157,
+     "rel_fin": 6.767
+    },
+    {
+     "vers": 21,
+     "texte": "et ôter",
+     "debut": 62.667,
+     "fin": 63.125,
+     "rel_debut": 6.767,
+     "rel_fin": 7.225
+    },
+    {
+     "vers": 21,
+     "texte": "la vie",
+     "debut": 63.125,
+     "fin": 63.43,
+     "rel_debut": 7.225,
+     "rel_fin": 7.53
+    },
+    {
+     "vers": 22,
+     "texte": "Personne s’rend",
+     "debut": 63.47,
+     "fin": 63.92,
+     "rel_debut": 7.57,
+     "rel_fin": 8.02
+    },
+    {
+     "vers": 22,
+     "texte": "compte des efforts",
+     "debut": 63.92,
+     "fin": 64.52,
+     "rel_debut": 8.02,
+     "rel_fin": 8.62
+    },
+    {
+     "vers": 22,
+     "texte": "qu'on fait",
+     "debut": 64.52,
+     "fin": 64.82,
+     "rel_debut": 8.62,
+     "rel_fin": 8.92
+    },
+    {
+     "vers": 22,
+     "texte": "d’ce que ça",
+     "debut": 64.82,
+     "fin": 65.27,
+     "rel_debut": 8.92,
+     "rel_fin": 9.37
+    },
+    {
+     "vers": 22,
+     "texte": "demande",
+     "debut": 65.27,
+     "fin": 65.57,
+     "rel_debut": 9.37,
+     "rel_fin": 9.67
+    },
+    {
+     "vers": 23,
+     "texte": "D’croiser que",
+     "debut": 65.61,
+     "fin": 66.111,
+     "rel_debut": 9.71,
+     "rel_fin": 10.211
+    },
+    {
+     "vers": 23,
+     "texte": "des feux rouges",
+     "debut": 66.111,
+     "fin": 66.612,
+     "rel_debut": 10.211,
+     "rel_fin": 10.712
+    },
+    {
+     "vers": 23,
+     "texte": "et des dos d’ânes",
+     "debut": 66.612,
+     "fin": 67.28,
+     "rel_debut": 10.712,
+     "rel_fin": 11.38
+    },
+    {
+     "vers": 24,
+     "texte": "Osciller",
+     "debut": 67.32,
+     "fin": 67.797,
+     "rel_debut": 11.42,
+     "rel_fin": 11.898
+    },
+    {
+     "vers": 24,
+     "texte": "entre propal",
+     "debut": 67.797,
+     "fin": 68.275,
+     "rel_debut": 11.898,
+     "rel_fin": 12.375
+    },
+    {
+     "vers": 24,
+     "texte": "de merde et",
+     "debut": 68.275,
+     "fin": 68.752,
+     "rel_debut": 12.375,
+     "rel_fin": 12.852
+    },
+    {
+     "vers": 24,
+     "texte": "ignorance",
+     "debut": 68.752,
+     "fin": 69.23,
+     "rel_debut": 12.852,
+     "rel_fin": 13.33
+    },
+    {
+     "vers": 25,
+     "texte": "C’est les mêmes",
+     "debut": 69.27,
+     "fin": 69.777,
+     "rel_debut": 13.37,
+     "rel_fin": 13.877
+    },
+    {
+     "vers": 25,
+     "texte": "qui s’battront",
+     "debut": 69.777,
+     "fin": 70.285,
+     "rel_debut": 13.877,
+     "rel_fin": 14.385
+    },
+    {
+     "vers": 25,
+     "texte": "pour les places",
+     "debut": 70.285,
+     "fin": 70.792,
+     "rel_debut": 14.385,
+     "rel_fin": 14.892
+    }
+   ]
+  },
+  {
+   "n": "02",
+   "titre": "vieux messages",
+   "bpm": 132,
+   "audio": "02-vieux-messages.wav",
+   "sous_titres": "02-vieux-messages.srt",
+   "source": "audio/02-vieux-messages.mp3",
+   "debut": 18.37,
+   "fin": 33.37,
+   "duree": 15.0,
+   "phrase_cle": "la seule vérité qui compte s’cache dans tes yeux dans les vieux messages",
+   "secondes_par_syllabe": 0.228,
+   "temps_mesure": [
+    0.136,
+    0.601,
+    1.065,
+    1.506,
+    1.994,
+    2.458,
+    2.923,
+    3.41,
+    3.851,
+    4.293,
+    4.757,
+    5.245,
+    5.709,
+    6.15,
+    6.615,
+    7.079,
+    7.52,
+    7.985,
+    8.449,
+    8.96,
+    9.471,
+    9.912,
+    10.33,
+    10.794,
+    11.235,
+    11.7,
+    12.164,
+    12.605,
+    13.093,
+    13.557,
+    13.999,
+    14.486,
+    14.904
+   ],
+   "fragments": [
+    {
+     "vers": 1,
+     "texte": "Il m’faut juste",
+     "debut": 18.4,
+     "fin": 19.122,
+     "rel_debut": 0.03,
+     "rel_fin": 0.752
+    },
+    {
+     "vers": 1,
+     "texte": "un peu d’air",
+     "debut": 19.122,
+     "fin": 19.844,
+     "rel_debut": 0.752,
+     "rel_fin": 1.474
+    },
+    {
+     "vers": 1,
+     "texte": "juste un peu",
+     "debut": 19.844,
+     "fin": 20.566,
+     "rel_debut": 1.474,
+     "rel_fin": 2.196
+    },
+    {
+     "vers": 1,
+     "texte": "d’aide, juste un peu",
+     "debut": 20.566,
+     "fin": 21.529,
+     "rel_debut": 2.196,
+     "rel_fin": 3.159
+    },
+    {
+     "vers": 1,
+     "texte": "d’espoir",
+     "debut": 21.529,
+     "fin": 22.01,
+     "rel_debut": 3.159,
+     "rel_fin": 3.64
+    },
+    {
+     "vers": 2,
+     "texte": "J’m’en tape de",
+     "debut": 22.05,
+     "fin": 22.744,
+     "rel_debut": 3.68,
+     "rel_fin": 4.374
+    },
+    {
+     "vers": 2,
+     "texte": "tes secrets",
+     "debut": 22.744,
+     "fin": 23.438,
+     "rel_debut": 4.374,
+     "rel_fin": 5.068
+    },
+    {
+     "vers": 2,
+     "texte": "garde les pour",
+     "debut": 23.438,
+     "fin": 24.132,
+     "rel_debut": 5.068,
+     "rel_fin": 5.762
+    },
+    {
+     "vers": 2,
+     "texte": "toi ça vaut",
+     "debut": 24.132,
+     "fin": 24.826,
+     "rel_debut": 5.762,
+     "rel_fin": 6.456
+    },
+    {
+     "vers": 2,
+     "texte": "mieux desfois",
+     "debut": 24.826,
+     "fin": 25.52,
+     "rel_debut": 6.456,
+     "rel_fin": 7.15
+    },
+    {
+     "vers": 3,
+     "texte": "La seule",
+     "debut": 25.56,
+     "fin": 26.061,
+     "rel_debut": 7.19,
+     "rel_fin": 7.691
+    },
+    {
+     "vers": 3,
+     "texte": "vérité",
+     "debut": 26.061,
+     "fin": 26.813,
+     "rel_debut": 7.691,
+     "rel_fin": 8.443
+    },
+    {
+     "vers": 3,
+     "texte": "qui compte s’cache",
+     "debut": 26.813,
+     "fin": 27.565,
+     "rel_debut": 8.443,
+     "rel_fin": 9.195
+    },
+    {
+     "vers": 3,
+     "texte": "dans tes yeux",
+     "debut": 27.565,
+     "fin": 28.317,
+     "rel_debut": 9.195,
+     "rel_fin": 9.947
+    },
+    {
+     "vers": 3,
+     "texte": "dans les vieux",
+     "debut": 28.317,
+     "fin": 29.069,
+     "rel_debut": 9.947,
+     "rel_fin": 10.699
+    },
+    {
+     "vers": 3,
+     "texte": "messages",
+     "debut": 29.069,
+     "fin": 29.57,
+     "rel_debut": 10.699,
+     "rel_fin": 11.2
+    },
+    {
+     "vers": 4,
+     "texte": "J’te rappellerai",
+     "debut": 29.61,
+     "fin": 30.61,
+     "rel_debut": 11.24,
+     "rel_fin": 12.24
+    },
+    {
+     "vers": 4,
+     "texte": "quand j’aurai",
+     "debut": 30.61,
+     "fin": 31.21,
+     "rel_debut": 12.24,
+     "rel_fin": 12.84
+    },
+    {
+     "vers": 4,
+     "texte": "à faire",
+     "debut": 31.21,
+     "fin": 31.41,
+     "rel_debut": 12.84,
+     "rel_fin": 13.04
+    },
+    {
+     "vers": 5,
+     "texte": "Tu m’appelles",
+     "debut": 31.45,
+     "fin": 31.967,
+     "rel_debut": 13.08,
+     "rel_fin": 13.597
+    },
+    {
+     "vers": 5,
+     "texte": "que quand t’es",
+     "debut": 31.967,
+     "fin": 32.483,
+     "rel_debut": 13.597,
+     "rel_fin": 14.113
+    },
+    {
+     "vers": 5,
+     "texte": "dans la merde",
+     "debut": 32.483,
+     "fin": 33.0,
+     "rel_debut": 14.113,
+     "rel_fin": 14.63
+    },
+    {
+     "vers": 6,
+     "texte": "J’suis frustré",
+     "debut": 33.04,
+     "fin": 33.63,
+     "rel_debut": 14.67,
+     "rel_fin": 15.0
+    }
+   ]
+  },
+  {
+   "n": "03",
+   "titre": "sidehustle",
+   "bpm": 75,
+   "audio": "03-sidehustle.wav",
+   "sous_titres": "03-sidehustle.srt",
+   "source": "audio/03-sidehustle.mp3",
+   "debut": 9.14,
+   "fin": 24.14,
+   "duree": 15.0,
+   "phrase_cle": "j’rêve de liasses, quitter le rivage",
+   "secondes_par_syllabe": 0.2,
+   "temps_mesure": [
+    0.055,
+    0.589,
+    1.123,
+    1.657,
+    2.191,
+    2.725,
+    3.259,
+    3.794,
+    4.281,
+    4.862,
+    5.396,
+    5.953,
+    6.487,
+    7.021,
+    7.555,
+    8.089,
+    8.646,
+    9.157,
+    9.691,
+    10.225,
+    10.783,
+    11.317,
+    11.851,
+    12.408,
+    12.919,
+    13.453,
+    13.987,
+    14.521
+   ],
+   "fragments": [
+    {
+     "vers": 3,
+     "texte": "La j’aimerais",
+     "debut": 9.17,
+     "fin": 9.964,
+     "rel_debut": 0.03,
+     "rel_fin": 0.824
+    },
+    {
+     "vers": 3,
+     "texte": "voir le sun",
+     "debut": 9.964,
+     "fin": 10.56,
+     "rel_debut": 0.824,
+     "rel_fin": 1.42
+    },
+    {
+     "vers": 4,
+     "texte": "J’connais mon",
+     "debut": 10.6,
+     "fin": 11.26,
+     "rel_debut": 1.46,
+     "rel_fin": 2.12
+    },
+    {
+     "vers": 4,
+     "texte": "business",
+     "debut": 11.26,
+     "fin": 11.92,
+     "rel_debut": 2.12,
+     "rel_fin": 2.78
+    },
+    {
+     "vers": 4,
+     "texte": "de A à Z",
+     "debut": 11.92,
+     "fin": 12.58,
+     "rel_debut": 2.78,
+     "rel_fin": 3.44
+    },
+    {
+     "vers": 5,
+     "texte": "Bientôt j’atteins",
+     "debut": 12.77,
+     "fin": 13.602,
+     "rel_debut": 3.63,
+     "rel_fin": 4.462
+    },
+    {
+     "vers": 5,
+     "texte": "la vitesse",
+     "debut": 13.602,
+     "fin": 14.226,
+     "rel_debut": 4.462,
+     "rel_fin": 5.086
+    },
+    {
+     "vers": 5,
+     "texte": "de croisière",
+     "debut": 14.226,
+     "fin": 14.85,
+     "rel_debut": 5.086,
+     "rel_fin": 5.71
+    },
+    {
+     "vers": 6,
+     "texte": "J’rêve de liasses",
+     "debut": 14.89,
+     "fin": 15.55,
+     "rel_debut": 5.75,
+     "rel_fin": 6.41
+    },
+    {
+     "vers": 6,
+     "texte": "quitter le",
+     "debut": 15.55,
+     "fin": 16.21,
+     "rel_debut": 6.41,
+     "rel_fin": 7.07
+    },
+    {
+     "vers": 6,
+     "texte": "rivage",
+     "debut": 16.21,
+     "fin": 16.65,
+     "rel_debut": 7.07,
+     "rel_fin": 7.51
+    },
+    {
+     "vers": 7,
+     "texte": "Citron sel",
+     "debut": 17.09,
+     "fin": 17.75,
+     "rel_debut": 7.95,
+     "rel_fin": 8.61
+    },
+    {
+     "vers": 7,
+     "texte": "et verre de",
+     "debut": 17.75,
+     "fin": 18.41,
+     "rel_debut": 8.61,
+     "rel_fin": 9.27
+    },
+    {
+     "vers": 7,
+     "texte": "tequila",
+     "debut": 18.41,
+     "fin": 19.07,
+     "rel_debut": 9.27,
+     "rel_fin": 9.93
+    },
+    {
+     "vers": 8,
+     "texte": "C’soir j’suis high",
+     "debut": 19.21,
+     "fin": 19.87,
+     "rel_debut": 10.07,
+     "rel_fin": 10.73
+    },
+    {
+     "vers": 9,
+     "texte": "J’ai pas tisé",
+     "debut": 19.95,
+     "fin": 20.83,
+     "rel_debut": 10.81,
+     "rel_fin": 11.69
+    },
+    {
+     "vers": 9,
+     "texte": "pas piav",
+     "debut": 20.83,
+     "fin": 21.27,
+     "rel_debut": 11.69,
+     "rel_fin": 12.13
+    },
+    {
+     "vers": 10,
+     "texte": "C’est pas plus mal",
+     "debut": 21.37,
+     "fin": 21.95,
+     "rel_debut": 12.23,
+     "rel_fin": 12.81
+    },
+    {
+     "vers": 11,
+     "texte": "Faut qu’j’m’écarte",
+     "debut": 21.99,
+     "fin": 22.675,
+     "rel_debut": 12.85,
+     "rel_fin": 13.535
+    },
+    {
+     "vers": 11,
+     "texte": "de la spirale",
+     "debut": 22.675,
+     "fin": 23.36,
+     "rel_debut": 13.535,
+     "rel_fin": 14.22
+    },
+    {
+     "vers": 12,
+     "texte": "J’écoute des",
+     "debut": 23.4,
+     "fin": 24.047,
+     "rel_debut": 14.26,
+     "rel_fin": 14.907
+    }
+   ]
+  },
+  {
+   "n": "04",
+   "titre": "buisness model",
+   "bpm": 74,
+   "audio": "04-buisness-model.wav",
+   "sous_titres": "04-buisness-model.srt",
+   "source": "audio/04-buisness-model.mp3",
+   "debut": 119.281,
+   "fin": 134.281,
+   "duree": 15.0,
+   "phrase_cle": "le plus dur est pas passé, raison d’plus pour qu’on profite",
+   "secondes_par_syllabe": 0.18,
+   "temps_mesure": [
+    0.0,
+    0.813,
+    1.625,
+    2.438,
+    3.344,
+    4.087,
+    4.899,
+    5.712,
+    6.525,
+    7.338,
+    8.15,
+    8.963,
+    9.776,
+    10.542,
+    11.424,
+    12.237,
+    13.05,
+    13.862,
+    14.698
+   ],
+   "fragments": [
+    {
+     "vers": 47,
+     "texte": "En train d’écrire",
+     "debut": 119.38,
+     "fin": 120.172,
+     "rel_debut": 0.099,
+     "rel_fin": 0.891
+    },
+    {
+     "vers": 47,
+     "texte": "notre récit",
+     "debut": 120.172,
+     "fin": 120.766,
+     "rel_debut": 0.891,
+     "rel_fin": 1.485
+    },
+    {
+     "vers": 48,
+     "texte": "L’temps presse pas",
+     "debut": 120.94,
+     "fin": 121.534,
+     "rel_debut": 1.659,
+     "rel_fin": 2.253
+    },
+    {
+     "vers": 48,
+     "texte": "j’serai bien",
+     "debut": 121.534,
+     "fin": 122.128,
+     "rel_debut": 2.253,
+     "rel_fin": 2.847
+    },
+    {
+     "vers": 48,
+     "texte": "quelque part",
+     "debut": 122.128,
+     "fin": 122.722,
+     "rel_debut": 2.847,
+     "rel_fin": 3.441
+    },
+    {
+     "vers": 48,
+     "texte": "dans quelque pages",
+     "debut": 122.722,
+     "fin": 123.514,
+     "rel_debut": 3.441,
+     "rel_fin": 4.233
+    },
+    {
+     "vers": 49,
+     "texte": "Les rêves",
+     "debut": 123.93,
+     "fin": 124.326,
+     "rel_debut": 4.649,
+     "rel_fin": 5.045
+    },
+    {
+     "vers": 49,
+     "texte": "s’réalisent",
+     "debut": 124.326,
+     "fin": 124.92,
+     "rel_debut": 5.045,
+     "rel_fin": 5.639
+    },
+    {
+     "vers": 49,
+     "texte": "pas mais au",
+     "debut": 124.92,
+     "fin": 125.514,
+     "rel_debut": 5.639,
+     "rel_fin": 6.233
+    },
+    {
+     "vers": 49,
+     "texte": "moins on a",
+     "debut": 125.514,
+     "fin": 126.108,
+     "rel_debut": 6.233,
+     "rel_fin": 6.827
+    },
+    {
+     "vers": 49,
+     "texte": "moins les poches vides",
+     "debut": 126.108,
+     "fin": 126.9,
+     "rel_debut": 6.827,
+     "rel_fin": 7.619
+    },
+    {
+     "vers": 50,
+     "texte": "Le plus dur",
+     "debut": 127.12,
+     "fin": 127.714,
+     "rel_debut": 7.839,
+     "rel_fin": 8.433
+    },
+    {
+     "vers": 50,
+     "texte": "est pas passé",
+     "debut": 127.714,
+     "fin": 128.506,
+     "rel_debut": 8.433,
+     "rel_fin": 9.225
+    },
+    {
+     "vers": 50,
+     "texte": "raison d’plus",
+     "debut": 128.506,
+     "fin": 129.1,
+     "rel_debut": 9.225,
+     "rel_fin": 9.819
+    },
+    {
+     "vers": 50,
+     "texte": "pour qu’on profite",
+     "debut": 129.1,
+     "fin": 129.892,
+     "rel_debut": 9.819,
+     "rel_fin": 10.611
+    },
+    {
+     "vers": 51,
+     "texte": "Bro paie nous",
+     "debut": 130.29,
+     "fin": 130.884,
+     "rel_debut": 11.009,
+     "rel_fin": 11.603
+    },
+    {
+     "vers": 51,
+     "texte": "en temps et",
+     "debut": 130.884,
+     "fin": 131.478,
+     "rel_debut": 11.603,
+     "rel_fin": 12.197
+    },
+    {
+     "vers": 51,
+     "texte": "en heures",
+     "debut": 131.478,
+     "fin": 131.874,
+     "rel_debut": 12.197,
+     "rel_fin": 12.593
+    },
+    {
+     "vers": 52,
+     "texte": "Essaie pas",
+     "debut": 132.77,
+     "fin": 133.364,
+     "rel_debut": 13.489,
+     "rel_fin": 14.083
+    },
+    {
+     "vers": 52,
+     "texte": "d’nous apprendre",
+     "debut": 133.364,
+     "fin": 133.958,
+     "rel_debut": 14.083,
+     "rel_fin": 14.677
+    },
+    {
+     "vers": 52,
+     "texte": "tu sais pas",
+     "debut": 133.958,
+     "fin": 134.552,
+     "rel_debut": 14.677,
+     "rel_fin": 15.0
+    }
+   ]
+  },
+  {
+   "n": "05",
+   "titre": "l’appelduvide",
+   "bpm": 120,
+   "audio": "05-lappelduvide.wav",
+   "sous_titres": "05-lappelduvide.srt",
+   "source": "audio/05-lappelduvide.mp3",
+   "debut": 69.55,
+   "fin": 84.55,
+   "duree": 15.0,
+   "phrase_cle": "dérush un peu ma belle, le plus important c’est d’contempler",
+   "secondes_par_syllabe": 0.192,
+   "temps_mesure": [
+    0.063,
+    0.551,
+    1.039,
+    1.526,
+    2.014,
+    2.548,
+    3.012,
+    3.546,
+    4.034,
+    4.568,
+    5.032,
+    5.543,
+    6.054,
+    6.542,
+    7.029,
+    7.54,
+    8.074,
+    8.539,
+    9.026,
+    9.537,
+    10.048,
+    10.536,
+    11.023,
+    11.534,
+    12.068,
+    12.556,
+    13.043,
+    13.531,
+    14.042,
+    14.553
+   ],
+   "fragments": [
+    {
+     "vers": 29,
+     "texte": "J’écoute moins",
+     "debut": 69.58,
+     "fin": 70.072,
+     "rel_debut": 0.03,
+     "rel_fin": 0.522
+    },
+    {
+     "vers": 29,
+     "texte": "d'prods depuis",
+     "debut": 70.072,
+     "fin": 70.563,
+     "rel_debut": 0.522,
+     "rel_fin": 1.013
+    },
+    {
+     "vers": 29,
+     "texte": "qu'j'ai son",
+     "debut": 70.563,
+     "fin": 71.055,
+     "rel_debut": 1.013,
+     "rel_fin": 1.505
+    },
+    {
+     "vers": 29,
+     "texte": "rire dans mon crâne",
+     "debut": 71.055,
+     "fin": 71.71,
+     "rel_debut": 1.505,
+     "rel_fin": 2.16
+    },
+    {
+     "vers": 30,
+     "texte": "J’arrive avec",
+     "debut": 71.75,
+     "fin": 72.507,
+     "rel_debut": 2.2,
+     "rel_fin": 2.957
+    },
+    {
+     "vers": 30,
+     "texte": "plus de confiance",
+     "debut": 72.507,
+     "fin": 73.264,
+     "rel_debut": 2.957,
+     "rel_fin": 3.714
+    },
+    {
+     "vers": 30,
+     "texte": "qu'eux, plus de constance qu'eux",
+     "debut": 73.264,
+     "fin": 74.4,
+     "rel_debut": 3.714,
+     "rel_fin": 4.85
+    },
+    {
+     "vers": 31,
+     "texte": "J’sais même si",
+     "debut": 74.44,
+     "fin": 75.074,
+     "rel_debut": 4.89,
+     "rel_fin": 5.524
+    },
+    {
+     "vers": 31,
+     "texte": "ils ont conscience d'eux",
+     "debut": 75.074,
+     "fin": 76.13,
+     "rel_debut": 5.524,
+     "rel_fin": 6.58
+    },
+    {
+     "vers": 32,
+     "texte": "Dérush un",
+     "debut": 76.26,
+     "fin": 76.894,
+     "rel_debut": 6.71,
+     "rel_fin": 7.344
+    },
+    {
+     "vers": 32,
+     "texte": "peu ma belle",
+     "debut": 76.894,
+     "fin": 77.528,
+     "rel_debut": 7.344,
+     "rel_fin": 7.978
+    },
+    {
+     "vers": 32,
+     "texte": "le plus",
+     "debut": 77.528,
+     "fin": 77.95,
+     "rel_debut": 7.978,
+     "rel_fin": 8.4
+    },
+    {
+     "vers": 32,
+     "texte": "important",
+     "debut": 77.95,
+     "fin": 78.584,
+     "rel_debut": 8.4,
+     "rel_fin": 9.034
+    },
+    {
+     "vers": 32,
+     "texte": "c'est d'contempler ",
+     "debut": 78.584,
+     "fin": 79.429,
+     "rel_debut": 9.034,
+     "rel_fin": 9.879
+    },
+    {
+     "vers": 33,
+     "texte": "On s'parle du",
+     "debut": 80.18,
+     "fin": 80.814,
+     "rel_debut": 10.63,
+     "rel_fin": 11.264
+    },
+    {
+     "vers": 33,
+     "texte": "brésil",
+     "debut": 80.814,
+     "fin": 81.236,
+     "rel_debut": 11.264,
+     "rel_fin": 11.686
+    },
+    {
+     "vers": 33,
+     "texte": "d'autres contrées",
+     "debut": 81.236,
+     "fin": 81.87,
+     "rel_debut": 11.686,
+     "rel_fin": 12.32
+    },
+    {
+     "vers": 33,
+     "texte": "lointaines",
+     "debut": 81.87,
+     "fin": 82.293,
+     "rel_debut": 12.32,
+     "rel_fin": 12.743
+    },
+    {
+     "vers": 34,
+     "texte": "D’nos conflits",
+     "debut": 82.63,
+     "fin": 83.264,
+     "rel_debut": 13.08,
+     "rel_fin": 13.714
+    },
+    {
+     "vers": 34,
+     "texte": "internes",
+     "debut": 83.264,
+     "fin": 83.686,
+     "rel_debut": 13.714,
+     "rel_fin": 14.136
+    },
+    {
+     "vers": 35,
+     "texte": "Tes plans sont",
+     "debut": 83.77,
+     "fin": 84.404,
+     "rel_debut": 14.22,
+     "rel_fin": 14.854
+    }
+   ]
+  },
+  {
+   "n": "06",
+   "titre": "imperméable",
+   "bpm": 75,
+   "audio": "06-impermeable.wav",
+   "sous_titres": "06-impermeable.srt",
+   "source": "audio/06-impermeable.mp3",
+   "debut": 60.07,
+   "fin": 75.07,
+   "duree": 15.0,
+   "phrase_cle": "p’t’être que des sumériennes écrivaient déjà tes lèvres sur les miennes",
+   "secondes_par_syllabe": 0.197,
+   "temps_mesure": [
+    0.0,
+    0.813,
+    1.579,
+    2.368,
+    3.111,
+    3.971,
+    4.737,
+    5.55,
+    6.316,
+    7.105,
+    7.895,
+    8.684,
+    9.451,
+    10.263,
+    11.053,
+    11.865,
+    12.632,
+    13.421,
+    14.211
+   ],
+   "fragments": [
+    {
+     "vers": 26,
+     "texte": "Les yeux fermés",
+     "debut": 60.18,
+     "fin": 61.049,
+     "rel_debut": 0.11,
+     "rel_fin": 0.979
+    },
+    {
+     "vers": 26,
+     "texte": "j’étais comme",
+     "debut": 61.049,
+     "fin": 61.701,
+     "rel_debut": 0.979,
+     "rel_fin": 1.631
+    },
+    {
+     "vers": 26,
+     "texte": "sourd et muet",
+     "debut": 61.701,
+     "fin": 62.352,
+     "rel_debut": 1.631,
+     "rel_fin": 2.282
+    },
+    {
+     "vers": 27,
+     "texte": "Qui sait",
+     "debut": 62.52,
+     "fin": 62.954,
+     "rel_debut": 2.45,
+     "rel_fin": 2.884
+    },
+    {
+     "vers": 27,
+     "texte": "ptetre que des",
+     "debut": 62.954,
+     "fin": 63.606,
+     "rel_debut": 2.884,
+     "rel_fin": 3.536
+    },
+    {
+     "vers": 27,
+     "texte": "sumériennes",
+     "debut": 63.606,
+     "fin": 64.258,
+     "rel_debut": 3.536,
+     "rel_fin": 4.188
+    },
+    {
+     "vers": 27,
+     "texte": "écrivaient",
+     "debut": 64.258,
+     "fin": 64.91,
+     "rel_debut": 4.188,
+     "rel_fin": 4.84
+    },
+    {
+     "vers": 27,
+     "texte": "déjà tes",
+     "debut": 64.91,
+     "fin": 65.561,
+     "rel_debut": 4.84,
+     "rel_fin": 5.491
+    },
+    {
+     "vers": 27,
+     "texte": "lèvres sur les miennes",
+     "debut": 65.561,
+     "fin": 66.43,
+     "rel_debut": 5.491,
+     "rel_fin": 6.36
+    },
+    {
+     "vers": 28,
+     "texte": "J’dors sereinement",
+     "debut": 67.25,
+     "fin": 68.141,
+     "rel_debut": 7.18,
+     "rel_fin": 8.071
+    },
+    {
+     "vers": 28,
+     "texte": "tant qu’elle s’en",
+     "debut": 68.141,
+     "fin": 68.675,
+     "rel_debut": 8.071,
+     "rel_fin": 8.605
+    },
+    {
+     "vers": 28,
+     "texte": "sort heureuse",
+     "debut": 68.675,
+     "fin": 69.21,
+     "rel_debut": 8.605,
+     "rel_fin": 9.14
+    },
+    {
+     "vers": 29,
+     "texte": "J’m’avance dans",
+     "debut": 69.25,
+     "fin": 69.766,
+     "rel_debut": 9.18,
+     "rel_fin": 9.696
+    },
+    {
+     "vers": 29,
+     "texte": "la brume",
+     "debut": 69.766,
+     "fin": 70.11,
+     "rel_debut": 9.696,
+     "rel_fin": 10.04
+    },
+    {
+     "vers": 30,
+     "texte": "J’me laisse",
+     "debut": 70.15,
+     "fin": 70.585,
+     "rel_debut": 10.08,
+     "rel_fin": 10.514
+    },
+    {
+     "vers": 30,
+     "texte": "attirer",
+     "debut": 70.585,
+     "fin": 71.236,
+     "rel_debut": 10.514,
+     "rel_fin": 11.166
+    },
+    {
+     "vers": 30,
+     "texte": "par les",
+     "debut": 71.236,
+     "fin": 71.671,
+     "rel_debut": 11.166,
+     "rel_fin": 11.601
+    },
+    {
+     "vers": 30,
+     "texte": "ensorceleuses",
+     "debut": 71.671,
+     "fin": 72.54,
+     "rel_debut": 11.601,
+     "rel_fin": 12.47
+    },
+    {
+     "vers": 31,
+     "texte": "Dis moi quand",
+     "debut": 73.58,
+     "fin": 74.11,
+     "rel_debut": 13.51,
+     "rel_fin": 14.04
+    },
+    {
+     "vers": 31,
+     "texte": "est ce qu'on",
+     "debut": 74.11,
+     "fin": 74.64,
+     "rel_debut": 14.04,
+     "rel_fin": 14.57
+    },
+    {
+     "vers": 31,
+     "texte": "sort d'ce euj",
+     "debut": 74.64,
+     "fin": 75.17,
+     "rel_debut": 14.57,
+     "rel_fin": 15.0
+    }
+   ]
+  },
+  {
+   "n": "07",
+   "titre": "long fleuve",
+   "bpm": 92,
+   "audio": "07-long-fleuve.wav",
+   "sous_titres": "07-long-fleuve.srt",
+   "source": "audio/07-long-fleuve.mp3",
+   "debut": 81.57,
+   "fin": 96.57,
+   "duree": 15.0,
+   "phrase_cle": "et sur l’écran d’mes nuits blanches quand j’aurai quelques idées noires, j’ferai de toi ma vedette comme Nougaro dans le cinéma",
+   "secondes_par_syllabe": 0.177,
+   "temps_mesure": [
+    0.861,
+    2.138,
+    3.415,
+    4.692,
+    5.969,
+    7.246,
+    8.523,
+    9.801,
+    11.078,
+    12.355,
+    13.655,
+    14.909
+   ],
+   "fragments": [
+    {
+     "vers": 22,
+     "texte": "Et si tu",
+     "debut": 81.6,
+     "fin": 82.114,
+     "rel_debut": 0.03,
+     "rel_fin": 0.544
+    },
+    {
+     "vers": 22,
+     "texte": "n'existais",
+     "debut": 82.114,
+     "fin": 82.628,
+     "rel_debut": 0.544,
+     "rel_fin": 1.058
+    },
+    {
+     "vers": 22,
+     "texte": "pas, j’pense quand même",
+     "debut": 82.628,
+     "fin": 83.313,
+     "rel_debut": 1.058,
+     "rel_fin": 1.743
+    },
+    {
+     "vers": 22,
+     "texte": "que j'existerais",
+     "debut": 83.313,
+     "fin": 84.17,
+     "rel_debut": 1.743,
+     "rel_fin": 2.6
+    },
+    {
+     "vers": 23,
+     "texte": "Moi j'aime prendre",
+     "debut": 84.21,
+     "fin": 84.648,
+     "rel_debut": 2.64,
+     "rel_fin": 3.078
+    },
+    {
+     "vers": 23,
+     "texte": "des risques",
+     "debut": 84.648,
+     "fin": 85.085,
+     "rel_debut": 3.078,
+     "rel_fin": 3.515
+    },
+    {
+     "vers": 23,
+     "texte": "mais si tu",
+     "debut": 85.085,
+     "fin": 85.523,
+     "rel_debut": 3.515,
+     "rel_fin": 3.953
+    },
+    {
+     "vers": 23,
+     "texte": "t'éloignes",
+     "debut": 85.523,
+     "fin": 85.815,
+     "rel_debut": 3.953,
+     "rel_fin": 4.245
+    },
+    {
+     "vers": 23,
+     "texte": "je me",
+     "debut": 85.815,
+     "fin": 86.106,
+     "rel_debut": 4.245,
+     "rel_fin": 4.536
+    },
+    {
+     "vers": 23,
+     "texte": "désisterai",
+     "debut": 86.106,
+     "fin": 86.69,
+     "rel_debut": 4.536,
+     "rel_fin": 5.12
+    },
+    {
+     "vers": 24,
+     "texte": "Et sur l'écran",
+     "debut": 86.73,
+     "fin": 87.338,
+     "rel_debut": 5.16,
+     "rel_fin": 5.768
+    },
+    {
+     "vers": 24,
+     "texte": "de mes nuits",
+     "debut": 87.338,
+     "fin": 87.793,
+     "rel_debut": 5.768,
+     "rel_fin": 6.223
+    },
+    {
+     "vers": 24,
+     "texte": "blanches, quand j'aurai",
+     "debut": 87.793,
+     "fin": 88.401,
+     "rel_debut": 6.223,
+     "rel_fin": 6.831
+    },
+    {
+     "vers": 24,
+     "texte": "quelques idées noires",
+     "debut": 88.401,
+     "fin": 89.16,
+     "rel_debut": 6.831,
+     "rel_fin": 7.59
+    },
+    {
+     "vers": 25,
+     "texte": "J’ferai de",
+     "debut": 89.2,
+     "fin": 89.691,
+     "rel_debut": 7.63,
+     "rel_fin": 8.121
+    },
+    {
+     "vers": 25,
+     "texte": "toi ma vedette",
+     "debut": 89.691,
+     "fin": 90.346,
+     "rel_debut": 8.121,
+     "rel_fin": 8.776
+    },
+    {
+     "vers": 25,
+     "texte": "comme Nougaro",
+     "debut": 90.346,
+     "fin": 91.001,
+     "rel_debut": 8.776,
+     "rel_fin": 9.431
+    },
+    {
+     "vers": 25,
+     "texte": "dans le",
+     "debut": 91.001,
+     "fin": 91.329,
+     "rel_debut": 9.431,
+     "rel_fin": 9.759
+    },
+    {
+     "vers": 25,
+     "texte": "cinéma",
+     "debut": 91.329,
+     "fin": 91.82,
+     "rel_debut": 9.759,
+     "rel_fin": 10.25
+    },
+    {
+     "vers": 26,
+     "texte": "Là j’dois péter",
+     "debut": 91.86,
+     "fin": 92.595,
+     "rel_debut": 10.29,
+     "rel_fin": 11.025
+    },
+    {
+     "vers": 26,
+     "texte": "Perrotta",
+     "debut": 92.595,
+     "fin": 93.147,
+     "rel_debut": 11.025,
+     "rel_fin": 11.577
+    },
+    {
+     "vers": 26,
+     "texte": "j'me déplace",
+     "debut": 93.147,
+     "fin": 93.698,
+     "rel_debut": 11.577,
+     "rel_fin": 12.128
+    },
+    {
+     "vers": 26,
+     "texte": "dans le 17",
+     "debut": 93.698,
+     "fin": 94.25,
+     "rel_debut": 12.128,
+     "rel_fin": 12.68
+    },
+    {
+     "vers": 27,
+     "texte": "Elle fait la",
+     "debut": 94.29,
+     "fin": 94.792,
+     "rel_debut": 12.72,
+     "rel_fin": 13.222
+    },
+    {
+     "vers": 27,
+     "texte": "belle en public",
+     "debut": 94.792,
+     "fin": 95.461,
+     "rel_debut": 13.222,
+     "rel_fin": 13.891
+    },
+    {
+     "vers": 27,
+     "texte": "quand on est",
+     "debut": 95.461,
+     "fin": 95.963,
+     "rel_debut": 13.891,
+     "rel_fin": 14.393
+    },
+    {
+     "vers": 27,
+     "texte": "deux, elle est discrète",
+     "debut": 95.963,
+     "fin": 96.8,
+     "rel_debut": 14.393,
+     "rel_fin": 15.0
+    }
+   ]
+  },
+  {
+   "n": "08",
+   "titre": "sésame interlude",
+   "bpm": 74,
+   "audio": "08-sesame-interlude.wav",
+   "sous_titres": "08-sesame-interlude.srt",
+   "source": "audio/08-sesame-interlude.mp3",
+   "debut": 92.8,
+   "fin": 107.8,
+   "duree": 15.0,
+   "phrase_cle": "des heures devant la porte à crier sésame, et cette chienne s’est jamais ouverte",
+   "secondes_par_syllabe": 0.194,
+   "temps_mesure": [
+    0.521,
+    1.194,
+    1.845,
+    2.611,
+    3.284,
+    4.004,
+    4.701,
+    5.397,
+    6.047,
+    6.698,
+    7.394,
+    8.067,
+    8.811,
+    9.507,
+    10.204,
+    10.854,
+    11.504,
+    12.131,
+    12.781,
+    13.478,
+    14.174,
+    14.871
+   ],
+   "fragments": [
+    {
+     "vers": 38,
+     "texte": "J'suis la comme",
+     "debut": 92.83,
+     "fin": 93.39,
+     "rel_debut": 0.03,
+     "rel_fin": 0.59
+    },
+    {
+     "vers": 38,
+     "texte": "un clébard",
+     "debut": 93.39,
+     "fin": 93.95,
+     "rel_debut": 0.59,
+     "rel_fin": 1.15
+    },
+    {
+     "vers": 39,
+     "texte": "Les yeux qui",
+     "debut": 93.99,
+     "fin": 94.474,
+     "rel_debut": 1.19,
+     "rel_fin": 1.674
+    },
+    {
+     "vers": 39,
+     "texte": "toisent les",
+     "debut": 94.474,
+     "fin": 94.957,
+     "rel_debut": 1.674,
+     "rel_fin": 2.157
+    },
+    {
+     "vers": 39,
+     "texte": "étoiles comme",
+     "debut": 94.957,
+     "fin": 95.441,
+     "rel_debut": 2.157,
+     "rel_fin": 2.641
+    },
+    {
+     "vers": 39,
+     "texte": "le u qui",
+     "debut": 95.441,
+     "fin": 95.925,
+     "rel_debut": 2.641,
+     "rel_fin": 3.125
+    },
+    {
+     "vers": 39,
+     "texte": "téma l'tréma",
+     "debut": 95.925,
+     "fin": 96.57,
+     "rel_debut": 3.125,
+     "rel_fin": 3.77
+    },
+    {
+     "vers": 40,
+     "texte": "J'essaye de",
+     "debut": 96.61,
+     "fin": 97.06,
+     "rel_debut": 3.81,
+     "rel_fin": 4.26
+    },
+    {
+     "vers": 40,
+     "texte": "trouver l'bonheur",
+     "debut": 97.06,
+     "fin": 97.66,
+     "rel_debut": 4.26,
+     "rel_fin": 4.86
+    },
+    {
+     "vers": 40,
+     "texte": "et l'calme",
+     "debut": 97.66,
+     "fin": 97.96,
+     "rel_debut": 4.86,
+     "rel_fin": 5.16
+    },
+    {
+     "vers": 41,
+     "texte": "La quête démarre",
+     "debut": 98.0,
+     "fin": 98.853,
+     "rel_debut": 5.2,
+     "rel_fin": 6.053
+    },
+    {
+     "vers": 41,
+     "texte": "très mal",
+     "debut": 98.853,
+     "fin": 99.279,
+     "rel_debut": 6.053,
+     "rel_fin": 6.479
+    },
+    {
+     "vers": 42,
+     "texte": "Des heures devant",
+     "debut": 99.62,
+     "fin": 100.473,
+     "rel_debut": 6.82,
+     "rel_fin": 7.673
+    },
+    {
+     "vers": 42,
+     "texte": "la porte a",
+     "debut": 100.473,
+     "fin": 101.112,
+     "rel_debut": 7.673,
+     "rel_fin": 8.312
+    },
+    {
+     "vers": 42,
+     "texte": "crier sésame",
+     "debut": 101.112,
+     "fin": 101.752,
+     "rel_debut": 8.312,
+     "rel_fin": 8.952
+    },
+    {
+     "vers": 43,
+     "texte": "Et cette chienne",
+     "debut": 103.08,
+     "fin": 103.72,
+     "rel_debut": 10.28,
+     "rel_fin": 10.92
+    },
+    {
+     "vers": 43,
+     "texte": "s'est jamais",
+     "debut": 103.72,
+     "fin": 104.359,
+     "rel_debut": 10.92,
+     "rel_fin": 11.559
+    },
+    {
+     "vers": 43,
+     "texte": "ouverte …",
+     "debut": 104.359,
+     "fin": 104.786,
+     "rel_debut": 11.559,
+     "rel_fin": 11.986
+    }
+   ]
+  },
+  {
+   "n": "09",
+   "titre": "dequoituparles!",
+   "bpm": 126,
+   "audio": "09-dequoituparles.wav",
+   "sous_titres": "09-dequoituparles.srt",
+   "source": "audio/09-dequoituparles.mp3",
+   "debut": 15.186,
+   "fin": 30.186,
+   "duree": 15.0,
+   "phrase_cle": "j’essaie d’m’insérer dans une voie durable",
+   "secondes_par_syllabe": 0.173,
+   "temps_mesure": [
+    0.0,
+    0.627,
+    1.254,
+    1.881,
+    2.531,
+    3.181,
+    3.785,
+    4.412,
+    5.039,
+    5.666,
+    6.293,
+    6.92,
+    7.546,
+    8.197,
+    8.847,
+    9.427,
+    10.054,
+    10.681,
+    11.308,
+    11.958,
+    12.585,
+    13.189,
+    13.816,
+    14.396,
+    14.93
+   ],
+   "fragments": [
+    {
+     "vers": 4,
+     "texte": "J'laisse",
+     "debut": 15.24,
+     "fin": 15.43,
+     "rel_debut": 0.054,
+     "rel_fin": 0.245
+    },
+    {
+     "vers": 5,
+     "texte": "J'laisse le monde",
+     "debut": 15.67,
+     "fin": 16.241,
+     "rel_debut": 0.484,
+     "rel_fin": 1.055
+    },
+    {
+     "vers": 5,
+     "texte": "s'consumer",
+     "debut": 16.241,
+     "fin": 16.812,
+     "rel_debut": 1.055,
+     "rel_fin": 1.627
+    },
+    {
+     "vers": 6,
+     "texte": "J'essaye",
+     "debut": 16.96,
+     "fin": 17.341,
+     "rel_debut": 1.774,
+     "rel_fin": 2.155
+    },
+    {
+     "vers": 7,
+     "texte": "J'essaye",
+     "debut": 17.39,
+     "fin": 17.771,
+     "rel_debut": 2.204,
+     "rel_fin": 2.585
+    },
+    {
+     "vers": 8,
+     "texte": "J'essaye",
+     "debut": 17.82,
+     "fin": 18.122,
+     "rel_debut": 2.634,
+     "rel_fin": 2.936
+    },
+    {
+     "vers": 8,
+     "texte": "d'm'insérer",
+     "debut": 18.122,
+     "fin": 18.575,
+     "rel_debut": 2.936,
+     "rel_fin": 3.389
+    },
+    {
+     "vers": 8,
+     "texte": "dans une voie",
+     "debut": 18.575,
+     "fin": 19.028,
+     "rel_debut": 3.389,
+     "rel_fin": 3.842
+    },
+    {
+     "vers": 8,
+     "texte": "durable",
+     "debut": 19.028,
+     "fin": 19.33,
+     "rel_debut": 3.842,
+     "rel_fin": 4.144
+    },
+    {
+     "vers": 9,
+     "texte": "Mets y ton",
+     "debut": 19.37,
+     "fin": 19.815,
+     "rel_debut": 4.184,
+     "rel_fin": 4.629
+    },
+    {
+     "vers": 9,
+     "texte": "âme ou next",
+     "debut": 19.815,
+     "fin": 20.26,
+     "rel_debut": 4.629,
+     "rel_fin": 5.074
+    },
+    {
+     "vers": 10,
+     "texte": "Quand t'es devant",
+     "debut": 20.3,
+     "fin": 20.86,
+     "rel_debut": 5.114,
+     "rel_fin": 5.674
+    },
+    {
+     "vers": 10,
+     "texte": "l'mic j'sens rien",
+     "debut": 20.86,
+     "fin": 21.28,
+     "rel_debut": 5.674,
+     "rel_fin": 6.094
+    },
+    {
+     "vers": 10,
+     "texte": "qui en ressort",
+     "debut": 21.28,
+     "fin": 21.84,
+     "rel_debut": 6.094,
+     "rel_fin": 6.654
+    },
+    {
+     "vers": 11,
+     "texte": "On dirait",
+     "debut": 21.88,
+     "fin": 22.324,
+     "rel_debut": 6.694,
+     "rel_fin": 7.138
+    },
+    {
+     "vers": 11,
+     "texte": "juste qu'tu",
+     "debut": 22.324,
+     "fin": 22.768,
+     "rel_debut": 7.138,
+     "rel_fin": 7.582
+    },
+    {
+     "vers": 11,
+     "texte": "fais des",
+     "debut": 22.768,
+     "fin": 23.064,
+     "rel_debut": 7.582,
+     "rel_fin": 7.878
+    },
+    {
+     "vers": 11,
+     "texte": "incantations",
+     "debut": 23.064,
+     "fin": 23.656,
+     "rel_debut": 7.878,
+     "rel_fin": 8.47
+    },
+    {
+     "vers": 11,
+     "texte": "sans le sort",
+     "debut": 23.656,
+     "fin": 24.1,
+     "rel_debut": 8.47,
+     "rel_fin": 8.914
+    },
+    {
+     "vers": 12,
+     "texte": "Cherche, celle qui peut",
+     "debut": 24.14,
+     "fin": 24.837,
+     "rel_debut": 8.954,
+     "rel_fin": 9.651
+    },
+    {
+     "vers": 12,
+     "texte": "bounce sur moi",
+     "debut": 24.837,
+     "fin": 25.36,
+     "rel_debut": 9.651,
+     "rel_fin": 10.174
+    },
+    {
+     "vers": 13,
+     "texte": "Sur un king size",
+     "debut": 25.4,
+     "fin": 26.162,
+     "rel_debut": 10.214,
+     "rel_fin": 10.976
+    },
+    {
+     "vers": 14,
+     "texte": "Sur un lit",
+     "debut": 26.23,
+     "fin": 26.73,
+     "rel_debut": 11.044,
+     "rel_fin": 11.544
+    },
+    {
+     "vers": 14,
+     "texte": "sans ressort",
+     "debut": 26.73,
+     "fin": 27.23,
+     "rel_debut": 11.544,
+     "rel_fin": 12.044
+    },
+    {
+     "vers": 15,
+     "texte": "Il faut chaud",
+     "debut": 27.27,
+     "fin": 27.705,
+     "rel_debut": 12.084,
+     "rel_fin": 12.519
+    },
+    {
+     "vers": 15,
+     "texte": "appelle moi",
+     "debut": 27.705,
+     "fin": 28.14,
+     "rel_debut": 12.519,
+     "rel_fin": 12.954
+    },
+    {
+     "vers": 16,
+     "texte": "Ça chute",
+     "debut": 28.18,
+     "fin": 28.47,
+     "rel_debut": 12.994,
+     "rel_fin": 13.284
+    },
+    {
+     "vers": 16,
+     "texte": "aussitôt",
+     "debut": 28.47,
+     "fin": 28.905,
+     "rel_debut": 13.284,
+     "rel_fin": 13.719
+    },
+    {
+     "vers": 16,
+     "texte": "quand je sors",
+     "debut": 28.905,
+     "fin": 29.34,
+     "rel_debut": 13.719,
+     "rel_fin": 14.154
+    },
+    {
+     "vers": 17,
+     "texte": "J'arrive avec",
+     "debut": 29.38,
+     "fin": 29.996,
+     "rel_debut": 14.194,
+     "rel_fin": 14.81
+    },
+    {
+     "vers": 17,
+     "texte": "une cible",
+     "debut": 29.996,
+     "fin": 30.304,
+     "rel_debut": 14.81,
+     "rel_fin": 15.0
+    }
+   ]
+  },
+  {
+   "n": "10",
+   "titre": "persephone",
+   "bpm": 110,
+   "audio": "10-persephone.wav",
+   "sous_titres": "10-persephone.srt",
+   "source": "audio/10-persephone.mp3",
+   "debut": 108.56,
+   "fin": 123.56,
+   "duree": 15.0,
+   "phrase_cle": "faut qu’j’l’enlève comme Hadès pour qu’elle fleurisse mon enfer comme Perséphone",
+   "secondes_par_syllabe": 0.191,
+   "temps_mesure": [
+    0.69,
+    1.41,
+    2.13,
+    2.873,
+    3.569,
+    4.312,
+    5.032,
+    5.752,
+    6.472,
+    7.191,
+    7.911,
+    8.654,
+    9.351,
+    10.071,
+    10.814,
+    11.534,
+    12.253,
+    12.973,
+    13.693,
+    14.436
+   ],
+   "fragments": [
+    {
+     "vers": 42,
+     "texte": "Ça m'a",
+     "debut": 108.59,
+     "fin": 108.947,
+     "rel_debut": 0.03,
+     "rel_fin": 0.387
+    },
+    {
+     "vers": 42,
+     "texte": "bouleversé",
+     "debut": 108.947,
+     "fin": 109.66,
+     "rel_debut": 0.387,
+     "rel_fin": 1.1
+    },
+    {
+     "vers": 43,
+     "texte": "On parlait",
+     "debut": 109.7,
+     "fin": 110.218,
+     "rel_debut": 1.14,
+     "rel_fin": 1.658
+    },
+    {
+     "vers": 43,
+     "texte": "sexe et drogue",
+     "debut": 110.218,
+     "fin": 110.909,
+     "rel_debut": 1.658,
+     "rel_fin": 2.349
+    },
+    {
+     "vers": 43,
+     "texte": "y'a 3h",
+     "debut": 110.909,
+     "fin": 111.254,
+     "rel_debut": 2.349,
+     "rel_fin": 2.694
+    },
+    {
+     "vers": 43,
+     "texte": "la on parle",
+     "debut": 111.254,
+     "fin": 111.772,
+     "rel_debut": 2.694,
+     "rel_fin": 3.212
+    },
+    {
+     "vers": 43,
+     "texte": "de versets",
+     "debut": 111.772,
+     "fin": 112.29,
+     "rel_debut": 3.212,
+     "rel_fin": 3.73
+    },
+    {
+     "vers": 44,
+     "texte": "Faut jouer",
+     "debut": 112.33,
+     "fin": 112.67,
+     "rel_debut": 3.77,
+     "rel_fin": 4.11
+    },
+    {
+     "vers": 44,
+     "texte": "tactique",
+     "debut": 112.67,
+     "fin": 113.18,
+     "rel_debut": 4.11,
+     "rel_fin": 4.62
+    },
+    {
+     "vers": 44,
+     "texte": "pour pas perdre",
+     "debut": 113.18,
+     "fin": 113.69,
+     "rel_debut": 4.62,
+     "rel_fin": 5.13
+    },
+    {
+     "vers": 44,
+     "texte": "ses forces",
+     "debut": 113.69,
+     "fin": 114.03,
+     "rel_debut": 5.13,
+     "rel_fin": 5.47
+    },
+    {
+     "vers": 45,
+     "texte": "Il faut l'temps",
+     "debut": 114.07,
+     "fin": 114.702,
+     "rel_debut": 5.51,
+     "rel_fin": 6.142
+    },
+    {
+     "vers": 45,
+     "texte": "pour percer",
+     "debut": 114.702,
+     "fin": 115.333,
+     "rel_debut": 6.142,
+     "rel_fin": 6.773
+    },
+    {
+     "vers": 46,
+     "texte": "Faut qu'j'l'enleve",
+     "debut": 115.42,
+     "fin": 116.138,
+     "rel_debut": 6.86,
+     "rel_fin": 7.578
+    },
+    {
+     "vers": 46,
+     "texte": "comme hades",
+     "debut": 116.138,
+     "fin": 116.496,
+     "rel_debut": 7.578,
+     "rel_fin": 7.936
+    },
+    {
+     "vers": 46,
+     "texte": "pour qu'elle fleurisse",
+     "debut": 116.496,
+     "fin": 117.214,
+     "rel_debut": 7.936,
+     "rel_fin": 8.654
+    },
+    {
+     "vers": 46,
+     "texte": "mon enfer",
+     "debut": 117.214,
+     "fin": 117.752,
+     "rel_debut": 8.654,
+     "rel_fin": 9.192
+    },
+    {
+     "vers": 46,
+     "texte": "comme persephone",
+     "debut": 117.752,
+     "fin": 118.47,
+     "rel_debut": 9.192,
+     "rel_fin": 9.91
+    },
+    {
+     "vers": 47,
+     "texte": "Quand est-ce qu'on",
+     "debut": 118.51,
+     "fin": 119.142,
+     "rel_debut": 9.95,
+     "rel_fin": 10.582
+    },
+    {
+     "vers": 47,
+     "texte": "inverse les",
+     "debut": 119.142,
+     "fin": 119.773,
+     "rel_debut": 10.582,
+     "rel_fin": 11.213
+    },
+    {
+     "vers": 47,
+     "texte": "rôles ?",
+     "debut": 119.773,
+     "fin": 119.984,
+     "rel_debut": 11.213,
+     "rel_fin": 11.424
+    },
+    {
+     "vers": 48,
+     "texte": "J'étais",
+     "debut": 120.29,
+     "fin": 120.65,
+     "rel_debut": 11.73,
+     "rel_fin": 12.09
+    },
+    {
+     "vers": 48,
+     "texte": "tipeu j'voulais",
+     "debut": 120.65,
+     "fin": 121.37,
+     "rel_debut": 12.09,
+     "rel_fin": 12.81
+    },
+    {
+     "vers": 48,
+     "texte": "tout le temps",
+     "debut": 121.37,
+     "fin": 121.91,
+     "rel_debut": 12.81,
+     "rel_fin": 13.35
+    },
+    {
+     "vers": 48,
+     "texte": "voir la mer",
+     "debut": 121.91,
+     "fin": 122.45,
+     "rel_debut": 13.35,
+     "rel_fin": 13.89
+    },
+    {
+     "vers": 48,
+     "texte": "c'était beau",
+     "debut": 122.45,
+     "fin": 122.99,
+     "rel_debut": 13.89,
+     "rel_fin": 14.43
+    },
+    {
+     "vers": 49,
+     "texte": "Ouais j'étais",
+     "debut": 123.03,
+     "fin": 123.614,
+     "rel_debut": 14.47,
+     "rel_fin": 15.0
+    }
+   ]
+  }
+ ]
+}

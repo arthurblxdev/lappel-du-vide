@@ -88,6 +88,7 @@
     <span style="margin-left:auto;display:flex;gap:12px">
       <button type="button" class="btn" id="copier">copier le json</button>
       <button type="button" class="btn" id="telecharger">télécharger</button>
+      <button type="button" class="btn" id="reprendre">reprendre le fichier</button>
       <button type="button" class="btn" id="vider">vider ce titre</button>
     </span>
   </div>
@@ -128,7 +129,10 @@ function charger() {
     fetch('assets/brief/horodatage.json').then(r => r.ok ? r.json() : {}).catch(() => ({})),
   ]).then(([, fichier]) => {
     for (const [n] of TRACKS) {
-      const src = local[n] || fichier[n] || [];
+      // le travail gardé dans le navigateur ne compte que s’il a autant de temps que de vers :
+      // sinon les paroles ont changé depuis, et ses temps tomberaient sur les mauvais vers
+      const nv = (paroles[n] || []).length;
+      const src = (local[n] && local[n].length === nv ? local[n] : null) || fichier[n] || [];
       temps[n] = (paroles[n] || []).map((_, i) => (typeof src[i] === 'number' ? src[i] : null));
     }
   });
@@ -239,6 +243,14 @@ $('telecharger').addEventListener('click', () => {
   a.href = URL.createObjectURL(new Blob([json()], { type: 'application/json' }));
   a.download = 'horodatage.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 });
+// abandonne le travail gardé dans le navigateur pour ce titre et relit assets/brief/horodatage.json
+$('reprendre').addEventListener('click', () => {
+  fetch('assets/brief/horodatage.json', { cache: 'no-store' }).then(r => r.json()).then(f => {
+    const src = f[cur] || [];
+    temps[cur] = (paroles[cur] || []).map((_, i) => (typeof src[i] === 'number' ? src[i] : null));
+    majVers(); majTitres(); sauver();
+  });
+});
 $('vider').addEventListener('click', () => {
   temps[cur] = (paroles[cur] || []).map(() => null); pos = 0; majVers(); majTitres(); sauver();
 });
@@ -258,7 +270,9 @@ document.addEventListener('keydown', e => {
 });
 
 renderTitres();
-charger().then(() => choisir('01')).catch(() => { $('etat').textContent = 'paroles introuvables'; });
+// ?titre=09 ouvre directement sur un titre
+const depart = new URLSearchParams(location.search).get('titre');
+charger().then(() => choisir(TRACKS.some(([n]) => n === depart) ? depart : '01')).catch(() => { $('etat').textContent = 'paroles introuvables'; });
 </script>
 </body>
 </html>

@@ -458,7 +458,10 @@ J'aime pas les puristes,
 T'sais même pas de quoi tu parles,
 Tu veux m'tester de quoi tu parles ?
 L'écart entre nous ne le vois tu pas ?
+J'laisse,
 J'laisse le monde s'consumer,
+J'essaye,
+J'essaye,
 J'essaye d'm'insérer dans une voie durable,
 Mets y ton âme ou next,
 Quand t'es devant l'mic j'sens rien qui en ressort,
@@ -500,7 +503,10 @@ J'aime pas les puristes,
 T'sais même pas de quoi tu parles,
 Tu veux m'tester de quoi tu parles ?
 L'écart entre nous ne le vois tu pas ?
+J'laisse,
 J'laisse le monde s'consumer,
+J'essaye,
+J'essaye,
 J'essaye d'm'insérer dans une voie durable
 
 ## 10. persephone

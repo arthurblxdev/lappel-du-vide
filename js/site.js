@@ -359,7 +359,7 @@ function verseTimes(vers, dur, stamps) {
   const lead = dur * .06, span = dur * .88;
   // points connus : (poids cumulé, temps). Les ancres viennent de l’horodatage, le reste est estimé.
   const pts = [];
-  if (stamps) vers.forEach((_, i) => { const t = +stamps[i]; if (isFinite(t) && t >= 0) pts.push([cum[i], t]); });
+  if (stamps) vers.forEach((_, i) => { const t = stamps[i]; if (typeof t === 'number' && t >= 0) pts.push([cum[i], t]); }); // null : vers pas encore horodaté
   pts.sort((a, b) => a[0] - b[0]);
   if (!pts.length || pts[0][0] > 0) pts.unshift([0, pts.length ? Math.min(lead, pts[0][1]) : lead]);
   if (pts[pts.length - 1][0] < total) pts.push([total, Math.max(lead + span, pts[pts.length - 1][1] + 2)]);

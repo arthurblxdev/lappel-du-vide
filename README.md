@@ -135,7 +135,9 @@ appuyer sur **entrée** au début de chaque vers ; le vers suivant devient coura
 curseur, `↑ ↓` recalent le vers de ± 0,1 s, `⌫` efface, un clic sur un vers s’y place. La frappe est
 compensée de 0,10 s, le travail est gardé dans le navigateur, et **télécharger** produit le
 `horodatage.json` à copier dans `assets/brief/`. Un titre à moitié fait suffit : les vers horodatés
-servent d’ancres, les autres se répartissent entre elles.
+servent d’ancres, les autres se répartissent entre elles. Le travail gardé dans le navigateur
+n’est repris que s’il a autant de temps que de vers ; **reprendre le fichier** l’abandonne pour le titre
+affiché et relit `horodatage.json`. Un vers sans temps vaut `null`.
 
 ## Audio
 
@@ -166,6 +168,12 @@ un reel dépasse la limite de 25 Mo par fichier de Cloudflare Pages).
   `tools/serve.py`, capture les posts en PNG, les reels image par image en JPEG puis les monte avec
   ffmpeg (H.264 1080 × 1920 30 i/s, AAC, extrait coupé à l’échantillon près, fondus).
 - `legendes.md` : légendes et hashtags proposés, ordre de publication.
+- `reels15.py` : extraits de 15 s pour monter des reels à la main — pour chaque titre, une fenêtre
+  qui s’ouvre sur un temps de la mesure, un vers avant la phrase-clé, sans couper de fragment ; les
+  paroles découpées en fragments d’un à trois mots (débuts de vers horodatés à la main, fragments
+  répartis au prorata des syllabes au débit du morceau) ; les temps de la mesure (librosa). Écrit
+  dans `~/Desktop/lappelduvide-reels-15s/` un WAV de 15 s et un SRT par titre, et `reels-15s.json`
+  (copié dans `tools/insta/`).
 
 ```
 cd tools/insta && npm install && cd ../..      # une fois : puppeteer-core

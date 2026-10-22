@@ -5914,9 +5914,9 @@
    "quote": "j’essaie d’m’insérer dans une voie durable",
    "emotion": "Émotion : nonchalance absolue, flows DMV presque hors du temps, instru Détroit, voix calme",
    "duree": 89.89,
-   "nb_vers": 48,
-   "vers_cle": 5,
-   "fenetre": "auto",
+   "nb_vers": 54,
+   "vers_cle": 8,
+   "fenetre": "manuelle",
    "debut": 14.54,
    "fin": 36.32,
    "vers": [
@@ -5942,91 +5942,106 @@
     },
     {
      "i": 4,
-     "t": 15.14,
-     "texte": "J'laisse le monde s'consumer,"
+     "t": 15.24,
+     "texte": "J'laisse,"
     },
     {
      "i": 5,
-     "t": 17.0,
-     "texte": "J'essaye d'm'insérer dans une voie durable,"
+     "t": 15.67,
+     "texte": "J'laisse le monde s'consumer,"
     },
     {
      "i": 6,
+     "t": 16.96,
+     "texte": "J'essaye,"
+    },
+    {
+     "i": 7,
+     "t": 17.39,
+     "texte": "J'essaye,"
+    },
+    {
+     "i": 8,
+     "t": 17.82,
+     "texte": "J'essaye d'm'insérer dans une voie durable,"
+    },
+    {
+     "i": 9,
      "t": 19.37,
      "texte": "Mets y ton âme ou next,"
     },
     {
-     "i": 7,
+     "i": 10,
      "t": 20.3,
      "texte": "Quand t'es devant l'mic j'sens rien qui en ressort,"
     },
     {
-     "i": 8,
+     "i": 11,
      "t": 21.88,
      "texte": "On dirait juste qu'tu fais des incantations sans le sort,"
     },
     {
-     "i": 9,
+     "i": 12,
      "t": 24.14,
      "texte": "Cherche, celle qui peut bounce sur moi,"
     },
     {
-     "i": 10,
+     "i": 13,
      "t": 25.4,
      "texte": "Sur un king size,"
     },
     {
-     "i": 11,
+     "i": 14,
      "t": 26.23,
      "texte": "Sur un lit sans ressort,"
     },
     {
-     "i": 12,
+     "i": 15,
      "t": 27.27,
      "texte": "Il faut chaud appelle moi,"
     },
     {
-     "i": 13,
+     "i": 16,
      "t": 28.18,
      "texte": "Ça chute aussitôt quand je sors,"
     },
     {
-     "i": 14,
+     "i": 17,
      "t": 29.38,
      "texte": "J'arrive avec une cible, avec un goal,"
     },
     {
-     "i": 15,
+     "i": 18,
      "t": 30.96,
      "texte": "J'suis la pour les lingots,"
     },
     {
-     "i": 16,
+     "i": 19,
      "t": 31.85,
      "texte": "Fuck attraper un lumbago,"
     },
     {
-     "i": 17,
+     "i": 20,
      "t": 33.16,
      "texte": "Ils ont tout, ils font des embargos,"
     },
     {
-     "i": 18,
+     "i": 21,
      "t": 34.4,
      "texte": "J'suis au courant pour l'grand magot,"
     },
     {
-     "i": 19,
+     "i": 22,
      "t": 35.68,
      "texte": "Et j'vais m'chopper une part,"
     },
     {
-     "i": 20,
+     "i": 23,
      "t": 36.57,
      "texte": "J'fais pas d'l'art c'est un sport,"
     },
     {
-     "i": 21,
+     "i": 24,
      "t": 37.86,
      "texte": "Comprends qu'j'sois ereinté as fuck,"
     }
