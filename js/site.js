@@ -58,12 +58,19 @@ const FALLBACK_RIVER = [
   "des heures devant la porte à crier sésame et cette chienne s’est jamais ouverte",
 ];
 
+// la coupe de « Vide » de chaque morceau (Site v2.dc.html) : son titre s’y écrit, et y passe au survol dans la liste
+const CUT = { "01": "lumiere", "02": "horizon", "03": "vertige", "04": "lumiere", "05": "vertige", "06": "horizon", "07": "horizon", "08": "lumiere", "09": "vertige", "10": "lumiere" };
+const COUPE_NOM = { horizon: 'horizon', vertige: 'vertige', lumiere: 'lumière' };
+
 const secs = d => { const [m, s] = d.split(':').map(Number); return m * 60 + s; };
-TRACKS.forEach((t, i) => { t.i = i; t.seconds = secs(t.dur); t.img = `assets/singles/${t.file}.webp`; });
+TRACKS.forEach((t, i) => { t.i = i; t.seconds = secs(t.dur); t.img = `assets/singles/${t.file}.webp`; t.coupe = `var(--vide-${CUT[t.n]})`; t.coupeNom = COUPE_NOM[CUT[t.n]]; });
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+// un mot en Vide (css/site.css, .vide) : le même texte en coupe base, survol et choisi, superposés
+const videHTML = s => `<span class="v-repos">${esc(s)}</span><span class="v-survol" aria-hidden="true">${esc(s)}</span><span class="v-choisi" aria-hidden="true">${esc(s)}</span>`;
+const setVide = (el, s) => { el.innerHTML = videHTML(s); };
 const rgba = (hx, a) => `rgba(${parseInt(hx.slice(1, 3), 16)},${parseInt(hx.slice(3, 5), 16)},${parseInt(hx.slice(5, 7), 16)},${a})`;
 const inView = r => r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
 // point de départ de l’envol : la vignette du livret si elle est visible, sinon l’élément cliqué
@@ -83,14 +90,14 @@ function renderPuzzle() {
     const tile = document.createElement('div');
     tile.className = 'tile' + (w * h > 1 ? ' tile-big' : ''); tile.dataset.n = t.n; tile.setAttribute('role', 'button'); tile.tabIndex = 0;
     tile.setAttribute('aria-label', `${t.n} ${t.title}`);
-    tile.style.gridColumn = `${c + 1} / span ${w}`; tile.style.gridRow = `${r + 1} / span ${h}`;
+    tile.style.gridColumn = `${c + 1} / span ${w}`; tile.style.gridRow = `${r + 1} / span ${h}`; tile.style.setProperty('--coupe', t.coupe);
     tile.innerHTML = `
       <div class="tile-in">
         <div class="tile-front" style="background-size:${N / w * 100}% ${N / h * 100}%;background-position:${pct(c, w)} ${pct(r, h)}">
           <span class="tile-title">${esc(t.title)}</span>
         </div>
         <div class="tile-back">
-          <div class="tile-back-img" data-face="back-img" style="background-image:url(${t.img})"><span class="tile-hint">ÉCOUTER →</span></div>
+          <div class="tile-back-img" data-face="back-img" style="background-image:url(${t.img})"><span class="tile-hint">écouter →</span></div>
           <div class="tile-back-txt">
             <span class="tile-quote">« ${esc(t.quote)} »</span>
           </div>
@@ -108,14 +115,15 @@ function renderPuzzle() {
 }
 const allTiles = () => [...document.querySelectorAll('.tile')];
 const allFlipped = () => allTiles().every(t => t.classList.contains('is-flipped'));
-function updateFlipAll() { $('flip-all').textContent = allFlipped() ? 'REMONTER LA POCHETTE' : 'TOUT RETOURNER'; }
+function updateFlipAll() { setVide($('flip-all'), allFlipped() ? 'remonter la pochette' : 'tout retourner'); }
 
 /* ---------- titres et livret ---------- */
 function renderTracklist() {
   const list = $('tracklist');
   TRACKS.forEach(t => {
-    const a = document.createElement('a'); a.className = 'track'; a.href = '#pochette';
-    a.innerHTML = `<span class="track-n">${t.n}</span><span class="track-title">${esc(t.title)}</span><span class="track-dur">${t.dur}</span>`;
+    const a = document.createElement('a'); a.className = 'track vide-hote'; a.href = '#pochette';
+    a.innerHTML = `<span class="track-n">${t.n}</span><span class="track-title vide" style="--v-survol:${t.coupe}">${videHTML(t.title)}</span>`
+      + `<span class="track-dur"><span class="track-coupe">${t.coupeNom}</span><span>${t.dur}</span></span>`;
     a.addEventListener('click', e => { e.preventDefault(); openPlayer(t.i, rectOf(t.n, a)); });
     list.appendChild(a);
   });
@@ -175,7 +183,7 @@ function paintFoil() {
 }
 function fillCarte(t) {
   scene.querySelector('.carte-recto').style.backgroundImage = `url(${t.img})`;
-  $('carte-titre').textContent = t.title; $('carte-quote').textContent = `« ${t.quote} »`;
+  $('carte-vue').style.setProperty('--coupe', t.coupe); $('carte-titre').textContent = t.title; $('carte-quote').textContent = `« ${t.quote} »`;
   // au dos : les premiers vers du titre, un par ligne (à défaut, l’extrait de secours)
   $('verso-vers').textContent = P.lines && P.lines[t.i] ? P.lines[t.i].split('\n').slice(0, 5).join('\n') : t.excerpt;
 }
@@ -257,7 +265,7 @@ function renderObjet() {
             <div class="disque-sillons"></div>
             <div class="disque-label">
               ${p.labelImg ? `<img src="${p.labelImg}" alt="" loading="lazy" decoding="async">` : ''}
-              <span class="disque-face">LEV × SIMARD · FACE A</span>
+              <span class="disque-face">lev × simard / face a</span>
               ${p.labelTitre ? `<span class="disque-titre">${esc(p.labelTitre)}</span>` : ''}
               <span class="disque-trou"></span>
             </div>
@@ -304,9 +312,10 @@ function applyTrack(smooth) {
   const meta = $('p-meta'); meta.style.color = t.accent;
   $('p-fill').style.background = t.accent; $('p-knob').style.background = t.accent;
   player.style.setProperty('--accent', t.accent);
+  const setCoupe = () => player.style.setProperty('--coupe', t.coupe);
   switchLive(t.n, smooth);
   const setText = () => {
-    $('p-title').textContent = t.title; meta.textContent = metaDe(t); $('p-dur').textContent = t.dur;
+    setCoupe(); $('p-title').textContent = t.title; meta.textContent = metaDe(t); $('p-dur').textContent = t.dur;
     renderLyrics(); renderProgress(); if (P.playing) liveLyrics(true);
   };
   clearTimeout(P.switchT);
@@ -465,10 +474,10 @@ function setPlaying(on) {
     P.liveOn = true; mountLive();
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (!P.liveOn) return;
-      P.playing = true; pLive.classList.add('is-on'); btn.textContent = 'PAUSE'; audioPlay(); liveLyrics(true);
+      P.playing = true; pLive.classList.add('is-on'); setVide(btn, 'pause'); btn.classList.add('is-on'); audioPlay(); liveLyrics(true);
     }));
   } else {
-    P.playing = false; pLive.classList.remove('is-on'); btn.textContent = 'LECTURE'; audioPause(); pulseStop();
+    P.playing = false; pLive.classList.remove('is-on'); setVide(btn, 'lecture'); btn.classList.remove('is-on'); audioPause(); pulseStop();
     P.liveOff = setTimeout(() => { P.liveOn = false; unmountLive(); }, 1500);
   }
 }
@@ -494,17 +503,18 @@ function onTick() {
    ne s’affiche. */
 const stats = { ecoutes: {}, interet: {}, joue: {}, comptees: new Set() };
 const fmtN = n => Number(n).toLocaleString('fr-FR');
-const pluriel = (n, mot) => `${fmtN(n)} ${mot}${n > 1 ? 'S' : ''}`;
-const metaDe = t => { const n = stats.ecoutes[t.n] | 0; return t.meta + (n ? ` · ${pluriel(n, 'ÉCOUTE')}` : ''); };
+const pluriel = (n, mot) => `${fmtN(n)} ${mot}${n > 1 ? 's' : ''}`;
+// les métadonnées s’écrivent en bas de casse, séparées par des barres (Site v2.dc.html)
+const metaDe = t => { const n = stats.ecoutes[t.n] | 0; return (t.meta.toLowerCase() + (n ? ` · ${pluriel(n, 'écoute')}` : '')).replace(/ · /g, ' / '); };
 const interesse = () => { try { return localStorage.getItem('interet:album') === '1'; } catch { return false; } };
 function renderStats() {
   const total = stats.ecoutes.total | 0;
-  $('pied-ecoutes').textContent = total ? ` · ${pluriel(total, 'ÉCOUTE')}` : '';
+  $('pied-ecoutes').textContent = total ? ` / ${pluriel(total, 'écoute')}` : '';
   if (P.phase !== 'closed') $('p-meta').textContent = metaDe(TRACKS[P.open]);
   const moi = interesse(), n = stats.interet.album | 0, btn = $('interet');
   btn.classList.toggle('is-on', moi); btn.setAttribute('aria-pressed', String(moi));
-  $('interet-txt').textContent = moi ? 'merci · intéressé' : 'ça m’intéresse';
-  $('interet-n').textContent = n ? pluriel(n, 'INTÉRESSÉ') : '';
+  $('interet-txt').textContent = moi ? 'merci / intéressé' : 'ça m’intéresse';
+  $('interet-n').textContent = n ? pluriel(n, 'intéressé') : '';
 }
 async function statsApi(corps) {
   try {
@@ -678,7 +688,7 @@ const river = (() => {
     let li = 0;
     for (const pts of lines) {
       const size = dsep * .58 + rnd(li) * dsep * .12; const gold = li % 9 === 4; li++;
-      ctx.font = `italic 300 ${size}px 'Cormorant Garamond', Georgia, serif`;
+      ctx.font = `${size}px 'Vide Vertige', 'Bricolage Grotesque', sans-serif`;
       ctx.fillStyle = gold ? 'rgba(224,163,58,.30)' : 'rgba(243,235,221,.17)';
       const txt = src[li % src.length]; const words = txt.split(' '); let wi = Math.floor(rnd(li * 7) * words.length);
       const total = (pts.length - 1) * step; let pos = 6;
@@ -697,7 +707,7 @@ const river = (() => {
   }
   const go = () => { ready = true; paint(); };
   return {
-    start() { (document.fonts && document.fonts.load ? document.fonts.load("italic 300 24px 'Cormorant Garamond'").then(go, go) : go()); },
+    start() { (document.fonts && document.fonts.load ? document.fonts.load("24px 'Vide Vertige'").then(go, go) : go()); },
     repaint(lines) { src = lines; if (ready) paint(); },
   };
 })();
@@ -712,7 +722,7 @@ function renderHeures() {
   const nav = $('heures');
   LUMIERES.forEach(k => {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'heure'; b.dataset.mode = k; b.textContent = k;
+    b.type = 'button'; b.className = 'heure vide'; b.dataset.mode = k; setVide(b, k);
     b.addEventListener('click', () => { heurePick = k; applyHeure(); });
     nav.appendChild(b);
   });

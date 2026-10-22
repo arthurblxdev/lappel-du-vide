@@ -1,24 +1,34 @@
-// <cover-live track="05"> — la pochette d’un single rendue en direct : paroles → champ animé → palette (WebGL)
+// <cover-live track="05" [time="12"]> — la pochette d’un single rendue en direct : paroles → champ animé → palette (WebGL)
 (() => {
+// palettes relevées sur les pochettes finales (singles/*.png) : couleur moyenne par niveau de luminance
 const PAL = {
-  "01": ['#07060C','#3A2452','#B8652E','#E0A33A','#F2D9A0','#F6EEDF'],
-  "02": ['#07060C','#2E0F22','#7A2A44','#B84A6E','#C8622A','#F2D9A0'],
-  "03": ['#07060C','#3A0E28','#8A2560','#F06292','#F8A050','#F8F06A'],
-  "04": ['#07060C','#08191E','#125050','#2E8B8B','#7FE0A0','#E8FFD0'],
-  "05": ['#07060C','#0F1F44','#3A5A9A','#A9C8EA','#E6F0FA','#FFFFFF'],
-  "06": ['#07060C','#1F1218','#5A2C1E','#B8652E','#E0A33A','#F2D9A0'],
-  "07": ['#07060C','#0F2A30','#2E8B8B','#B8652E','#E0A33A','#F2D9A0'],
-  "08": ['#07060C','#1A1512','#4A3E36','#9A8C7E','#D8CCBA','#F2E9D8'],
-  "09": ['#07060C','#1B1436','#5E3FB3','#B8A0D0','#F3EBDD','#FFFFFF'],
-  "10": ['#07060C','#2E0C1A','#8A1F26','#D0546A','#F0B8C8','#F6EEDF'],
+  "01": ['#0A0812','#231D24','#5A4A37','#9B8259','#DDBF7F','#FCEAA0'],
+  "02": ['#08060C','#3A1622','#6E3137','#A85E52','#DE9C78','#F7D096'],
+  "03": ['#09070E','#4A163F','#8F2C68','#C94F82','#F49A88','#FFEB74'],
+  "04": ['#070A0F','#0C2429','#18595F','#249A9D','#3AE4E4','#C8FFE6'],
+  "05": ['#07070E','#22304A','#486287','#7798C2','#AECCEE','#EEF6FD'],
+  "06": ['#080912','#182236','#3C485E','#6E7A8E','#ABADB6','#F4F0EE'],
+  "07": ['#07070D','#0C2727','#447A71','#734423','#FDBF4B','#FFEF56'],
+  "08": ['#08080B','#1B1B1C','#3E3E3E','#767675','#B9B9B7','#F6F3EB'],
+  "09": ['#0A0812','#2A2050','#52427A','#7A68A0','#A893C5','#D8CAE0'],
+  "10": ['#0C070C','#561520','#96303C','#D0566B','#FB93AB','#FFEBF1'],
 };
-const MODE = { "01":2, "02":7, "03":3, "04":4, "05":0, "06":1, "07":5, "08":6, "09":0, "10":8 };
-const SPEED = { "09": .55 };
+const ACC = { "06": '#F2894A' };
+const MODE = { "01":2, "02":7, "03":3, "04":4, "05":0, "06":1, "07":5, "08":6, "09":9, "10":8 };
+const TXT0 = { font: "italic 22px Georgia, 'Times New Roman', serif", lh: 25, gap: 7 };
+const TXT = {
+  "02": { font: "italic bold 21px Georgia, 'Times New Roman', serif", lh: 24, gap: 6 },
+  "03": { font: "italic bold 24px Georgia, 'Times New Roman', serif", lh: 28, gap: 7 },
+  "05": { font: "bold 30px Georgia, 'Times New Roman', serif", lh: 33, gap: 9 },
+  "06": { font: "bold 24px Georgia, 'Times New Roman', serif", lh: 26, gap: 6 },
+  "08": { font: "italic 20px Georgia, 'Times New Roman', serif", lh: 23, gap: 7 },
+  "09": { font: "bold 16px Georgia, 'Times New Roman', serif", lh: 17, gap: 5 },
+};
 const FALLBACK = "tout là-haut je ressens l’appel du vide pour m’calmer je fabrique de la belle musique la vie dont j’rêve c’est pas la vie qu’j’ai certes les larmes cachées bien à l’abri d’mes cernes ";
 
 const VS = `attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}`;
 const FS = `precision highp float;
-uniform sampler2D uText;uniform float uTime;uniform int uMode;uniform vec3 uPal[6];uniform vec2 uRes;
+uniform sampler2D uText;uniform sampler2D uTextM;uniform float uTime;uniform int uMode;uniform vec3 uPal[6];uniform vec3 uAcc;uniform vec2 uRes;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x),f.y);}
 float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*noise(p);p*=2.1;a*=.5;}return v;}
@@ -27,28 +37,43 @@ vec3 pal(float t){t=clamp(t,0.,.9999)*5.;float f=fract(t);int i=int(floor(t));
  if(i==1){c0=uPal[1];c1=uPal[2];}else if(i==2){c0=uPal[2];c1=uPal[3];}else if(i==3){c0=uPal[3];c1=uPal[4];}else if(i==4){c0=uPal[4];c1=uPal[5];}
  return mix(c0,c1,f);}
 float T(vec2 uv){return texture2D(uText,uv).r;}
+float TM(vec2 uv){return texture2D(uTextM,uv,-.35).r;}
 float G(vec2 p,vec2 c,vec2 r){vec2 d=(p-c)/r;return exp(-dot(d,d));}
+vec2 rot(vec2 v,float a){float c=cos(a),s=sin(a);return vec2(v.x*c-v.y*s,v.x*s+v.y*c);}
+// paroles enroulées autour de c : torsion fixe + rotation d'un seul bloc. les bras de la spirale semblent aspirés, et rien ne se cisaille avec le temps
+float swirl(vec2 p,vec2 c,float A,float R,float spin,float warp,float wf,vec2 sc,float bands,float base,float chaos,float duty,float t){
+ vec2 d=p-c;float r=length(d);vec2 q=rot(d,A*exp(-r/R)*(1.+.05*sin(t*.25))+spin*t+base);
+ vec2 w=vec2(fbm(q*wf+vec2(1.7,9.2)+t*.01),fbm(q*wf+vec2(8.3,2.8)-t*.01))-.5;
+ vec2 w2=vec2(fbm(q*wf*3.7+vec2(4.4,.3)),fbm(q*wf*3.7+vec2(.9,6.1)))-.5;vec2 u=q+w*warp+w2*chaos;
+ float b=smoothstep(-duty-.2,-duty+.2,sin(u.y*bands+9.*fbm(u*2.2+4.))); // des paquets de lignes séparés par du noir, qui suivent le courant
+ return TM(u*sc+.5)*b;}
+float edge(vec2 p,float b,float tb,float lw){return smoothstep(lw,0.,abs(p.x-b))*step(tb,p.y);}
 void main(){
- vec2 p=gl_FragCoord.xy/uRes;p.y=1.-p.y;float t=uTime;float v=0.;float L=0.;bool fold=false;
- if(uMode==0){ // vortex — rotation différentielle
-  vec2 c=vec2(.5);vec2 d=p-c;float r=length(d)+1e-4;float a=2.6*exp(-r/.36)+t*(.06+.5*exp(-r/.18));float cs=cos(a),sn=sin(a);
-  vec2 q=c+vec2(d.x*cs-d.y*sn,d.x*sn+d.y*cs);q=c+(q-c)*(1.+.35*exp(-r/.3));v=T(q+vec2(0.,t*.01));
-  L=G(p,c,vec2(.3));v=v*(.25+.75*sqrt(L))*.9+pow(L,2.6)*1.25;
- } else if(uMode==1){ // pluie — la cover : rangées horizontales de paroles, resserrées vers une ligne d'horizon, qui glissent lentement vers le bas
-  float cy=.52;float dy=p.y-cy;float stretch=.32+.25*sin(p.x*11.);float yy=cy+dy*stretch+.07*sin(p.x*17.)+t*.03;
-  vec2 q=vec2(p.x+.009*sin(p.y*90.+p.x*10.+t*.4),yy);v=T(q);
-  // gouttes : fines colonnes qui tombent, longueur/vitesse variées, trois couches
-  float rain=0.;for(int k=0;k<3;k++){float kf=float(k);float nx=90.+40.*kf;float col=floor(p.x*nx+kf*13.);float h1=hash(vec2(col,kf)),h2=hash(vec2(col,kf+5.));
-   float fx=fract(p.x*nx+kf*13.);float w=smoothstep(.0,.35,fx)*smoothstep(1.,.65,fx);float fy=fract(p.y*(.9+.6*h2)-t*(.35+.45*h1)+h1*7.);
-   rain+=w*pow(fy,9.)*step(.55,h2)*(.5+.5*h1);}
-  v=v*(1.-.35*rain)+rain*.55;
-  L=max(G(p,vec2(.5,.69),vec2(.23,.15)),.35*G(p,vec2(.5,.69),vec2(.7,.06)));v=v*(.2+.8*pow(L,.6))*.8+pow(L,2.4)*.85;
- } else if(uMode==2){ // horizon — soleil anneau, rangées qui glissent, reflet qui ondule
-  float H=.66;vec2 q;
-  if(p.y<H){q=vec2(p.x+t*.02*(.4+p.y)+.04*sin(p.y*14.+t*.4),p.y*1.1+.015*sin(p.x*9.+t*.6));v=T(q)*(.3+.7*smoothstep(.15,.7,p.y));}
-  else{float yy=H-(p.y-H)*1.25;float rip=.012*sin(p.y*110.+t*2.5)*smoothstep(0.,.08,p.y-H);q=vec2(p.x+t*.02*(.4+yy)+.04*sin(yy*14.+t*.4)+rip,yy*1.1);v=T(q)*.5*(1.-(p.y-H)*1.6);}
-  vec2 sc=vec2(.5,H-.1);float ring=exp(-pow((length((p-sc)*vec2(1.,1.15))-.11)*26.,2.));
-  L=max(.5*G(p,vec2(.5,H),vec2(.9,.05)),.35*G(p,sc,vec2(.3)));v=v*(.5+.5*sqrt(L))+ring*.95+pow(L,2.)*.5;fold=true;
+ vec2 p=gl_FragCoord.xy/uRes;p.y=1.-p.y;float t=uTime;float v=0.;float L=0.;float acc=0.;bool fold=false;
+ if(uMode==0){ // l'appel du vide — le champ de paroles tourne autour de la lumière, des vides le découpent
+  vec2 c=vec2(.55,.43);float tx=swirl(p,c,7.5,.1,-.07,.45,1.3,vec2(.85,1.8),62.,0.,.035,.7,t);
+  float e=(fbm(p*5.+vec2(2.,t*.03))-.5)*.08;
+  float m=smoothstep(.012,-.012,p.y-(.56+2.6*p.x*p.x)+e)*smoothstep(.45,.38,G(p,vec2(0.),vec2(.34,.15))+e)+step(.4,p.x);m=min(1.,m);float halo=G(p,c,vec2(.28)),core=G(p,c,vec2(.095));
+  v=tx*m*(.72+.45*halo)+core*1.15+halo*.2;
+ } else if(uMode==1){ // imperméable — les paroles étirées en pluie sur trois plans, une lampe derrière la pluie
+  vec2 c=vec2(.68,.6);float halo=G(p,c,vec2(.19)),core=G(p,c,vec2(.085));float rain=0.;
+  // chaque colonne lit une tranche verticale des paroles : les jambages deviennent des gouttes, rien ne se compresse donc rien ne scintille
+  for(int k=0;k<3;k++){float kf=float(k);float n=300.-kf*80.;float col=floor(p.x*n),fx=fract(p.x*n);
+   float h=hash(vec2(col,kf*7.1+1.)),h2=hash(vec2(col,kf+3.)),h3=hash(vec2(col,kf+11.));
+   float prof=smoothstep(.15,.42,fx)*smoothstep(.85,.58,fx);
+   vec2 uv=vec2(h3*7.31+kf*.37+p.y*.015,p.y*(.6-kf*.12)*(.7+.6*h2)-t*(.16+kf*.1)*(.8+.4*h)+h*5.);
+   rain+=smoothstep(.4,.8,T(uv))*prof*(.3+.7*h2)*(.32+kf*.22);}
+  float bg=.02+.04*fbm(p*vec2(2.5,1.2)+vec2(0.,-t*.04));
+  v=bg+rain*(.6+1.6*halo)+core*.9+halo*.24;
+  acc=smoothstep(.28,.55,rain)*smoothstep(.2,.75,G(p,c,vec2(.11)));
+ } else if(uMode==2){ // intro — l'anneau posé sur l'horizon, un ciel de paroles en nuages qui dérivent, le reflet en stries qui ondule
+  float H=.61;vec2 sc=vec2(.62,.45);float rr=length(p-sc);
+  float ring=exp(-pow((rr-.148-.003*sin(t*.5))*30.,2.))*step(p.y,H);
+  if(p.y<H){float cl=fbm(vec2(p.x*2.4+t*.012,p.y*6.5-t*.004)+2.);float tx=TM(vec2(p.x*.9+t*.01,p.y*1.6+.04*sin(p.x*9.+t*.3)));
+   v=smoothstep(.4,.75,cl)*(.6+.4*tx)*.42+exp(-(H-p.y)/.075)*(.55+.7*cl)*1.15;v*=1.-smoothstep(.15,.11,rr)*.85;}
+  else{float yy=p.y-H;float tx=TM(vec2(p.x*.14+t*.006+.004*sin(p.x*40.+t*2.2+yy*90.),yy*3.2+.5));
+   v=tx*max(G(p,vec2(sc.x,H+.06),vec2(.36,.11)),.6*exp(-yy/.035))*2.2+exp(-yy/.006)*.9;}
+  v=(v+ring*.95)*(.5+hash(p*uRes+fract(t*.7)));
  } else if(uMode==3){ // lampe à lave — blobs qui montent, paroles en suspension
   float f=0.;for(int i=0;i<10;i++){float fi=float(i);float bx=.25+.5*hash(vec2(fi,2.))+.06*sin(t*.3+fi);float by=fract(t*.02*(.6+hash(vec2(fi,5.)))+hash(vec2(fi,9.)));
    vec2 rr=vec2(.05+.06*hash(vec2(fi,3.)),.09+.12*hash(vec2(fi,4.)));vec2 d=(p-vec2(bx,by))/rr;f+=exp(-dot(d,d)*1.6);}
@@ -60,17 +85,29 @@ void main(){
   float st=0.;for(int k=0;k<6;k++){float o=(float(k)-2.5)*.004;st+=T(q+vec2(0.,o));}st/=6.;
   float below=d.y>-.04?1.:exp(d.y/.09);float lanes=.55+.45*pow(max(0.,sin(th*9.+fbm(vec2(th*3.,1.))*3.)),1.5);
   v=st*lanes*(.25+.95*min(1.,r/.38))*(.35+.65*below)+.03+.2*exp(-abs(d.y)/.06);
-  float bl=.5+.5*sin(t*1.3);L=max(max(G(p,vec2(.44,.69),vec2(.026,.014)),G(p,vec2(.6,.69),vec2(.026,.014))),max(.5*G(p,vec2(.52,.69),vec2(.26,.11)),.28*G(p,vp,vec2(.12,.06))));
+  float bl=.5+.5*sin(t*1.3);L=max(max(G(p,vec2(.44,.69),vec2(.026,.014)),G(p,vec2(.6,.69),vec2(.026,.014))),max(.78*G(p,vec2(.52,.68),vec2(.24,.12)),.28*G(p,vp,vec2(.12,.06))));
   v=v*(.6+.4*sqrt(L))+pow(L,1.6)*(1.05+.1*bl);fold=true;
  } else if(uMode==5){ // long fleuve — strates postérisées qui dérivent
-  vec2 w=vec2(fbm(p*2.+vec2(-t*.03,0.)),fbm(p*2.+vec2(5.2,t*.02)));float n=fbm(p*vec2(2.2,3.6)+vec2(t*.05,0.)+(w-.5)*1.4);
-  n+=.12*(1.-p.y);float post=floor(n*5.5)/4.5;v=post*.9+T(p*vec2(1.,2.)+vec2(t*.01,0.))*.06;
-  L=.3*G(p,vec2(.5,.75),vec2(.9,.12));v=v*(.75+.25*sqrt(L))+pow(L,2.)*.2;
- } else if(uMode==6){ // sésame — colonnes de paroles, la porte, la faille qui respire, zoom lent
-  p=.5+(p-.5)*(1.-.06*sin(t*.25));float col=floor(p.x*14.);float ph=hash(vec2(col,2.));
-  vec2 q=vec2(p.x+.003*sin(p.y*50.),fract(p.y*.3+ph-t*.006));v=T(q)*(.5+.5*hash(vec2(col,4.)))*.9;
-  v*=.35+.65*abs(sin(p.x*44.));float inDoor=step(abs(p.x-.5),.09)*step(.46,p.y);v=mix(v,.05+T(p*vec2(1.,3.))*.08,inDoor);
-  float pulse=.85+.15*sin(t*1.4);L=max(G(p,vec2(.5,.43),vec2(.09,.05))*pulse,.25*G(p,vec2(.5,.45),vec2(.35,.3)));v=v*(.5+.5*sqrt(L))+pow(L,1.8)*.9;
+  vec2 w=vec2(fbm(p*2.+vec2(-t*.03,0.)),fbm(p*2.+vec2(5.2,t*.02)));float n=fbm(p*vec2(3.,6.)+vec2(t*.05,0.)+(w-.5)*1.4);
+  n=(n-.47)*1.4+.45+.4*exp(-pow((p.y-.33)/.16,2.))-.3*smoothstep(.45,1.,p.y);float post=floor(n*5.5)/4.5;v=post*.9+T(p*vec2(1.,2.)+vec2(t*.01,0.))*.05; // aplats exacts de la palette, comme la pochette
+ } else if(uMode==6){ // sésame — la rangée de portes, la silhouette, la lumière qui respire derrière ; la porte ne s'ouvre jamais
+  float x=p.x,y=p.y;float top=.468,id=10.;
+  if(x<.1){top=.653;id=0.;}else if(x<.208){top=.604;id=1.;}else if(x<.3){top=.518;id=2.;}else if(x<.397){top=.464;id=3.;}else if(x<.47){top=.464;id=4.;}else if(x<.595){top=.395;id=5.;}else if(x<.697){top=.507;id=6.;}else if(x<.783){top=.482;id=7.;}else if(x<.86){top=.513;id=8.;}else if(x<.946){top=.48;id=9.;}
+  float inP=step(top,y);float br=.5+.5*sin(t*.55);
+  vec2 bc=vec2(.5,.535);vec2 d=p-bc;float r=length(d);float ang=atan(d.x,-d.y);
+  float pent=.809/cos(.6283-abs(mod(ang+.6283,1.2566)-.6283));
+  float R0=.088*mix(1.,pent,.35)+(fbm(vec2(ang*3.,t*.12))-.5)*.022+(noise(p*uRes*.35)-.5)*.008;
+  float blob=step(r,R0)*step(y,.6);float halo=exp(-max(0.,r-R0)/(.1+.02*br))*(1.-blob);
+  float cloud=fbm(p*vec2(6.,4.)+vec2(id*3.1,t*.012))*.8+fbm(p*24.+id*1.7)*.4;
+  float tx=TM(vec2(x*1.5+id*.21,y*1.15+t*(.004+.006*hash(vec2(id,3.)))));
+  float lit=halo*(.82+.18*br)*(.8+.4*hash(floor(p*uRes*.5)+floor(t*10.)));
+  v=inP*(.07+.12*cloud+.05*tx+lit*(.72+.3*cloud+.15*tx))+(1.-inP)*(.025+lit*.14);
+  float lw=1.3/uRes.x;
+  float e=edge(p,.1,.604,lw)+edge(p,.208,.518,lw)+edge(p,.3,.464,lw)+edge(p,.397,.464,lw)+edge(p,.47,.395,lw)+edge(p,.595,.395,lw)+edge(p,.697,.482,lw)+edge(p,.705,.482,lw)+edge(p,.783,.482,lw)+edge(p,.86,.48,lw)+edge(p,.946,.468,lw);
+  v+=min(1.,e)*(.55+.12*sin(t*2.3+x*40.)+lit*.4);
+  float door=step(abs(x-.5),.07)*step(.6,y);float seam=exp(-abs(x-.5)*uRes.x/1.5)*smoothstep(.62,.7,y)*(.04+.08*br);
+  v=mix(v,.02+G(p,vec2(.5,.6),vec2(.075,.065))*(.9+.1*br)+seam,door);
+  v=mix(v,.03,blob);
  } else if(uMode==7){ // vieux messages — feuille de paroles qui se défait et se reforme
   vec2 c=vec2(.42,.45);vec2 d=p-c;float ang=-.2;vec2 dr=vec2(d.x*cos(ang)-d.y*sin(ang),d.x*sin(ang)+d.y*cos(ang));
   float r=length(dr);float th=atan(dr.y,dr.x)+1.5708;float lobes=pow(abs(cos(2.5*th)),2.4);float base=abs(th)>2.45?.3:1.;
@@ -83,6 +120,11 @@ void main(){
   float scatter=step(.58,fbm(p*35.+vec2(-t*.25,9.)))*clamp((p.x-c.x-.02)/.24,0.,1.)*(1.-inside*keep)*exp(-abs(p.y-c.y-(p.x-c.x)*.12)/.3);
   v+=fly*scatter*1.05;float sx=c.x+(p.y-c.y)*tan(-ang);if(abs(p.x-sx)<.0025&&p.y>c.y+R*.28&&p.y<c.y+R*.28+.26)v+=.7;
   L=max(.6*G(p,vec2(.6,.42),vec2(.32)),.3*G(p,vec2(.5),vec2(.8)));v=v*(.6+.4*sqrt(L))+pow(L,3.)*.3+.03;
+ } else if(uMode==9){ // dequoituparles — le même tourbillon, plus lent, plus trouble, sans lumière au centre
+  vec2 c=vec2(.42,.54);float tx=swirl(p,c,5.5,.09,-.035,.6,1.9,vec2(.9,1.5),70.,1.2,.1,.45,t);
+  float e=(fbm(p*5.+vec2(7.,t*.02))-.5)*.1;
+  float m=smoothstep(.5,.42,G(p,vec2(1.,.54),vec2(.15,.24))+e)*smoothstep(.5,.42,G(p,vec2(.1,1.03),vec2(.24,.13))+e)*smoothstep(.5,.42,G(p,vec2(.72,1.04),vec2(.16,.09))+e);float halo=G(p,c,vec2(.16));
+  v=tx*m*.78+halo*.1;
  } else { // persephone — grains de paroles projetés depuis un centre vide, en boucle
   vec2 c=vec2(.5,.47);vec2 d=p-c;float r=length(d)+1e-4;float th=atan(d.y,d.x);
   vec2 u=vec2((th+3.14159)/6.2832*22.,log(r*8.+1.)*7.-t*.45);vec2 id=floor(u);vec2 f=fract(u)-.5;
@@ -93,7 +135,7 @@ void main(){
   L=max(.8*G(p,c,vec2(.095)),max(.35*G(p,c,vec2(.42)),.25*G(p,vec2(.5),vec2(.9))));v=v*(.6+.4*sqrt(L))+pow(L,2.4)*.85;fold=true;
  }
  if(fold&&v>1.)v=2.-v;v+=(hash(p*uRes+fract(t))-.5)*.05;
- gl_FragColor=vec4(pal(v),1.);}`;
+ gl_FragColor=vec4(mix(pal(v),uAcc,clamp(acc,0.,1.)),1.);}`;
 
 let lyricsPromise = null;
 function loadLyrics() {
@@ -102,45 +144,79 @@ function loadLyrics() {
   }).catch(() => ({}));
   return lyricsPromise;
 }
-function textCanvas(txt, seed) {
+function textCanvas(txt, seed, st) {
   const S = 1024, c = document.createElement('canvas'); c.width = S; c.height = S; const g = c.getContext('2d');
-  g.fillStyle = '#000'; g.fillRect(0, 0, S, S); g.fillStyle = '#fff'; g.font = "italic 300 22px 'Cormorant Garamond', Georgia, serif"; g.textBaseline = 'top';
+  g.fillStyle = '#000'; g.fillRect(0, 0, S, S); g.fillStyle = '#fff'; g.font = st.font; g.textBaseline = 'top';
   const words = txt.split(' '); let wi = Math.floor(seed * words.length);
-  for (let y = 0; y < S; y += 25) { let x = -((y * 7.3 + seed * 997) % 180); while (x < S) { const w = words[wi++ % words.length]; g.fillText(w, x, y); x += g.measureText(w).width + 7; } }
+  for (let y = 0; y < S; y += st.lh) { let x = -((y * 7.3 + seed * 997) % 180); while (x < S) { const w = words[wi++ % words.length]; g.fillText(w, x, y); x += g.measureText(w).width + st.gap; } }
   return c;
 }
 const hex = h => [parseInt(h.slice(1, 3), 16) / 255, parseInt(h.slice(3, 5), 16) / 255, parseInt(h.slice(5, 7), 16) / 255];
 
 class CoverLive extends HTMLElement {
-  static get observedAttributes() { return ['track']; }
+  static get observedAttributes() { return ['track', 'time']; }
   connectedCallback() {
-    if (!this.cv) { this.cv = document.createElement('canvas'); this.cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block'; this.style.cssText += ';position:absolute;inset:0;display:block;overflow:hidden;background:#07060C'; this.appendChild(this.cv); this.initGL(); }
-    this.running = true; this.t0 = performance.now() - (this.paused || 0); this.loop();
+    if (!this.cv) { this.style.cssText += ';position:absolute;inset:0;display:block;overflow:hidden;background:#07060C'; this.makeCanvas(); }
+    // hors champ : on rend le contexte WebGL (le navigateur en limite le nombre), on le reprend en revenant
+    if (!this.io) this.io = new IntersectionObserver(es => { this.visible = es[es.length - 1].isIntersecting; if (this.visible) this.wake(); else { clearTimeout(this.relT); this.relT = setTimeout(() => this.release(), 1500); } }, { rootMargin: '200px' });
+    if (!this.ro) this.ro = new ResizeObserver(() => this.draw());
+    this.io.observe(this); this.ro.observe(this);
+    this.running = true; this.t0 = performance.now() - (this.paused || 0); this.wake(); this.loop();
   }
-  disconnectedCallback() { this.running = false; if (this.raf) cancelAnimationFrame(this.raf); }
-  attributeChangedCallback() { if (this.gl) this.setTrack(); }
+  disconnectedCallback() { this.running = false; if (this.raf) cancelAnimationFrame(this.raf); this.io.disconnect(); this.ro.disconnect(); clearTimeout(this.relT); this.relT = setTimeout(() => this.release(), 400); }
+  attributeChangedCallback(name) { if (!this.gl || this.lost) return; if (name === 'track') this.setTrack(); this.draw(); }
+  makeCanvas() {
+    if (this.cv) this.cv.remove();
+    const cv = this.cv = document.createElement('canvas'); cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block'; this.appendChild(cv);
+    this.lost = false; this.released = false; this.gl = null; this.u = null;
+    cv.addEventListener('webglcontextlost', e => { e.preventDefault(); this.lost = true; if (!this.released && this.visible !== false) { clearTimeout(this.rbT); this.rbT = setTimeout(() => this.wake(), 1200); } });
+    cv.addEventListener('webglcontextrestored', () => { this.lost = false; this.initGL(); this.draw(); });
+    this.initGL();
+  }
+  release() { if (this.released || this.lost || !this.gl) return; const ext = this.gl.getExtension('WEBGL_lose_context'); if (ext) { this.released = true; this.loseExt = ext; ext.loseContext(); } }
+  wake() {
+    clearTimeout(this.relT); if (!this.lost) return;
+    if (this.released && this.loseExt) { this.released = false; this.loseExt.restoreContext(); return; }
+    // contexte retiré par le navigateur : nouveau canvas, nouveau contexte (trois essais par minute au plus)
+    const now = performance.now(); this.rb = (this.rb || []).filter(x => now - x < 60000); if (this.rb.length >= 3) return; this.rb.push(now); this.makeCanvas(); this.draw();
+  }
   initGL() {
-    const gl = this.gl = this.cv.getContext('webgl', { antialias: false, premultipliedAlpha: false, preserveDrawingBuffer: true }); if (!gl) return;
+    const gl = this.gl = this.cv.getContext('webgl', { antialias: false, premultipliedAlpha: false, preserveDrawingBuffer: true }); if (!gl || gl.isContextLost()) return;
     const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) console.error('[cover-live]', gl.getShaderInfoLog(o)); return o; };
     const pr = this.pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(pr); gl.useProgram(pr);
     const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     const a = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
-    this.u = { time: gl.getUniformLocation(pr, 'uTime'), mode: gl.getUniformLocation(pr, 'uMode'), pal: gl.getUniformLocation(pr, 'uPal'), res: gl.getUniformLocation(pr, 'uRes'), text: gl.getUniformLocation(pr, 'uText') };
-    this.tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, this.tex);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.uniform1i(this.u.text, 0); this.setTrack();
+    const U = k => gl.getUniformLocation(pr, k);
+    this.u = { time: U('uTime'), mode: U('uMode'), pal: U('uPal'), acc: U('uAcc'), res: U('uRes'), text: U('uText'), textM: U('uTextM') };
+    const aniso = gl.getExtension('EXT_texture_filter_anisotropic');
+    const mk = (unit, mip) => { gl.activeTexture(gl.TEXTURE0 + unit); const tx = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tx);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, mip ? gl.LINEAR_MIPMAP_LINEAR : gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      if (mip && aniso) gl.texParameterf(gl.TEXTURE_2D, aniso.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(8, gl.getParameter(aniso.MAX_TEXTURE_MAX_ANISOTROPY_EXT)));
+      return tx; };
+    // deux copies des paroles : nette (modes historiques) et mipmappée (modes qui tournent ou se compriment — pas de moiré)
+    this.tex = mk(0, false); this.texM = mk(1, true);
+    gl.uniform1i(this.u.text, 0); gl.uniform1i(this.u.textM, 1); this.setTrack();
   }
   setTrack() {
     const gl = this.gl, n = this.getAttribute('track') || '05'; this.track = n;
-    gl.uniform1i(this.u.mode, MODE[n] ?? 0); gl.uniform3fv(this.u.pal, new Float32Array((PAL[n] || PAL['05']).flatMap(hex)));
-    const upload = (txt) => { if (this.track !== n) return; gl.bindTexture(gl.TEXTURE_2D, this.tex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas(txt, parseInt(n) / 11)); };
+    gl.uniform1i(this.u.mode, MODE[n] ?? 0); gl.uniform3fv(this.u.pal, new Float32Array((PAL[n] || PAL['05']).flatMap(hex))); gl.uniform3fv(this.u.acc, new Float32Array(hex(ACC[n] || '#000000')));
+    const st = TXT[n] || TXT0;
+    const upload = (txt) => { if (this.track !== n || this.gl !== gl || this.lost) return; const c = textCanvas(txt, parseInt(n) / 11, st);
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, this.tex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
+      gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, this.texM); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c); gl.generateMipmap(gl.TEXTURE_2D);
+      this.draw(); };
     upload(FALLBACK); loadLyrics().then(l => { if (l[n]) upload(l[n]); });
   }
   loop() {
-    if (!this.running || !this.gl) return; this.raf = requestAnimationFrame(() => this.loop());
-    const gl = this.gl, dpr = Math.min(1.5, window.devicePixelRatio || 1); const w = Math.max(1, Math.round(this.clientWidth * dpr)), h = Math.max(1, Math.round(this.clientHeight * dpr));
+    if (!this.running) return; this.raf = requestAnimationFrame(() => this.loop());
+    this.paused = performance.now() - this.t0; if (this.visible !== false) this.draw();
+  }
+  draw() {
+    const gl = this.gl; if (!gl || this.lost || !this.u) return;
+    const dpr = Math.min(1.5, window.devicePixelRatio || 1); const w = Math.max(1, Math.round(this.clientWidth * dpr)), h = Math.max(1, Math.round(this.clientHeight * dpr));
     if (this.cv.width !== w || this.cv.height !== h) { this.cv.width = w; this.cv.height = h; gl.viewport(0, 0, w, h); }
-    const t = (performance.now() - this.t0) / 1000 * (SPEED[this.track] || 1); this.paused = performance.now() - this.t0;
+    const ft = this.getAttribute('time'); const t = ft != null && ft !== '' ? +ft : (performance.now() - (this.t0 ?? performance.now())) / 1000;
     gl.uniform1f(this.u.time, t); gl.uniform2f(this.u.res, w, h); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 }

@@ -73,9 +73,10 @@ Pages…) gère les Range ; `tools/serve.py` ne sert qu’au développement.
 
 ```
 index.html            page
-css/site.css          styles (importe tokens/colors.css et tokens/texture.css)
+css/site.css          styles (importe tokens/colors.css et tokens/texture.css, déclare les polices Vide)
+fonts/vide-*.otf      « Vide », la police de l’album, en quatre coupes : base, horizon, vertige, lumière (copiées du projet)
 js/site.js            puzzle, liste des titres, cartes du livret, lecteur, rivière de paroles
-js/cover-live.js      <cover-live track="05"> — pochette rendue en direct (WebGL), copié du projet
+js/cover-live.js      <cover-live track="05" [time]> — pochette rendue en direct (WebGL), copié du projet (version de Gifs.dc.html : palettes relevées sur les pochettes, un mode par titre)
 assets/brief/paroles.md   paroles des 10 titres (rivière de fond, texture des pochettes animées, lecteur)
 assets/pochette.webp      la pochette (vertige, sans titre) découpée par le puzzle, 1200 × 1200
 assets/pochette-titre.jpg la pochette titrée, 1200 × 1200, pour og:image
@@ -93,6 +94,20 @@ assets/brief/horodatage.json  temps de chaque vers des 10 titres (passe complèt
 tools/render-covers.html  outil de rendu des pochettes de secours en série (hors site)
 tools/insta/              posts et reels Instagram : plan.py → plan.json, post.html, reel.html, render.mjs, legendes.md (hors site)
 ```
+
+## Polices
+
+Depuis `Site v2.dc.html` (22 octobre 2026) : le texte courant est en **Bricolage Grotesque**
+(Google Fonts), les mots qui comptent en **Vide**, la police de l’album (`fonts/`). Le titre de
+l’album est en coupe horizon ; chaque morceau a sa coupe (`CUT` dans `js/site.js`) pour son titre
+sur la pochette, la carte et dans le lecteur. Les boutons-mots (`.vide` dans `css/site.css`) sont
+en base au repos, passent en horizon au survol et en lumière quand ils sont choisis (vertige pour
+« pause »). La rivière de fond s’écrit en vertige. La texture des pochettes animées
+(`js/cover-live.js`) est en Georgia, avec un corps et une graisse propres à chaque titre.
+
+`vide-vertige.otf` dépasse le plafond de 256 Kio de l’API Claude Design : il est arrivé tronqué
+et sa fin (tables kern, ltag, maxp, name, post) a été reprise des autres coupes, identiques à
+l’octet près, sommes de contrôle vérifiées.
 
 ## Images
 
@@ -174,7 +189,7 @@ Deux compteurs partagés entre tous les visiteurs, gardés dans une base **D1** 
   titre et par page, jamais en lecture simulée). Le total s’affiche dans le pied de page
   (`… · 22:33 · 1 204 ÉCOUTES`) et le détail du titre dans la métadonnée du lecteur
   (`1:36 · 120 BPM · 38 ÉCOUTES`) ;
-- **l’intérêt pour l’album** : dans l’en-tête, à côté de la marque, le bouton `ÇA M’INTÉRESSE` — bordure or,
+- **l’intérêt pour l’album** : dans l’en-tête, à côté de la marque, le bouton « ça m’intéresse » — bordure or,
   foil holographique des cartes, reflet qui balaie, halo qui respire ; cliqué, il se remplit d’or et dit
   `MERCI · INTÉRESSÉ`, le nombre d’intéressés à côté. Un aller-retour par navigateur (`localStorage`), un
   second clic retire l’intérêt.

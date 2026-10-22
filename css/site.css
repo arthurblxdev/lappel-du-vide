@@ -3,6 +3,15 @@
 @import "../tokens/colors.css";
 @import "../tokens/texture.css";
 
+/* ---------- les polices (Site v2.dc.html) ----------
+   Le texte courant est en Bricolage Grotesque. Les mots qui comptent — titre, titres des morceaux,
+   boutons — sont dans « Vide », la police de l’album, en quatre coupes : base au repos, horizon,
+   vertige et lumière. Chaque morceau a sa coupe (js/site.js, CUT). */
+@font-face { font-family: 'Vide Base'; src: url(../fonts/vide-base.otf) format('opentype'); font-display: swap; }
+@font-face { font-family: 'Vide Horizon'; src: url(../fonts/vide-horizon.otf) format('opentype'); font-display: swap; }
+@font-face { font-family: 'Vide Vertige'; src: url(../fonts/vide-vertige.otf) format('opentype'); font-display: swap; }
+@font-face { font-family: 'Vide Lumiere'; src: url(../fonts/vide-lumiere.otf) format('opentype'); font-display: swap; }
+
 /* ---------- la lumière : jour ou nuit (Site.dc.html / Heure.dc.html) ----------
    js/site.js pose data-heure sur <html> — jour entre 10 h et 18 h chez le visiteur, nuit le reste
    du temps, et le switch de l’en-tête tranche. De jour le site est inversé, encre nuit sur or. */
@@ -19,9 +28,11 @@
 }
 
 :root {
-  --font-titre: 'Cormorant Garamond', Georgia, serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
-  --titre-tilt: -1.5deg;
+  --font-texte: 'Bricolage Grotesque', sans-serif;
+  --vide-base: 'Vide Base', 'Bricolage Grotesque', sans-serif;
+  --vide-horizon: 'Vide Horizon', 'Bricolage Grotesque', sans-serif;
+  --vide-vertige: 'Vide Vertige', 'Bricolage Grotesque', sans-serif;
+  --vide-lumiere: 'Vide Lumiere', 'Bricolage Grotesque', sans-serif;
   --texte-doux: #CFC4AE;
   --largeur: 1100px;
   --marge: 32px;
@@ -31,13 +42,13 @@
 html { background: var(--h-fond); transition: background-color 1.6s ease; }
 body {
   margin: 0; background: transparent; color: var(--blanc-chaud);
-  font-family: var(--font-titre); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  font-family: var(--font-texte); font-synthesis: none; -webkit-font-smoothing: antialiased; overflow-x: hidden;
 }
 body.no-scroll { overflow: hidden; }
 a { color: var(--or); text-decoration: none; }
 a:hover { color: var(--or-pale); }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; border-radius: 0; }
-.noscript { font-style: italic; font-size: 24px; line-height: 1.5; padding: 0 var(--marge) 40px; color: var(--h-ink); }
+.noscript { font-family: var(--vide-base); font-size: 24px; line-height: 1.5; padding: 0 var(--marge) 40px; color: var(--h-ink); }
 
 /* midi : là où l’ombre du soleil passe derrière elle, la liste des titres se retourne en blanc.
    Le dégradé reprend l’ellipse du voile, il est posé sur la liste entière et découpé dans le texte ;
@@ -50,6 +61,21 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 :root[data-heure="jour"] .track-title,
 :root[data-heure="jour"] .track-dur,
 :root[data-heure="jour"] .track:hover .track-title { color: transparent; }
+
+/* ---------- un mot en Vide ----------
+   Le même mot trois fois, superposé : coupe base au repos, horizon au survol, et la coupe d’état quand
+   il est choisi (lumière, ou vertige pour la lecture en cours). On passe de l’une à l’autre en fondu.
+   L’hôte du survol est le mot lui-même (.vide) ou la ligne qui le porte (.vide-hote). */
+.vide { display: inline-grid; }
+.vide > span { grid-area: 1 / 1; transition: opacity .45s ease; }
+.v-repos { font-family: var(--vide-base); }
+.v-survol { font-family: var(--v-survol, var(--vide-horizon)); opacity: 0; }
+.v-choisi { font-family: var(--v-choisi, var(--vide-lumiere)); opacity: 0; }
+:is(.vide, .vide-hote):is(:hover, :focus-visible) .v-repos { opacity: 0; }
+:is(.vide, .vide-hote):is(:hover, :focus-visible) .v-survol { opacity: 1; }
+:is(.vide, .vide-hote).is-on .v-repos, :is(.vide, .vide-hote).is-on .v-survol { opacity: 0; }
+:is(.vide, .vide-hote).is-on .v-choisi { opacity: 1; }
+.vide:focus-visible { outline: none; } /* le focus clavier se voit au passage en coupe horizon */
 
 /* le ciel : la lumière de l’heure, posée en fond fixe sous la rivière */
 .ciel { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--h-env); transition: background 1.6s ease; }
@@ -70,7 +96,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .brand {
   padding-top: 28px; display: flex; justify-content: space-between; align-items: baseline; gap: 24px; flex-wrap: wrap;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  font-size: 15px; font-weight: 600;
 }
 .brand-nom { color: var(--h-accent); transition: color 1.6s ease; }
 
@@ -84,7 +110,7 @@ body.avec-stats .interet-bloc { display: flex; }
 .interet {
   position: relative; isolation: isolate; overflow: hidden;
   padding: 11px 20px; border: 1px solid var(--h-accent); color: var(--h-ink);
-  font: inherit; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; white-space: nowrap;
+  font: inherit; font-size: 15px; font-weight: 600; white-space: nowrap;
   background: linear-gradient(120deg, rgba(224,163,58,.12), rgba(94,63,179,.16));
   transition: color .4s ease, border-color .6s ease, background .6s ease, transform .3s ease;
   animation: interetHalo 4.5s ease-in-out infinite;
@@ -109,30 +135,25 @@ body.avec-stats .interet-bloc { display: flex; }
 .interet.is-on:hover { color: var(--nuit); }
 .interet.is-on::before { opacity: .3; }
 .interet.is-pop { animation: interetPop .6s cubic-bezier(.2,.7,.2,1); }
-.interet-n { color: var(--h-meta); transition: color 1.6s ease; }
+.interet-n { font-weight: 500; font-variant-numeric: tabular-nums; color: var(--h-meta); transition: color 1.6s ease; }
 :root[data-heure="jour"] .interet { background: linear-gradient(120deg, rgba(7,6,12,.05), rgba(94,63,179,.14)); animation-name: interetHaloJour; }
 @keyframes interetHalo { 0%, 100% { box-shadow: 0 0 20px 3px rgba(242,217,160,.14); } 50% { box-shadow: 0 0 36px 10px rgba(242,217,160,.34); } }
 @keyframes interetHaloJour { 0%, 100% { box-shadow: 0 0 20px 3px rgba(7,6,12,.10); } 50% { box-shadow: 0 0 34px 10px rgba(7,6,12,.22); } }
 @keyframes interetSheen { 0%, 50% { transform: translateX(-60%); } 80%, 100% { transform: translateX(60%); } }
 @keyframes interetPop { 0% { transform: scale(1); } 35% { transform: scale(1.06); } 100% { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .interet, .interet::after { animation: none; } }
-.heures { display: flex; gap: 18px; flex-wrap: wrap; }
-.heure {
-  padding-bottom: 3px; color: var(--h-meta); border-bottom: 1px solid transparent;
-  font: inherit; letter-spacing: inherit; text-transform: none; cursor: pointer;
-  transition: color .6s ease, border-color .6s ease;
-}
-.heure:hover { color: var(--h-ink); }
-.heure.is-on { color: var(--h-ink); border-bottom-color: var(--h-accent); }
+.heures { display: flex; gap: 2px 20px; flex-wrap: wrap; align-items: baseline; }
+/* les lumières : base au repos, horizon au survol, lumière quand elle est choisie */
+.heure { font-size: 23px; font-weight: 400; line-height: 1.3; color: var(--h-meta); transition: color .6s ease; }
+.heure:hover, .heure.is-on { color: var(--h-ink); }
 
-.hero { padding-top: 10vh; padding-bottom: 8vh; display: flex; flex-direction: column; gap: 18px; }
+.hero { padding-top: 10vh; padding-bottom: 8vh; display: flex; flex-direction: column; gap: 14px; }
 .titre {
-  margin: 0; font-style: italic; font-weight: 300; font-size: clamp(56px, 11vw, 150px); line-height: .92; letter-spacing: -.01em;
-  color: var(--h-ink); transform: rotate(var(--titre-tilt)); transform-origin: left bottom; text-wrap: balance;
-  transition: color 1.6s ease;
+  margin: 0 0 .14em; font-family: var(--vide-horizon); font-weight: 400; font-size: min(12.5vw, 176px); line-height: 1.5; letter-spacing: -.01em;
+  white-space: nowrap; color: var(--h-ink); transition: color 1.6s ease;
 }
 .hero-quote {
-  margin: 12px 0 0; max-width: 52ch; font-style: italic; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45;
+  margin: 0; max-width: 46ch; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.4;
   color: var(--h-quote); text-wrap: pretty; transition: color 1.6s ease;
 }
 
@@ -151,14 +172,14 @@ body.avec-stats .interet-bloc { display: flex; }
 .tile-front, .tile-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; }
 .tile-front { background: var(--nuit) url(../assets/pochette.webp) no-repeat; }
 .tile-title {
-  position: absolute; left: 12px; right: 12px; bottom: 10px; font-style: italic; font-weight: 300; font-size: clamp(14px, 1.8vw, 22px); line-height: 1;
-  color: var(--blanc-creme); opacity: .9; text-shadow: 0 0 12px rgba(7,6,12,.6);
+  position: absolute; left: 12px; right: 12px; bottom: 12px; font-family: var(--coupe); font-size: clamp(18px, 2.4vw, 32px); line-height: 1.25; letter-spacing: -.01em;
+  color: var(--blanc-creme); text-wrap: balance; text-shadow: 0 0 12px rgba(7,6,12,.8);
 }
 .tile-back { transform: rotateY(180deg); background: var(--nuit-2); display: grid; grid-template-rows: 1fr auto; }
 .tile-back-img { position: relative; overflow: hidden; min-height: 0; background: var(--nuit) center / cover no-repeat; }
-.tile-hint { position: absolute; right: 10px; top: 8px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; color: var(--or-pale); }
+.tile-hint { position: absolute; right: 10px; top: 8px; font-size: 13px; font-weight: 600; color: var(--or-pale); }
 .tile-back-txt { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; border-top: 1px solid #1A1626; }
-.tile-quote { font-style: italic; font-weight: 300; font-size: clamp(13px, 1.5vw, 19px); line-height: 1.12; color: var(--blanc-creme); text-wrap: balance; }
+.tile-quote { font-weight: 500; font-size: clamp(13px, 1.5vw, 19px); line-height: 1.2; color: var(--blanc-creme); text-wrap: balance; }
 /* petites pièces : le single occupe tout le dos, la phrase se pose dessus en bas sur un voile ;
    taille en cqw pour suivre la taille de la pièce (le puzzle est borné par la hauteur d’écran) */
 .tile:not(.tile-big) .tile-back { display: block; }
@@ -167,24 +188,24 @@ body.avec-stats .interet-bloc { display: flex; }
   position: absolute; left: 0; right: 0; bottom: 0; border-top: 0; padding-top: 28px; gap: 5px;
   background: linear-gradient(to bottom, rgba(12,10,20,0), rgba(12,10,20,.86) 30%, rgba(12,10,20,.94));
 }
-.tile:not(.tile-big) .tile-quote { font-size: clamp(12px, 7cqw, 16px); line-height: 1.15; text-shadow: 0 1px 8px rgba(7,6,12,.6); }
-.puzzle-tools { display: flex; gap: 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; color: var(--h-meta); transition: color 1.6s ease; }
-.puzzle-tools .lien { border-color: var(--h-trait); }
-.puzzle-tools .lien:hover { color: var(--h-ink); }
-.lien { border-bottom: 1px solid var(--trait); padding-bottom: 2px; color: inherit; }
-.lien:hover { color: var(--or-pale); }
+.tile:not(.tile-big) .tile-quote { font-size: clamp(12px, 7cqw, 16px); line-height: 1.2; text-shadow: 0 1px 8px rgba(7,6,12,.6); }
+.puzzle-tools { display: flex; gap: 18px; font-size: 34px; line-height: 1.3; letter-spacing: -.01em; color: var(--h-ink); transition: color 1.6s ease; }
+/* les boutons en mots : « fermer », « précédent », « lecture »… */
+.fermer { font-size: 30px; line-height: 1.3; color: var(--blanc-chaud); }
 
 /* ---------- titres ---------- */
 .titres { padding-bottom: 12vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 32px 48px; align-items: start; }
 .tracklist { display: flex; flex-direction: column; }
 .track {
-  display: grid; grid-template-columns: 2.5em minmax(0, 1fr) auto; gap: 16px; align-items: baseline;
-  padding: 14px 0; border-top: 1px solid var(--h-trait); color: var(--blanc-chaud); transition: border-color 1.6s ease;
+  display: grid; grid-template-columns: 2.5em minmax(0, 1fr) auto; gap: 16px; align-items: baseline; outline: none;
+  padding: 6px 0 2px; border-top: 1px solid var(--h-trait); color: var(--blanc-chaud); transition: border-color 1.6s ease;
 }
-.track-n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; color: var(--h-meta); transition: color 1.6s ease; }
-.track-title { font-style: italic; font-weight: 300; font-size: clamp(26px, 3vw, 40px); line-height: 1.05; color: var(--h-ink); transition: color .3s ease; }
-.track:hover .track-title { color: var(--h-accent); }
-.track-dur { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--h-meta); transition: color 1.6s ease; }
+.track-n { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--h-meta); transition: color 1.6s ease; }
+/* au survol le titre passe de la coupe base à la sienne, et le nom de la coupe s’affiche près de la durée */
+.track-title { font-size: clamp(30px, 3.6vw, 48px); line-height: 1.5; letter-spacing: -.01em; color: var(--h-ink); transition: color 1.6s ease; }
+.track-dur { display: flex; gap: 14px; font-size: 15px; font-variant-numeric: tabular-nums; color: var(--h-meta); transition: color 1.6s ease; }
+.track-coupe { opacity: 0; transition: opacity .45s ease; }
+.track:is(:hover, :focus-visible) .track-coupe { opacity: 1; }
 .track-end { border-top: 1px solid var(--h-trait); transition: border-color 1.6s ease; }
 
 /* ---------- livret : dix cartes à foil holographique ----------
@@ -218,8 +239,7 @@ body.avec-stats .interet-bloc { display: flex; }
 .carte-vue { position: fixed; inset: 0; z-index: 12; background: rgba(7,6,12,0); transition: background .6s ease; perspective: 1400px; cursor: pointer; }
 .carte-vue.is-open { background: rgba(7,6,12,.86); }
 .carte-bar {
-  position: absolute; left: 0; right: 0; top: 0; padding: 24px 32px; display: flex; justify-content: flex-end;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gris-violet);
+  position: absolute; left: 0; right: 0; top: 0; padding: 18px 32px; display: flex; justify-content: flex-end;
   opacity: 0; transition: opacity .5s ease .3s;
 }
 .carte-vue.is-open .carte-bar { opacity: 1; }
@@ -242,21 +262,18 @@ body.avec-stats .interet-bloc { display: flex; }
   transform: rotateY(180deg); background: var(--nuit-2);
   display: flex; flex-direction: column; justify-content: center; padding: 9% 7% 22%;
 }
-.verso-vers { font-style: italic; font-weight: 300; font-size: clamp(17px, 2.4vmin, 24px); line-height: 1.5; color: var(--texte-doux); white-space: pre-line; text-wrap: pretty; }
+.verso-vers { font-size: clamp(16px, 2.2vmin, 22px); line-height: 1.45; color: var(--texte-doux); white-space: pre-line; text-wrap: pretty; }
 .verso-play {
-  position: absolute; left: 7%; bottom: 8%; font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--blanc-chaud); border: 1px solid var(--trait); padding: 10px 18px;
+  position: absolute; left: 7%; bottom: 7%; font-size: 24px; line-height: 1.3; color: var(--blanc-chaud);
 }
-.verso-play:hover { border-color: var(--gris-violet); color: var(--or-pale); }
 .carte-tourner {
-  position: absolute; left: 6%; top: 4%; font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--or-pale); opacity: .85; text-shadow: 0 0 10px rgba(7,6,12,.9);
+  position: absolute; left: 6%; top: 4%; font-size: 13px; font-weight: 600; color: var(--or-pale); opacity: .85; text-shadow: 0 0 10px rgba(7,6,12,.9);
 }
 .carte-scene:hover .carte-tourner { opacity: 1; }
 /* feuilleter : les chevrons, et le glissé au doigt (voir js/site.js) */
 .carte-nav {
   position: absolute; top: 50%; transform: translateY(-50%); padding: 18px 22px;
-  font-family: var(--font-titre); font-size: 44px; line-height: 1; color: var(--gris-violet);
+  font-family: var(--vide-base); font-size: 44px; line-height: 1; color: var(--gris-violet);
   opacity: 0; transition: opacity .5s ease .3s, color .3s ease;
 }
 .carte-vue.is-open .carte-nav { opacity: 1; }
@@ -273,12 +290,12 @@ body.avec-stats .interet-bloc { display: flex; }
 }
 .carte-vue.is-open .carte-txt { opacity: 1; }
 .carte-titre {
-  font-style: italic; font-weight: 300; font-size: clamp(28px, 5vmin, 52px); line-height: 1; color: var(--blanc-creme);
-  transform: rotate(var(--titre-tilt)); transform-origin: left bottom; text-shadow: 0 0 14px rgba(7,6,12,.7);
+  font-family: var(--coupe); font-size: clamp(30px, 5vmin, 56px); line-height: 1.25; letter-spacing: -.01em; color: var(--blanc-creme);
+  text-wrap: balance; text-shadow: 0 0 14px rgba(7,6,12,.8);
 }
-.carte-quote { font-style: italic; font-size: clamp(14px, 1.9vmin, 18px); line-height: 1.35; color: var(--texte-doux); text-wrap: pretty; }
+.carte-quote { font-size: clamp(14px, 1.9vmin, 18px); line-height: 1.35; color: var(--texte-doux); text-wrap: pretty; }
 
-.pied { padding-top: 12px; padding-bottom: 40px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--h-meta); transition: color 1.6s ease; }
+.pied { padding-top: 12px; padding-bottom: 40px; font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--h-meta); transition: color 1.6s ease; }
 
 /* ---------- lecteur ---------- */
 /* --accent : la couleur du titre en cours ; enregistrée pour pouvoir glisser d’une couleur à l’autre au changement de morceau */
@@ -292,8 +309,7 @@ body.avec-stats .interet-bloc { display: flex; }
 }
 .player.is-open { opacity: 1; }
 .player-bar {
-  position: absolute; left: 0; right: 0; top: 0; padding: 24px 32px; display: flex; justify-content: flex-end;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gris-violet);
+  position: absolute; left: 0; right: 0; top: 0; padding: 18px 32px; display: flex; justify-content: flex-end;
 }
 .player-img {
   position: fixed; background: var(--nuit); overflow: hidden; cursor: pointer;
@@ -325,27 +341,21 @@ body.avec-stats .interet-bloc { display: flex; }
 .player.is-open .player-text { opacity: 1; }
 .player-head, .player-lyrics { transition: opacity .35s ease, transform .35s ease; }
 .player-text.is-switching .player-head, .player-text.is-switching .player-lyrics { opacity: 0; transform: translateY(10px); }
-.player-head { display: flex; flex-direction: column; gap: 8px; }
-.player-title {
-  font-style: italic; font-weight: 300; font-size: clamp(40px, 5vw, 84px); line-height: .95; color: var(--blanc-creme);
-  transform: rotate(var(--titre-tilt)); transform-origin: left bottom;
-}
-.player-meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; transition: color .8s ease; }
+.player-head { display: flex; flex-direction: column; gap: 4px; }
+.player-title { font-family: var(--coupe); font-size: clamp(44px, 5vw, 88px); line-height: 1.3; letter-spacing: -.01em; color: var(--blanc-creme); text-wrap: balance; }
+.player-meta { font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; transition: color .8s ease; }
 .player-lyrics { max-height: 38vh; overflow: auto; padding-right: 12px; mask-image: linear-gradient(#000 85%, #0000); -webkit-mask-image: linear-gradient(#000 85%, #0000); }
-.player-lyrics span { display: block; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: var(--texte-doux); font-style: italic; text-wrap: pretty; }
-.player-controls { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.player-lyrics span { display: block; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.45; color: var(--texte-doux); text-wrap: pretty; }
+.player-controls { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
 .seek { position: relative; height: 18px; cursor: pointer; display: flex; align-items: center; }
 .seek-rail { position: absolute; left: 0; right: 0; height: 1px; background: var(--trait); }
 .seek-fill { position: absolute; left: 0; height: 1px; width: 0; background: var(--or); transition: background-color .8s ease; }
 .seek-knob { position: absolute; top: 5px; width: 8px; height: 8px; margin-left: -4px; left: 0; background: var(--or); transition: background-color .8s ease; }
-.transport {
-  display: flex; justify-content: space-between; align-items: baseline;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--gris-violet);
-}
-.nav:hover { color: var(--or-pale); }
-.play { color: var(--blanc-chaud); border: 1px solid var(--trait); padding: 10px 22px; }
-.play:hover { border-color: var(--gris-violet); }
-.times { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; letter-spacing: .18em; color: var(--gris-violet); }
+.transport { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; color: var(--texte-doux); }
+.nav { font-size: 24px; line-height: 1.3; }
+/* lecture / pause : base au repos, horizon au survol, vertige pendant la lecture */
+.play { --v-choisi: var(--vide-vertige); font-size: 54px; line-height: 1.3; letter-spacing: -.01em; color: var(--accent); }
+.times { display: flex; justify-content: space-between; font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--gris-violet); }
 
 /* ---------- écrans étroits ---------- */
 @media (max-width: 820px) {
@@ -356,14 +366,13 @@ body.avec-stats .interet-bloc { display: flex; }
   .carte { flex: 0 0 112px; width: auto; }
   .carte + .carte { margin-top: 0; }
   .carte.is-dealt:hover { transform: none; }
-  .tile-hint { font-size: 8px; right: 8px; top: 6px; }
-  .tile-title { left: 8px; right: 8px; bottom: 7px; font-size: 12px; }
+  .tile-title { left: 8px; right: 8px; bottom: 7px; font-size: 15px; }
   /* au dos des pièces : plus de texte, seulement le bouton écouter, centré */
   .tile-back-txt { display: none; }
   .tile-back { display: block; }
   .tile-back-img { position: absolute; inset: 0; }
   .tile-hint {
-    left: 50%; top: 50%; right: auto; transform: translate(-50%, -50%); font-size: 9px; letter-spacing: .14em; padding: 6px 8px; white-space: nowrap;
+    left: 50%; top: 50%; right: auto; transform: translate(-50%, -50%); font-size: 12px; padding: 5px 8px; white-space: nowrap;
     border: 1px solid rgba(242,217,160,.55); background: rgba(7,6,12,.45); color: var(--or-pale);
   }
   .player-bar { padding: 20px 24px; }
@@ -374,6 +383,9 @@ body.avec-stats .interet-bloc { display: flex; }
   }
   .player-text { transform: none; padding: 0 24px; gap: 14px; }
   .player-title { font-size: clamp(34px, 9vw, 60px); }
+  .play { font-size: 42px; }
+  .nav { font-size: 20px; }
+  .titre { font-size: 12.5vw; }
   .player-lyrics { max-height: 22vh; }
   /* la carte ouverte prend la largeur du cadre : les chevrons passent sous elle */
   .carte-nav { top: auto; bottom: 3%; transform: none; font-size: 34px; padding: 12px 20px; }
@@ -426,8 +438,8 @@ body.avec-stats .interet-bloc { display: flex; }
   background: var(--nuit); container-type: inline-size;
 }
 .disque-label img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.disque-face { position: absolute; left: 0; right: 0; top: 17%; text-align: center; font-family: var(--font-mono); font-size: 7cqw; letter-spacing: .14em; color: var(--or-pale); text-shadow: 0 0 6px rgba(7,6,12,.9); }
-.disque-titre { position: absolute; left: 0; right: 0; top: 50%; text-align: center; font-style: italic; font-weight: 300; font-size: 14cqw; color: var(--blanc-creme); text-shadow: 0 0 6px rgba(7,6,12,.9); }
+.disque-face { position: absolute; left: 0; right: 0; top: 17%; text-align: center; font-size: 8cqw; font-weight: 600; color: var(--or-pale); text-shadow: 0 0 6px rgba(7,6,12,.9); }
+.disque-titre { position: absolute; left: 0; right: 0; top: 46%; text-align: center; font-family: var(--vide-base); font-size: 14cqw; color: var(--blanc-creme); text-shadow: 0 0 6px rgba(7,6,12,.9); }
 .disque-trou { position: absolute; left: 50%; top: 50%; width: 7%; aspect-ratio: 1; margin: -3.5% 0 0 -3.5%; border-radius: 50%; background: var(--nuit); box-shadow: 0 0 0 1px var(--trait); }
 .pressage-noir .disque-sillons {
   background: radial-gradient(circle, #0C0A14 0 17%, rgba(7,6,12,0) 18%),

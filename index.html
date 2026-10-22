@@ -15,7 +15,9 @@
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap">
+<!-- « Vide », la police de l’album : la coupe du titre est chargée d’avance, elle s’affiche au premier écran -->
+<link rel="preload" href="fonts/vide-horizon.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="css/site.css">
 <!-- la lumière est posée avant le premier rendu pour éviter un passage par la nuit -->
 <script>document.documentElement.dataset.heure=(h=>h>=10&&h<18?'jour':'nuit')(new Date().getHours())</script>
@@ -35,7 +37,7 @@
 
   <header class="brand">
     <div class="brand-gauche">
-      <span class="brand-nom">LEV × SIMARD</span>
+      <span class="brand-nom">lev × simard</span>
       <!-- « ça m’intéresse » : le compteur d’intérêt pour l’album (functions/api/stats.js), visible quand l’API répond -->
       <span class="interet-bloc">
         <button type="button" class="interet" id="interet" aria-pressed="false"><span id="interet-txt">ça m’intéresse</span></button>
@@ -53,7 +55,7 @@
   <section class="pochette" id="pochette" aria-label="La pochette en dix pièces">
     <div class="puzzle" id="puzzle"></div>
     <div class="puzzle-tools">
-      <button type="button" class="lien" id="flip-all">TOUT RETOURNER</button>
+      <button type="button" class="vide" id="flip-all"><span class="v-repos">tout retourner</span><span class="v-survol" aria-hidden="true">tout retourner</span><span class="v-choisi" aria-hidden="true">tout retourner</span></button>
     </div>
   </section>
 
@@ -68,13 +70,13 @@
     <div class="pressages" id="pressages"></div>
   </section>
 
-  <footer class="pied">LEV × SIMARD · 10 TITRES · 22:33<span id="pied-ecoutes"></span></footer>
+  <footer class="pied">lev × simard / 10 titres / 22:33<span id="pied-ecoutes"></span></footer>
 
 </div>
 
 <!-- une carte du livret ouverte en grand : elle s’envole depuis sa place, le foil suit la souris -->
 <div class="carte-vue" id="carte-vue" role="dialog" aria-modal="true" aria-label="Carte du livret" hidden>
-  <div class="carte-bar"><button type="button" class="lien" id="carte-close">fermer</button></div>
+  <div class="carte-bar"><button type="button" class="vide fermer" id="carte-close"><span class="v-repos">fermer</span><span class="v-survol" aria-hidden="true">fermer</span><span class="v-choisi" aria-hidden="true">fermer</span></button></div>
   <button type="button" class="carte-nav carte-prev" id="carte-prev" aria-label="Carte précédente">‹</button>
   <button type="button" class="carte-nav carte-next" id="carte-next" aria-label="Carte suivante">›</button>
   <div class="carte-scene" id="carte-scene">
@@ -91,7 +93,7 @@
       </div>
       <div class="carte-face carte-verso">
         <span class="verso-vers" id="verso-vers"></span>
-        <button type="button" class="verso-play" id="verso-play">écouter →</button>
+        <button type="button" class="vide verso-play" id="verso-play"><span class="v-repos">écouter →</span><span class="v-survol" aria-hidden="true">écouter →</span><span class="v-choisi" aria-hidden="true">écouter →</span></button>
       </div>
     </div>
   </div>
@@ -101,7 +103,7 @@
 <div class="player" id="player" role="dialog" aria-modal="true" aria-label="Lecteur" hidden>
   <div class="player-glow" id="p-glow" aria-hidden="true"></div>
   <div class="player-bar">
-    <button type="button" class="lien" id="p-close">fermer</button>
+    <button type="button" class="vide fermer" id="p-close"><span class="v-repos">fermer</span><span class="v-survol" aria-hidden="true">fermer</span><span class="v-choisi" aria-hidden="true">fermer</span></button>
   </div>
   <div class="player-img" id="p-img" role="button" tabindex="0" aria-label="Lecture / pause">
     <div class="player-img-static" id="p-static-prev"></div>
@@ -125,9 +127,9 @@
         <div class="seek-knob" id="p-knob"></div>
       </div>
       <div class="transport">
-        <button type="button" class="nav" id="p-prev">← précédent</button>
-        <button type="button" class="play" id="p-play">LECTURE</button>
-        <button type="button" class="nav" id="p-next">suivant →</button>
+        <button type="button" class="vide nav" id="p-prev"><span class="v-repos">← précédent</span><span class="v-survol" aria-hidden="true">← précédent</span><span class="v-choisi" aria-hidden="true">← précédent</span></button>
+        <button type="button" class="vide play" id="p-play"><span class="v-repos">lecture</span><span class="v-survol" aria-hidden="true">lecture</span><span class="v-choisi" aria-hidden="true">lecture</span></button>
+        <button type="button" class="vide nav" id="p-next"><span class="v-repos">suivant →</span><span class="v-survol" aria-hidden="true">suivant →</span><span class="v-choisi" aria-hidden="true">suivant →</span></button>
       </div>
       <div class="times"><span id="p-elapsed">0:00</span><span id="p-dur"></span></div>
     </div>
