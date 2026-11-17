@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- outil : un item 3D seul, à la taille voulue, pour en tirer une image fixe (cartes du livret).
+     ?track=NN&time=T&w=900&h=1200 — time fige l’image à T secondes de la boucle de 16 s. -->
+<base href="../">
+<title>item 3D</title>
+<style>html,body{margin:0;background:#07060C}#stage{position:relative;overflow:hidden;background:#07060C}</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="js/item-3d.js"></script>
+<script>
+const q = new URLSearchParams(location.search), st = document.getElementById('stage');
+st.style.width = (+q.get('w') || 750) + 'px'; st.style.height = (+q.get('h') || 1000) + 'px';
+const it = document.createElement('item-3d');
+it.setAttribute('track', q.get('track') || '03'); it.setAttribute('dpr', '1');
+if (q.has('time')) it.setAttribute('time', q.get('time'));
+st.appendChild(it);
+</script>
+</body>
+</html>

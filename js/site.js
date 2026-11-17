@@ -63,7 +63,7 @@ const CUT = { "01": "lumiere", "02": "horizon", "03": "vertige", "04": "lumiere"
 const COUPE_NOM = { horizon: 'horizon', vertige: 'vertige', lumiere: 'lumière' };
 
 const secs = d => { const [m, s] = d.split(':').map(Number); return m * 60 + s; };
-TRACKS.forEach((t, i) => { t.i = i; t.seconds = secs(t.dur); t.img = `assets/singles/${t.file}.webp`; t.coupe = `var(--vide-${CUT[t.n]})`; t.coupeNom = COUPE_NOM[CUT[t.n]]; });
+TRACKS.forEach((t, i) => { t.i = i; t.seconds = secs(t.dur); t.img = `assets/singles/${t.file}.webp`; t.card = `assets/items/${t.n}.webp`; t.coupe = `var(--vide-${CUT[t.n]})`; t.coupeNom = COUPE_NOM[CUT[t.n]]; });
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -137,7 +137,7 @@ function renderCartes() {
     const c = document.createElement('div');
     c.className = 'carte'; c.dataset.thumb = t.n; c.setAttribute('role', 'button'); c.tabIndex = 0;
     c.setAttribute('aria-label', `carte ${t.title}`);
-    c.style.backgroundImage = `url(${t.img})`;
+    c.style.backgroundImage = `url(${t.card})`;   // le recto : une image fixe de l’item 3D du titre (assets/items, tools/item-3d.html)
     c.innerHTML = '<div class="carte-holo"></div><div class="carte-sheen"></div>';
     c.addEventListener('click', () => openCarte(t.i, c));
     c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCarte(t.i, c); } });
@@ -181,8 +181,24 @@ function paintFoil() {
   $('grande-sheen').style.background = `linear-gradient(${105 + kx * 40}deg, rgba(255,255,255,0) ${28 + kx * 30}%, rgba(255,255,255,.34) ${46 + kx * 30}%, rgba(242,217,160,.3) ${50 + kx * 30}%, rgba(255,255,255,0) ${66 + kx * 30}%)`;
   $('grande-stripes').style.background = `repeating-linear-gradient(${60 + ky * 50}deg, rgba(255,255,255,0) 0 6px, rgba(255,255,255,.35) ${7 + kx * 3}px, rgba(255,255,255,0) 14px)`;
 }
+/* au verso, l’item 3D du titre en direct (js/item-3d.js). Un seul élément, créé à la première carte ouverte
+   et réutilisé : il ne tourne que quand le verso est montré, sinon il reste figé (aucun rendu en continu). */
+let versoItem = null;
+function itemVerso(track) {
+  if (!versoItem) {
+    versoItem = document.createElement('item-3d'); versoItem.className = 'verso-item'; versoItem.setAttribute('aria-hidden', 'true');
+    versoItem.setAttribute('time', '0');
+    scene.querySelector('.carte-verso').prepend(versoItem);
+  }
+  if (track && versoItem.getAttribute('track') !== track) versoItem.setAttribute('track', track);
+}
+function animeVerso(on) {
+  if (!versoItem) return;
+  if (on) { versoItem.t0 = performance.now(); versoItem.removeAttribute('time'); } else versoItem.setAttribute('time', '0');
+}
 function fillCarte(t) {
-  scene.querySelector('.carte-recto').style.backgroundImage = `url(${t.img})`;
+  scene.querySelector('.carte-recto').style.backgroundImage = `url(${t.card})`;
+  itemVerso(t.n);   // la scène se compile pendant qu’on regarde le recto
   $('carte-vue').style.setProperty('--coupe', t.coupe); $('carte-titre').textContent = t.title; $('carte-quote').textContent = `« ${t.quote} »`;
   // au dos : les premiers vers du titre, un par ligne (à défaut, l’extrait de secours)
   $('verso-vers').textContent = P.lines && P.lines[t.i] ? P.lines[t.i].split('\n').slice(0, 5).join('\n') : t.excerpt;
@@ -191,7 +207,7 @@ function openCarte(i, el) {
   if (C.open != null) return;
   C.open = i; C.el = el; C.rx = 0; C.ry = 0; C.slide = 0;
   clearTimeout(C.closeT);
-  flip.classList.remove('is-back');
+  flip.classList.remove('is-back'); animeVerso(false);
   fillCarte(TRACKS[i]);
   vue.hidden = false; document.body.classList.add('no-scroll');
   scene.classList.remove('is-tilting', 'is-sliding'); scene.style.opacity = '1';
@@ -209,14 +225,14 @@ function closeCarte() {
   C.open = null; C.rx = 0; C.ry = 0; C.slide = 0;
   clearTimeout(C.stepT); C.busy = false;
   scene.classList.remove('is-tilting', 'is-sliding', 'is-instant'); scene.style.opacity = '1';
-  flip.classList.remove('is-back');
+  flip.classList.remove('is-back'); animeVerso(false);
   paintFoil();
   vue.classList.remove('is-open'); setCarteBox(el.getBoundingClientRect());
   clearTimeout(C.closeT);
   C.closeT = setTimeout(() => { vue.hidden = true; document.body.classList.remove('no-scroll'); el.classList.remove('is-open'); }, 700);
   if (el.focus) el.focus({ preventScroll: true });
 }
-function flipCarte() { if (C.open != null && !C.busy) flip.classList.toggle('is-back'); }
+function flipCarte() { if (C.open != null && !C.busy) animeVerso(flip.classList.toggle('is-back')); }
 // feuilleter : la carte sort d’un côté, la suivante entre de l’autre
 function stepCarte(d) {
   if (C.open == null || C.busy) return;
@@ -227,7 +243,7 @@ function stepCarte(d) {
   C.stepT = setTimeout(() => {
     C.el.classList.remove('is-open');
     C.open = i; C.el = carteEl(i); C.el.classList.add('is-open');
-    flip.classList.remove('is-back');
+    flip.classList.remove('is-back'); animeVerso(false);
     fillCarte(TRACKS[i]);
     scene.classList.add('is-instant');
     C.slide = d * 44; applyTilt();
@@ -244,7 +260,7 @@ function ecouterCarte() {
   clearTimeout(C.closeT); clearTimeout(C.stepT); C.busy = false;
   C.open = null; C.slide = 0;
   vue.classList.remove('is-open'); vue.hidden = true; el.classList.remove('is-open');
-  flip.classList.remove('is-back');
+  flip.classList.remove('is-back'); animeVerso(false);
   openPlayer(i, r);
 }
 
