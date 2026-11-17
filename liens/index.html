@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#07060C">
 <meta property="og:type" content="website">
 <meta property="og:title" content="l’appel du vide — Lev × Simard">
-<meta property="og:description" content="L’album, le 11 décembre 2026.">
+<meta property="og:description" content="11 décembre 2026.">
 <meta property="og:url" content="https://lappelduvide.pages.dev/liens/">
 <meta property="og:image" content="https://lappelduvide.pages.dev/assets/pochette-titre.jpg">
 <meta property="og:image:width" content="1200">
@@ -19,15 +19,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap">
 <link rel="preload" href="../fonts/vide-base.otf" as="font" type="font/otf" crossorigin>
-<!-- Page de liens pour la bio Instagram, dans la DA du site (css/site.css) : nuit, rivière de paroles,
-     mots en « Vide », boutons à foil comme « ça m’intéresse ». Toujours de nuit, comme Instagram. -->
+<!-- Page de liens pour la bio Instagram. Même écriture que le site (css/site.css) : nuit, rivière de paroles,
+     et les liens posés comme la liste des titres — des lignes entre deux filets, le mot en « Vide »
+     (base au repos, horizon au survol), la plateforme en petit à droite. Pas de cadre, pas de bouton. -->
 <style>
 @font-face { font-family: 'Vide Base'; src: url(../fonts/vide-base.otf) format('opentype'); font-display: swap; }
 @font-face { font-family: 'Vide Horizon'; src: url(../fonts/vide-horizon.otf) format('opentype'); font-display: swap; }
 @font-face { font-family: 'Vide Vertige'; src: url(../fonts/vide-vertige.otf) format('opentype'); font-display: swap; }
 
 :root {
-  --nuit: #07060C; --or: #E0A33A; --or-pale: #F2D9A0; --ambre: #B8652E; --violet: #5E3FB3;
+  --nuit: #07060C; --or: #E0A33A;
   --ink: #F6EEDF; --quote: #CFC4AE; --meta: #8F86B0; --trait: #2A2338;
   --texte: 'Bricolage Grotesque', sans-serif;
   --vide-base: 'Vide Base', 'Bricolage Grotesque', sans-serif;
@@ -52,40 +53,24 @@ a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transpar
 @keyframes riverSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 .page {
-  position: relative; z-index: 1; width: 100%; max-width: 460px; margin: 0 auto;
-  padding: max(28px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom));
-  display: flex; flex-direction: column; align-items: center; min-height: 100vh; min-height: 100dvh;
+  position: relative; z-index: 1; width: 100%; max-width: 440px; margin: 0 auto;
+  padding: max(40px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh;
 }
-.nom { align-self: stretch; font-size: 15px; font-weight: 600; color: var(--or); }
 
-.pochette {
-  display: block; width: min(100%, 340px); aspect-ratio: 1; margin: 30px 0 0;
-  box-shadow: 0 0 0 1px rgba(242,217,160,.12), 0 30px 80px -20px rgba(94,63,179,.55), 0 0 60px -10px rgba(224,163,58,.18);
-}
+.pochette { display: block; width: 100%; aspect-ratio: 1; }
 .pochette img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.date { margin: 22px 0 0; font-size: 17px; line-height: 1.4; color: var(--quote); text-align: center; }
-.date b { font-weight: 600; color: var(--ink); }
+.date { margin: 18px 0 0; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--meta); }
 
-/* les liens : bordure or, foil holographique, reflet qui balaie (« ça m’intéresse », css/site.css) */
-.liens { list-style: none; margin: 30px 0 0; padding: 0; width: 100%; display: flex; flex-direction: column; gap: 12px; }
+/* les liens : la liste des titres du site (.track) */
+.liens { list-style: none; margin: 28px 0 0; padding: 0; border-bottom: 1px solid var(--trait); }
 .lien {
-  position: relative; isolation: isolate; overflow: hidden;
-  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
-  min-height: 58px; padding: 16px 20px; border: 1px solid rgba(224,163,58,.55);
-  background: linear-gradient(120deg, rgba(224,163,58,.08), rgba(94,63,179,.14)), rgba(7,6,12,.55);
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-  transition: border-color .4s ease, transform .3s ease, background .4s ease;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: baseline;
+  padding: 6px 0 2px; border-top: 1px solid var(--trait); outline: none;
 }
-.lien::before {
-  content: ''; position: absolute; inset: 0; z-index: -1; opacity: .12; mix-blend-mode: color-dodge;
-  background: conic-gradient(from 210deg at 60% 40%, #F0B8C8, #A9C8EA, #F2D9A0, #B8A0D0, #F0B8C8);
-  transition: opacity .5s ease;
-}
-.lien:hover, .lien:focus-visible { border-color: var(--or); transform: translateY(-1px); outline: none; }
-.lien:hover::before, .lien:focus-visible::before { opacity: .3; }
-.lien:active { transform: translateY(0) scale(.99); }
-.lien-mot { font-size: 23px; line-height: 1.2; color: var(--ink); }
-.lien-ou { font-size: 14px; font-weight: 500; color: var(--meta); white-space: nowrap; }
+.lien-mot { font-size: clamp(30px, 8.6vw, 38px); line-height: 1.5; letter-spacing: -.01em; color: var(--ink); }
+.lien-ou { font-size: 15px; font-variant-numeric: tabular-nums; color: var(--meta); white-space: nowrap; }
+.lien.album .lien-mot { color: var(--or); }
 
 /* le mot en Vide : base au repos, horizon au survol (css/site.css, .vide) */
 .vide { display: inline-grid; }
@@ -95,28 +80,9 @@ a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transpar
 .lien:is(:hover, :focus-visible) .v-repos { opacity: 0; }
 .lien:is(:hover, :focus-visible) .v-survol { opacity: 1; }
 
-/* l’album : rempli d’or, il respire */
-.lien.album {
-  min-height: 66px; border-color: var(--or-pale); color: var(--nuit);
-  background: linear-gradient(120deg, #F2D9A0, #E0A33A 55%, #B8652E);
-  animation: halo 4.5s ease-in-out infinite;
-}
-.lien.album .lien-mot { color: var(--nuit); font-size: 25px; }
-.lien.album .lien-ou { color: rgba(7,6,12,.62); }
-.lien.album::before { opacity: .28; }
-.lien.album::after {
-  content: ''; position: absolute; inset: -40% -70%; z-index: -1; mix-blend-mode: screen;
-  background: linear-gradient(105deg, rgba(255,255,255,0) 42%, rgba(255,255,255,.22) 48%, rgba(255,255,255,.32) 50%, rgba(255,255,255,0) 58%);
-  animation: sheen 5.5s ease-in-out infinite;
-}
-@keyframes halo { 0%, 100% { box-shadow: 0 0 22px 4px rgba(224,163,58,.20); } 50% { box-shadow: 0 0 40px 12px rgba(224,163,58,.36); } }
-@keyframes sheen { 0%, 50% { transform: translateX(-60%); } 80%, 100% { transform: translateX(60%); } }
+.pied { margin-top: auto; padding-top: 36px; font-size: 15px; font-weight: 500; color: var(--meta); font-variant-numeric: tabular-nums; }
 
-.pied { margin-top: auto; padding-top: 40px; font-size: 14px; font-weight: 500; color: var(--meta); font-variant-numeric: tabular-nums; }
-
-@media (prefers-reduced-motion: reduce) {
-  .river-tex, .lien.album, .lien.album::after { animation: none; }
-}
+@media (prefers-reduced-motion: reduce) { .river-tex { animation: none; } }
 </style>
 </head>
 <body>
@@ -128,13 +94,11 @@ a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transpar
 </div>
 
 <main class="page">
-  <div class="nom">lev × simard</div>
-
   <a class="pochette" href="https://lappelduvide.pages.dev/" aria-label="Le site de l’album">
-    <img src="../assets/pochette-titre.jpg" width="1200" height="1200" alt="Pochette de l’album l’appel du vide : un vortex de paroles or et violet">
+    <img src="../assets/pochette.webp" width="1200" height="1200" alt="Pochette de l’album l’appel du vide : un vortex de paroles or et violet">
   </a>
 
-  <p class="date" id="date">l’album, le <b>11 décembre 2026</b></p>
+  <p class="date" id="date">11 décembre 2026</p>
 
   <ul class="liens">
     <li><a class="lien album" href="https://distrokid.com/hyperfollow/levrailev/lappel-du-vide/">
@@ -142,7 +106,7 @@ a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transpar
       <span class="lien-ou" data-ou>spotify · apple</span>
     </a></li>
     <li><a class="lien" href="https://lappelduvide.pages.dev/">
-      <span class="lien-mot vide"><span class="v-repos">le site de l’album</span><span class="v-survol" aria-hidden="true">le site de l’album</span></span>
+      <span class="lien-mot vide"><span class="v-repos">le site</span><span class="v-survol" aria-hidden="true">le site</span></span>
       <span class="lien-ou">paroles · titres</span>
     </a></li>
     <li><a class="lien" href="https://on.soundcloud.com/IciXj0pAwRmZh1KmxW">
@@ -159,7 +123,7 @@ a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transpar
     </a></li>
   </ul>
 
-  <footer class="pied">lev × simard / 10 titres / 22:33</footer>
+  <footer class="pied">10 titres / 22:33</footer>
 </main>
 
 <script>
@@ -169,7 +133,7 @@ a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transpar
   if (new Date() < new Date(2026, 11, 11)) return;
   document.querySelectorAll('[data-album]').forEach(e => { e.textContent = 'écouter l’album'; });
   document.querySelector('[data-ou]').textContent = 'toutes les plateformes';
-  document.getElementById('date').innerHTML = 'l’album est <b>sorti</b>';
+  document.getElementById('date').textContent = 'sorti le 11 décembre 2026';
 })();
 
 /* ---------- rivière de paroles (js/site.js) ----------
