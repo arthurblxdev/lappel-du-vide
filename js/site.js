@@ -187,7 +187,7 @@ let versoItem = null;
 function itemVerso(track) {
   if (!versoItem) {
     versoItem = document.createElement('item-3d'); versoItem.className = 'verso-item'; versoItem.setAttribute('aria-hidden', 'true');
-    versoItem.setAttribute('time', '0');
+    versoItem.setAttribute('time', '0'); versoItem.setAttribute('adapt', '');   // adapt : définition réglée sur le GPU (téléphone)
     scene.querySelector('.carte-verso').prepend(versoItem);
   }
   if (track && versoItem.getAttribute('track') !== track) versoItem.setAttribute('track', track);
@@ -200,8 +200,6 @@ function fillCarte(t) {
   scene.querySelector('.carte-recto').style.backgroundImage = `url(${t.card})`;
   itemVerso(t.n);   // la scène se compile pendant qu’on regarde le recto
   $('carte-vue').style.setProperty('--coupe', t.coupe); $('carte-titre').textContent = t.title; $('carte-quote').textContent = `« ${t.quote} »`;
-  // au dos : les premiers vers du titre, un par ligne (à défaut, l’extrait de secours)
-  $('verso-vers').textContent = P.lines && P.lines[t.i] ? P.lines[t.i].split('\n').slice(0, 5).join('\n') : t.excerpt;
 }
 function openCarte(i, el) {
   if (C.open != null) return;

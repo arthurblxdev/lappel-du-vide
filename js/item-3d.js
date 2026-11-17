@@ -140,17 +140,49 @@ class Item3D extends HTMLElement {
       gl.uniform1i(this.u.text, 0); gl.uniform3fv(this.u.pal, new Float32Array((sc.pal || PAL[n]).flatMap(hex))); gl.uniform3fv(this.u.acc, new Float32Array(hex(sc.acc || ACC[n] || '#000000')));
       const upload = txt => { if (this.track !== n || this.lost) return; gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, this.tex);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas(txt, parseInt(n) / 11, sc.txt || TXT[n] || TXT0)); gl.generateMipmap(gl.TEXTURE_2D); this.draw(); };
-      upload(FALLBACK); loadLyrics().then(l => { if (l[n]) upload(l[n]); if (PERF) setTimeout(() => this.perf(), 300); });
+      upload(FALLBACK); loadLyrics().then(l => { if (l[n]) upload(l[n]); if (PERF) setTimeout(() => this.perf(), 300);
+        // adapt : on mesure une fois ce que coûte la scène sur ce GPU (après l’envol de la carte, 0,7 s), pour régler la définition
+        if (this.hasAttribute('adapt') && !(this.mspx && this.mspx[n])) setTimeout(() => { if (this.track === n && !this.lost) this.calibrate(); }, 800); });
     });
   }
   perf() { const gl = this.gl, N = 30, px = new Uint8Array(4); if (!this.u) return; const one = i => { this.forceT = 16 * i / N; this.draw(); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); };
     for (let i = 0; i < 3; i++) one(i); const t0 = performance.now(); for (let i = 0; i < N; i++) one(i); const ms = (performance.now() - t0) / N; this.forceT = null;
     console.log(`[item-3d perf] ${this.track} : ${ms.toFixed(1)} ms par image à ${this.cv.width}×${this.cv.height}`); }
-  loop() { if (!this.running) return; this.raf = requestAnimationFrame(() => this.loop()); if (this.visible !== false && !this.fixed()) this.draw(); }
+  // la mesure (attribut adapt) : quatre images synchrones à une taille fixe, d’où un coût en ms par pixel pour ce titre sur ce GPU
+  calibrate() {
+    const gl = this.gl, px = new Uint8Array(4); if (!this.u) return;
+    const W = 420, H = 560; this.calib = [W, H];
+    const one = i => { this.forceT = 2 + i * .7; this.draw(); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); };
+    one(0); const t0 = performance.now(); for (let i = 1; i <= 3; i++) one(i);
+    (this.mspx || (this.mspx = {}))[this.track] = (performance.now() - t0) / 3 / (W * H);
+    this.forceT = null; this.calib = null; this.draw();
+  }
+  // en direct : 60 images/s au plus (un écran à 120 Hz ne double pas le travail du GPU). Filet de sécurité : si les images
+  // arrivent vraiment trop lentement (moins de 25 par seconde), la définition baisse encore d’un palier (this.q, jusqu’à 0,55).
+  // Un téléphone en économie d’énergie, bridé à 30 images/s, ne déclenche pas ce filet.
+  loop() {
+    if (!this.running) return; this.raf = requestAnimationFrame(() => this.loop());
+    if (this.visible === false || this.fixed()) { this.lastT = 0; this.acc = null; return; }
+    const now = performance.now(); if (this.lastT && now - this.lastT < 15) return;
+    if (this.lastT) { const a = this.acc || (this.acc = { n: 0, s: 0 }); a.n++; a.s += now - this.lastT;
+      if (a.n >= 40) { if (a.s / a.n > 40 && (this.q || 1) > .56) this.q = Math.max(.55, (this.q || 1) * .82); this.acc = null; } }
+    this.lastT = now; this.draw();
+  }
   fixed() { return Number.isFinite(parseFloat(this.getAttribute('time'))); }
   draw() {
     const gl = this.gl; if (!gl || this.lost || !this.u) return;
-    const dpr = Math.min(parseFloat(this.getAttribute('dpr')) || 1.5, window.devicePixelRatio || 1); const w = Math.max(1, Math.round(this.clientWidth * dpr)), h = Math.max(1, Math.round(this.clientHeight * dpr));
+    let w, h;
+    if (this.calib) [w, h] = this.calib;
+    else {
+      // définition : 1,5 px par px CSS au plus, 1 sur un écran tactile (téléphone) ; si la mesure dit qu’une image coûterait
+      // plus de 11 ms à cette taille, on la réduit d’autant (jusqu’à 0,55), puis le filet de sécurité this.q
+      const base = parseFloat(this.getAttribute('dpr')) || (matchMedia('(pointer: coarse)').matches ? 1 : 1.5);
+      let dpr = Math.min(base, window.devicePixelRatio || 1);
+      const k = this.mspx && this.mspx[this.track];
+      if (k) { const ms = this.clientWidth * this.clientHeight * dpr * dpr * k; if (ms > 11) dpr *= Math.max(.55, Math.sqrt(11 / ms)); }
+      dpr *= this.q || 1;
+      w = Math.max(1, Math.round(this.clientWidth * dpr)); h = Math.max(1, Math.round(this.clientHeight * dpr));
+    }
     if (this.cv.width !== w || this.cv.height !== h) { this.cv.width = w; this.cv.height = h; gl.viewport(0, 0, w, h); }
     const ft = this.forceT ?? parseFloat(this.getAttribute('time')), t = Number.isFinite(ft) ? ft : (performance.now() - this.t0) / 1000;
     const L = parseFloat(this.getAttribute('loop')) || 16, ph = (t / L) % 1;
