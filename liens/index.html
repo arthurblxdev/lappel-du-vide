@@ -82,6 +82,25 @@ a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transpar
 
 .pied { margin-top: auto; padding-top: 36px; font-size: 15px; font-weight: 500; color: var(--meta); font-variant-numeric: tabular-nums; }
 
+/* téléphone : tout tient dans un écran, même dans le navigateur d’Instagram (environ 390 × 700).
+   La pochette prend la hauteur qui reste une fois les liens posés : carrée sur un grand écran,
+   recadrée en bandeau autour du vortex sur un petit. Les mots rétrécissent pour tenir sur une ligne. */
+@media (max-width: 560px) {
+  .page { padding-top: max(20px, env(safe-area-inset-top)); }
+  .pochette {
+    aspect-ratio: auto;
+    height: clamp(170px, calc(100vh - 420px), calc(100vw - 32px));
+    height: clamp(170px, calc(100svh - 420px), calc(100vw - 32px));
+  }
+  .pochette img { object-position: 52% 46%; }
+  .date { margin-top: 14px; font-size: 14px; }
+  .liens { margin-top: 18px; }
+  .lien { gap: 12px; padding: 4px 0 1px; }
+  .lien-mot { font-size: clamp(25px, 7.5vw, 32px); }
+  .lien-ou { font-size: 13px; }
+  .pied { padding-top: 22px; font-size: 13px; }
+}
+
 @media (prefers-reduced-motion: reduce) { .river-tex { animation: none; } }
 </style>
 </head>
