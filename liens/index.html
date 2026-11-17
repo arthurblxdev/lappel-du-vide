@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>l’appel du vide — liens</title>
+<meta name="description" content="l’appel du vide, l’album de Lev × Simard — 11 décembre 2026.">
+<meta name="theme-color" content="#07060C">
+<meta property="og:type" content="website">
+<meta property="og:title" content="l’appel du vide — Lev × Simard">
+<meta property="og:description" content="L’album, le 11 décembre 2026.">
+<meta property="og:url" content="https://arthurblxdev.github.io/lappel-du-vide/liens/">
+<meta property="og:image" content="https://arthurblxdev.github.io/lappel-du-vide/assets/pochette-titre.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap">
+<link rel="preload" href="../fonts/vide-base.otf" as="font" type="font/otf" crossorigin>
+<!-- Page de liens pour la bio Instagram, dans la DA du site (css/site.css) : nuit, rivière de paroles,
+     mots en « Vide », boutons à foil comme « ça m’intéresse ». Toujours de nuit, comme Instagram. -->
+<style>
+@font-face { font-family: 'Vide Base'; src: url(../fonts/vide-base.otf) format('opentype'); font-display: swap; }
+@font-face { font-family: 'Vide Horizon'; src: url(../fonts/vide-horizon.otf) format('opentype'); font-display: swap; }
+@font-face { font-family: 'Vide Vertige'; src: url(../fonts/vide-vertige.otf) format('opentype'); font-display: swap; }
+
+:root {
+  --nuit: #07060C; --or: #E0A33A; --or-pale: #F2D9A0; --ambre: #B8652E; --violet: #5E3FB3;
+  --ink: #F6EEDF; --quote: #CFC4AE; --meta: #8F86B0; --trait: #2A2338;
+  --texte: 'Bricolage Grotesque', sans-serif;
+  --vide-base: 'Vide Base', 'Bricolage Grotesque', sans-serif;
+  --vide-horizon: 'Vide Horizon', 'Bricolage Grotesque', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--nuit); color-scheme: dark; }
+body {
+  margin: 0; min-height: 100vh; min-height: 100dvh; color: var(--ink); background: transparent;
+  font-family: var(--texte); font-synthesis: none; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+
+/* le ciel de nuit et la rivière de paroles (css/site.css) */
+.ciel { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 90% 45% at 50% 108%, rgba(94,63,179,.45), rgba(7,6,12,0) 70%), var(--nuit); }
+.river { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.river-tex { position: absolute; left: 50%; top: 50%; width: 175vmax; height: 175vmax; margin: -87.5vmax 0 0 -87.5vmax;
+  background-size: 100% 100%; opacity: 0; transition: opacity 2s ease; animation: riverSpin 320s linear infinite; will-change: transform; }
+.river-tex.is-on { opacity: 1; }
+.river-scrim { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 55% at 50% 45%, rgba(7,6,12,.82), rgba(7,6,12,.1) 100%); }
+@keyframes riverSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.page {
+  position: relative; z-index: 1; width: 100%; max-width: 460px; margin: 0 auto;
+  padding: max(28px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; align-items: center; min-height: 100vh; min-height: 100dvh;
+}
+.nom { align-self: stretch; font-size: 15px; font-weight: 600; color: var(--or); }
+
+.pochette {
+  display: block; width: min(100%, 340px); aspect-ratio: 1; margin: 30px 0 0;
+  box-shadow: 0 0 0 1px rgba(242,217,160,.12), 0 30px 80px -20px rgba(94,63,179,.55), 0 0 60px -10px rgba(224,163,58,.18);
+}
+.pochette img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.date { margin: 22px 0 0; font-size: 17px; line-height: 1.4; color: var(--quote); text-align: center; }
+.date b { font-weight: 600; color: var(--ink); }
+
+/* les liens : bordure or, foil holographique, reflet qui balaie (« ça m’intéresse », css/site.css) */
+.liens { list-style: none; margin: 30px 0 0; padding: 0; width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.lien {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  min-height: 58px; padding: 16px 20px; border: 1px solid rgba(224,163,58,.55);
+  background: linear-gradient(120deg, rgba(224,163,58,.08), rgba(94,63,179,.14)), rgba(7,6,12,.55);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  transition: border-color .4s ease, transform .3s ease, background .4s ease;
+}
+.lien::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; opacity: .12; mix-blend-mode: color-dodge;
+  background: conic-gradient(from 210deg at 60% 40%, #F0B8C8, #A9C8EA, #F2D9A0, #B8A0D0, #F0B8C8);
+  transition: opacity .5s ease;
+}
+.lien:hover, .lien:focus-visible { border-color: var(--or); transform: translateY(-1px); outline: none; }
+.lien:hover::before, .lien:focus-visible::before { opacity: .3; }
+.lien:active { transform: translateY(0) scale(.99); }
+.lien-mot { font-size: 23px; line-height: 1.2; color: var(--ink); }
+.lien-ou { font-size: 14px; font-weight: 500; color: var(--meta); white-space: nowrap; }
+
+/* le mot en Vide : base au repos, horizon au survol (css/site.css, .vide) */
+.vide { display: inline-grid; }
+.vide > span { grid-area: 1 / 1; transition: opacity .45s ease; }
+.v-repos { font-family: var(--vide-base); }
+.v-survol { font-family: var(--vide-horizon); opacity: 0; }
+.lien:is(:hover, :focus-visible) .v-repos { opacity: 0; }
+.lien:is(:hover, :focus-visible) .v-survol { opacity: 1; }
+
+/* l’album : rempli d’or, il respire */
+.lien.album {
+  min-height: 66px; border-color: var(--or-pale); color: var(--nuit);
+  background: linear-gradient(120deg, #F2D9A0, #E0A33A 55%, #B8652E);
+  animation: halo 4.5s ease-in-out infinite;
+}
+.lien.album .lien-mot { color: var(--nuit); font-size: 25px; }
+.lien.album .lien-ou { color: rgba(7,6,12,.62); }
+.lien.album::before { opacity: .28; }
+.lien.album::after {
+  content: ''; position: absolute; inset: -40% -70%; z-index: -1; mix-blend-mode: screen;
+  background: linear-gradient(105deg, rgba(255,255,255,0) 42%, rgba(255,255,255,.22) 48%, rgba(255,255,255,.32) 50%, rgba(255,255,255,0) 58%);
+  animation: sheen 5.5s ease-in-out infinite;
+}
+@keyframes halo { 0%, 100% { box-shadow: 0 0 22px 4px rgba(224,163,58,.20); } 50% { box-shadow: 0 0 40px 12px rgba(224,163,58,.36); } }
+@keyframes sheen { 0%, 50% { transform: translateX(-60%); } 80%, 100% { transform: translateX(60%); } }
+
+.pied { margin-top: auto; padding-top: 40px; font-size: 14px; font-weight: 500; color: var(--meta); font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .river-tex, .lien.album, .lien.album::after { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="ciel" aria-hidden="true"></div>
+<div class="river" aria-hidden="true">
+  <div class="river-tex" id="river-tex"></div>
+  <div class="river-scrim"></div>
+</div>
+
+<main class="page">
+  <div class="nom">lev × simard</div>
+
+  <a class="pochette" href="https://lappelduvide.pages.dev/" aria-label="Le site de l’album">
+    <img src="../assets/pochette-titre.jpg" width="1200" height="1200" alt="Pochette de l’album l’appel du vide : un vortex de paroles or et violet">
+  </a>
+
+  <p class="date" id="date">l’album, le <b>11 décembre 2026</b></p>
+
+  <ul class="liens">
+    <li><a class="lien album" href="https://distrokid.com/hyperfollow/levrailev/lappel-du-vide/">
+      <span class="lien-mot vide"><span class="v-repos" data-album>pré-sauvegarder l’album</span><span class="v-survol" aria-hidden="true" data-album>pré-sauvegarder l’album</span></span>
+      <span class="lien-ou" data-ou>spotify · apple</span>
+    </a></li>
+    <li><a class="lien" href="https://lappelduvide.pages.dev/">
+      <span class="lien-mot vide"><span class="v-repos">le site de l’album</span><span class="v-survol" aria-hidden="true">le site de l’album</span></span>
+      <span class="lien-ou">paroles · titres</span>
+    </a></li>
+    <li><a class="lien" href="https://on.soundcloud.com/IciXj0pAwRmZh1KmxW">
+      <span class="lien-mot vide"><span class="v-repos">ironsight</span><span class="v-survol" aria-hidden="true">ironsight</span></span>
+      <span class="lien-ou">soundcloud</span>
+    </a></li>
+    <li><a class="lien" href="https://www.youtube.com/@Lev-cc7vc">
+      <span class="lien-mot vide"><span class="v-repos">youtube</span><span class="v-survol" aria-hidden="true">youtube</span></span>
+      <span class="lien-ou">les clips</span>
+    </a></li>
+    <li><a class="lien" href="https://open.spotify.com/artist/5dNQFaWGIYmdqCllBynPgv">
+      <span class="lien-mot vide"><span class="v-repos">spotify</span><span class="v-survol" aria-hidden="true">spotify</span></span>
+      <span class="lien-ou">tous les sons</span>
+    </a></li>
+  </ul>
+
+  <footer class="pied">lev × simard / 10 titres / 22:33</footer>
+</main>
+
+<script>
+/* Le 11 décembre 2026, chez le visiteur, la page passe d’elle-même de la pré-sauvegarde à l’écoute :
+   le lien HyperFollow reste le même, DistroKid le change en page d’écoute à la sortie. */
+(() => {
+  if (new Date() < new Date(2026, 11, 11)) return;
+  document.querySelectorAll('[data-album]').forEach(e => { e.textContent = 'écouter l’album'; });
+  document.querySelector('[data-ou]').textContent = 'toutes les plateformes';
+  document.getElementById('date').innerHTML = 'l’album est <b>sorti</b>';
+})();
+
+/* ---------- rivière de paroles (js/site.js) ----------
+   Lignes de courant équidistantes d’un vortex perturbé ; les paroles de l’album courent dessus, mot à mot.
+   Peinte une fois sur un canvas, posée en fond et mise en rotation par CSS. */
+(() => {
+  const layer = document.getElementById('river-tex');
+  const FALLBACK = [
+    "tout là-haut je ressens l’appel du vide, pour m’calmer je fabrique de la belle musique",
+    "la vie c’est pas un long fleuve tranquille, on sait naviguer dans les trombes d’eau",
+    "aujourd’hui tout va bien demain tu peux partir sans préavis",
+    "des heures devant la porte à crier sésame et cette chienne s’est jamais ouverte",
+  ];
+  function paint(src) {
+    const S = innerWidth < 700 ? 1536 : 2048, k = S / 2048;
+    const cv = document.createElement('canvas'); cv.width = S; cv.height = S; const ctx = cv.getContext('2d');
+    const rnd = i => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+    const field = (x, y) => {
+      x /= k; y /= k;
+      const dx = x - 1024, dy = y - 1024, r = Math.hypot(dx, dy) + 1;
+      const s = Math.min(1.6, 420 / r) + 0.25;
+      let vx = -dy / r * s, vy = dx / r * s;
+      vx += 0.35 * Math.sin(y * 0.003) + 0.2 * Math.sin((x + y) * 0.0018);
+      vy += 0.35 * Math.cos(x * 0.0026) + 0.2 * Math.sin(x * 0.0045);
+      vx -= dx / r * 0.1; vy -= dy / r * 0.1;
+      const n = Math.hypot(vx, vy) + 1e-6; return [vx / n, vy / n];
+    };
+    const dsep = 46 * k, dtest = dsep * .55, step = 4 * k, G = Math.ceil(S / dsep);
+    const cells = Array.from({ length: G * G }, () => []);
+    const near = (x, y, d, id) => {
+      const gx = (x / dsep) | 0, gy = (y / dsep) | 0;
+      for (let oy = -1; oy <= 1; oy++) for (let ox = -1; ox <= 1; ox++) {
+        const cx = gx + ox, cy = gy + oy; if (cx < 0 || cy < 0 || cx >= G || cy >= G) continue;
+        for (const p of cells[cy * G + cx]) if (p[2] !== id && Math.hypot(p[0] - x, p[1] - y) < d) return true;
+      }
+      return false;
+    };
+    const put = (x, y, id) => { const gx = (x / dsep) | 0, gy = (y / dsep) | 0; if (gx >= 0 && gy >= 0 && gx < G && gy < G) cells[gy * G + gx].push([x, y, id]); };
+    const inside = (x, y) => x > 0 && y > 0 && x < S && y < S && Math.hypot(x - S / 2, y - S / 2) > 110 * k;
+    const lines = [], queue = [[S * .3, S * .3]]; let id = 0;
+    const trace = (x0, y0, dir, lid) => {
+      const pts = []; let x = x0, y = y0;
+      for (let i = 0; i < 1200; i++) {
+        const [ux, uy] = field(x, y); x += ux * step * dir; y += uy * step * dir;
+        if (!inside(x, y) || near(x, y, dtest, lid)) break;
+        pts.push([x, y]); if (i % 3 === 0) put(x, y, lid);
+      }
+      return pts;
+    };
+    while (queue.length && lines.length < 900) {
+      const [sx, sy] = queue.shift(); if (!inside(sx, sy) || near(sx, sy, dsep * .9, -1)) continue;
+      const lid = id++; const fwd = trace(sx, sy, 1, lid), bwd = trace(sx, sy, -1, lid);
+      const pts = bwd.reverse().concat([[sx, sy]], fwd); if (pts.length < 12) continue; put(sx, sy, lid);
+      lines.push(pts);
+      for (let i = 0; i < pts.length; i += Math.round(dsep / step)) {
+        const p = pts[i], q = pts[Math.min(pts.length - 1, i + 1)]; const tx = q[0] - p[0], ty = q[1] - p[1], n = Math.hypot(tx, ty) || 1;
+        queue.push([p[0] - ty / n * dsep, p[1] + tx / n * dsep]); queue.push([p[0] + ty / n * dsep, p[1] - tx / n * dsep]);
+      }
+    }
+    let li = 0;
+    for (const pts of lines) {
+      const size = dsep * .58 + rnd(li) * dsep * .12; const gold = li % 9 === 4; li++;
+      ctx.font = `${size}px 'Vide Vertige', 'Bricolage Grotesque', sans-serif`;
+      ctx.fillStyle = gold ? 'rgba(224,163,58,.30)' : 'rgba(243,235,221,.17)';
+      const words = src[li % src.length].split(' '); let wi = Math.floor(rnd(li * 7) * words.length);
+      const total = (pts.length - 1) * step; let pos = 6 * k;
+      const at = s => { const i = Math.min(pts.length - 2, Math.max(0, Math.floor(s / step))); const f = s / step - i; const p = pts[i], q = pts[i + 1]; return [p[0] + (q[0] - p[0]) * f, p[1] + (q[1] - p[1]) * f, q[0] - p[0], q[1] - p[1]]; };
+      while (pos < total - 20 * k) {
+        const w = words[wi++ % words.length]; const ww = ctx.measureText(w).width; if (pos + ww > total - 6 * k) break;
+        for (const ch of w) {
+          const cw = ctx.measureText(ch).width; const [x, y, tx, ty] = at(pos + cw / 2); const n = Math.hypot(tx, ty) || 1;
+          ctx.setTransform(tx / n, ty / n, -ty / n, tx / n, x, y); ctx.fillText(ch, -cw / 2, size * .3); pos += cw;
+        }
+        pos += size * .28;
+      }
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    layer.style.backgroundImage = `url(${cv.toDataURL('image/png')})`;
+    layer.classList.add('is-on');
+  }
+  const paroles = fetch('../assets/brief/paroles.md').then(r => r.ok ? r.text() : Promise.reject()).then(md => {
+    const flat = [];
+    for (const s of md.split(/\n## /).slice(1)) {
+      const m = s.match(/^(\d\d)\.[^\n]*\n\n\*[^\n]*\*\n\n([\s\S]*)/);
+      if (m) flat.push(m[2].replace(/\s+/g, ' ').trim());
+    }
+    return flat.length ? flat : FALLBACK;
+  }).catch(() => FALLBACK);
+  const police = document.fonts && document.fonts.load ? document.fonts.load("24px 'Vide Vertige'").catch(() => {}) : Promise.resolve();
+  const go = () => Promise.all([paroles, police]).then(([src]) => paint(src));
+  if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1200 }); else setTimeout(go, 150);
+})();
+</script>
+</body>
+</html>
